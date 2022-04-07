@@ -1,0 +1,13 @@
+export { default as Onboarding } from './Resident/Onboarding';
+export { default as CompleteSignup } from './Resident/CompleteSignup';
+export { default as FullRegister } from './Resident/FullRegister';
+export { default as PartialRegister } from './Resident/PartialRegister';
+export { default as SignIn } from './SignIn';
+export { default as SelectUser } from './SelectUser';
+export { default as Overview } from './Resident/Overview';
+export { default as Payment } from './Resident/Payments';
+export { default as Orders } from './Resident/Orders';
+export { default as Visitors } from './Resident/Visitors';
+export { default as Maintenance } from './Resident/Maintenance';
+export { default as FMBusiness } from './FacilityManager/Company';
+export { default as FMPersonal } from './FacilityManager/Register';
