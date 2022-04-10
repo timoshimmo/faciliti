@@ -7,7 +7,6 @@ import {
   CardContent,
   CardActions,
 } from '@material-ui/core';
-import { Topbar } from '../components';
 import { Overview, Logs } from './components';
 
 const useStyles = makeStyles(theme => ({
@@ -41,7 +40,6 @@ const Visitors = props => {
 
     return (
       <div className={classes.root}>
-        <Topbar />
         <Grid
           className={classes.grid}
           container

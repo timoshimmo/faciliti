@@ -7,6 +7,7 @@ import {
   Typography,
   Card,
   CardActionArea,
+  CardContent,
   SvgIcon,
   Paper
 } from '@material-ui/core';
@@ -76,6 +77,11 @@ const useStyles = makeStyles((theme) => ({
   display: 'flex',
   justifyContent: 'center',
   overflowY: 'scroll',
+  msOverflowStyle: 'none',
+  scrollbarWidth: 'none',
+  '&::-webkit-scrollbar': {
+    display: 'none',
+  }
 },
   formBody: {
     width: '100%',
@@ -280,7 +286,7 @@ const SelectUser = () => {
                               onMouseEnter={() => setIsHoverResidents(true)}
                               onMouseLeave={() => setIsHoverResidents(false)}
                             >
-                              <cardContent>
+                              <CardContent>
                                 <Grid container direction="row" alignItems="center" className={classes.gridAction}>
                                     <Grid
                                       item
@@ -317,7 +323,7 @@ const SelectUser = () => {
                                         {isHoverResidents && <RightArrowIcon style={{ fontSize: 10, fill:'none' }} /> }
                                     </Grid>
                                 </Grid>
-                              </cardContent>
+                              </CardContent>
                             </CardActionArea>
                         </Card>
 
@@ -329,7 +335,7 @@ const SelectUser = () => {
                               onMouseLeave={() => setIsHoverManagers(false)}
                               onClick={handleGoToFacilityManager}
                             >
-                              <cardContent>
+                              <CardContent>
                                 <Grid container direction="row" alignItems="center" className={classes.gridAction}>
                                     <Grid
                                       item
@@ -366,7 +372,7 @@ const SelectUser = () => {
 
                                     </Grid>
                                 </Grid>
-                              </cardContent>
+                              </CardContent>
                             </CardActionArea>
                         </Card>
                     </div>

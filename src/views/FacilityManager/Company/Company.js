@@ -27,6 +27,7 @@ import PhoneInput from 'react-phone-input-2';
 import 'react-phone-input-2/lib/material.css';
 import AXIOS from '../../../util/webservices';
 //import { EstateDialog } from '../../../components';
+import AddIcon from '@material-ui/icons/Add';
 
 function BackButtonIcon(props) {
   return (
@@ -101,6 +102,22 @@ policy: {
   }
 };
 
+const NewButton = ({ children, ...other }) => (
+  <Paper {...other}>
+    {children}
+    <Button
+      fullWidth
+      startIcon={<AddIcon fontSize="small" style={{ marginRight: '10%' }} />}
+      style={{ fontSize: 13, textTransform: 'none', backgroundColor: "#fff", color: '#696F79', borderRadius: 0 }}
+      onMouseDown={event => {
+        event.preventDefault();
+      }}
+    >
+      Add Estate
+    </Button>
+  </Paper>
+);
+
 const estateList = [
   {
     value: 'ajaoestate',
@@ -154,6 +171,11 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     justifyContent: 'center',
     overflowY: 'scroll',
+    msOverflowStyle: 'none',
+    scrollbarWidth: 'none',
+    '&::-webkit-scrollbar': {
+      display: 'none',
+    }
   },
   gridItem: {
     width: '100%',
@@ -215,7 +237,7 @@ const useStyles = makeStyles((theme) => ({
   },
   formComponent: {
   width: '100%',
-  marginBottom: theme.spacing(2),
+  marginBottom: theme.spacing(1),
   fontSize: 10
 },
 helper: {
@@ -304,6 +326,9 @@ signUpButton: {
     '"Segoe UI Symbol"',
   ].join(','),
 },
+helperRoot: {
+  height: 13
+}
 }));
 
 const Company = () => {
@@ -552,7 +577,7 @@ const Company = () => {
                          <InputLabel shrink htmlFor="businessName">
                             Business name*
                           </InputLabel>
-                          <FormControl className={classes.formComponent}>
+                          <FormControl error={hasError('businessName')} className={classes.formComponent}>
                             <TextField
                               id="businessName-input"
                               className={classes.textField}
@@ -567,7 +592,7 @@ const Company = () => {
                               }}
                               aria-describedby="businessName-error"
                             />
-                            <FormHelperText id="businessName-error" classes={{ error: classes.helper }}>
+                            <FormHelperText id="businessName-error" classes={{ root: classes.helperRoot, error: classes.helper }}>
                               {  hasError('businessName') ? formState.errors.businessName[0] : null }
                             </FormHelperText>
                           </FormControl>
@@ -592,7 +617,7 @@ const Company = () => {
                                   aria-describedby="businessAddress-error"
                                 />
 
-                                <FormHelperText id="businessAddress-error" classes={{ error: classes.helper }}>
+                                <FormHelperText id="businessAddress-error" classes={{ root: classes.helperRoot, error: classes.helper }}>
                                   {  hasError('businessAddress') ? formState.errors.businessAddress[0] : null }
                                 </FormHelperText>
                             </FormControl>
@@ -614,7 +639,7 @@ const Company = () => {
                                   }}
                                   aria-describedby="webUrl-error"
                                 />
-                                <FormHelperText id="webUrl-error" classes={{ error: classes.helper }}>
+                                <FormHelperText id="webUrl-error" classes={{ root: classes.helperRoot, error: classes.helper }}>
                                   {  hasError('webUrl') ? formState.errors.webUrl[0] : null }
                                 </FormHelperText>
                             </FormControl>
@@ -641,7 +666,7 @@ const Company = () => {
                                       }}
                                   />}
                                 />
-                              <FormHelperText id="businessType-error" classes={{ error: classes.helper }}>
+                              <FormHelperText id="businessType-error" classes={{ root: classes.helperRoot, error: classes.helper }}>
                                 {  hasError('businessType') ? formState.errors.businessType[0] : null }
                               </FormHelperText>
                           </FormControl>
@@ -668,8 +693,10 @@ const Company = () => {
                                     style: {fontSize: 12}
                                   }}
                               />}
+                              PaperComponent={NewButton}
+                              classes={{ option: { fontSize: 10 } }}
                             />
-                          <FormHelperText id="estatefacility-error" classes={{ error: classes.helper }}>
+                          <FormHelperText id="estatefacility-error" classes={{ root: classes.helperRoot, error: classes.helper }}>
                             {  hasError('estateFacility') ? formState.errors.estateFacility[0] : null }
                           </FormHelperText>
                       </FormControl>
@@ -682,6 +709,7 @@ const Company = () => {
                         type="button"
                         variant="contained"
                         onClick={handleSignUp}
+                        disabled={loading}
                       >
                         Save & Continue
                       </Button>

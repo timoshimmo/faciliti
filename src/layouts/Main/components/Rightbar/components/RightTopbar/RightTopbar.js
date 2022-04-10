@@ -2,8 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/styles';
 import { Grid, Typography } from '@material-ui/core';
-import { Toolbar, IconButton } from '@material-ui/core';
+import { Toolbar, IconButton, Button } from '@material-ui/core';
 import SvgIcon from '@material-ui/core/SvgIcon';
+import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 
 
 const useStyles = makeStyles(theme => ({
@@ -50,6 +51,13 @@ const useStyles = makeStyles(theme => ({
   typoUsername: {
     fontSize: 13,
     color: theme.palette.secondary.dark,
+    textTransform: 'none',
+    backgroundColor: 'transparent',
+    borderColor: 'transparent',
+    boxShadow: 'none',
+    borderRadius: 4,
+    paddingLeft: 10,
+    paddingRight: 10,
   }
   }));
 
@@ -120,13 +128,12 @@ const useStyles = makeStyles(theme => ({
               lg={10}
               className={classes.rightCol}
             >
-                <Typography
-                  variant="h6"
-                  gutterBottom
+                <Button
                   className={classes.typoUsername}
+                  startIcon={<AccountCircleIcon fontSize="small" style={{ marginRight: '10%' }} />}
                 >
                   Tunde Ednut
-                </Typography>
+                </Button>
             </Grid>
           </Grid>
         </Toolbar>

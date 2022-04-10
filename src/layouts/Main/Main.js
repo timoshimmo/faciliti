@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/styles';
-import { Leftbar, Rightbar } from './components';
+import { Leftbar, Rightbar, Topbar } from './components';
 import { OrderDialog } from '../../views/Resident/components';
 
 const useStyles = makeStyles(theme => ({
@@ -24,7 +24,7 @@ const useStyles = makeStyles(theme => ({
     width: '100%',
   },
   leftDiv: {
-    width: '15%',
+    width: '17%',
     position: 'sticky',
     right: 0,
     top: 0,
@@ -38,7 +38,7 @@ const useStyles = makeStyles(theme => ({
     backgroundColor: '#fff',
     flexDirection: 'column',
     alignItems: 'center',
-    width: '68%',
+    width: '66%',
     [theme.breakpoints.down('sm')]: {
         width: '100%',
     }
@@ -85,6 +85,7 @@ const Main = props => {
           <Leftbar onDialogOpen={handleDialogOpen} />
         </div>
         <div className={classes.mainDiv}>
+            <Topbar />
             <main className={classes.content}>
               {children}
             </main>

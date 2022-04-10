@@ -144,7 +144,11 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     justifyContent: 'center',
     overflowY: 'scroll',
-
+    msOverflowStyle: 'none',
+    scrollbarWidth: 'none',
+    '&::-webkit-scrollbar': {
+      display: 'none',
+    }
   },
   gridItem: {
     width: '100%',
@@ -205,7 +209,7 @@ const useStyles = makeStyles((theme) => ({
   },
   formComponent: {
   width: '100%',
-  marginBottom: theme.spacing(2),
+  marginBottom: theme.spacing(1),
   fontSize: 10
 },
 helper: {
@@ -294,6 +298,9 @@ signUpButton: {
     '"Segoe UI Symbol"',
   ].join(','),
 },
+helperRoot: {
+  height: 13
+}
 }));
 
 const Register = () => {
@@ -306,8 +313,7 @@ const Register = () => {
    const [loading, setLoading] = useState(false);
    const [showPassword, setShowPassword] = useState(false);
    const [open, setOpen] = useState(false);
-   const [serverError, setServerError] = React.useState(null);
-
+   const [serverError, setServerError] = useState(null);
    const [openDialog, setOpenDialog] = useState(false);
 
    const handleDialogOpen = () => {
@@ -385,9 +391,7 @@ const Register = () => {
     else {
       history.push('/signup/completed');
     }
-
   }
-
 }
 
 /*
@@ -495,202 +499,168 @@ const Register = () => {
                      className={classes.registerForm}
                      autoComplete="off"
                    >
+                     <Collapse in={open}>
+                         <MuiAlert
+                           severity="error"
+                           action={
+                              <IconButton
+                                aria-label="close"
+                                color="inherit"
+                                size="small"
+                                onClick={() => {
+                                  setOpen(false);
+                                }}
+                              >
+                                <CloseIcon fontSize="inherit" />
+                              </IconButton>
+                            }
+                            className={classes.subtitleSpacing}
+                           >
+                           <Typography
+                             color="textSecondary"
+                             variant="body2"
+                             style={{ fontSize: 12 }}
+                           >
+                               {serverError}
+                           </Typography>
+                        </MuiAlert>
+                     </Collapse>
 
-                         <Collapse in={open}>
-                             <MuiAlert
-                               severity="error"
-                               action={
-                                  <IconButton
-                                    aria-label="close"
-                                    color="inherit"
-                                    size="small"
-                                    onClick={() => {
-                                      setOpen(false);
-                                    }}
-                                  >
-                                    <CloseIcon fontSize="inherit" />
-                                  </IconButton>
-                                }
-                                className={classes.subtitleSpacing}
-                               >
-                               <Typography
-                                 color="textSecondary"
-                                 variant="body2"
-                                 style={{ fontSize: 12 }}
-                               >
-                                   {serverError}
-                               </Typography>
-                            </MuiAlert>
-                         </Collapse>
+                       <InputLabel shrink htmlFor="firstName">
+                          Firstname*
+                        </InputLabel>
+                        <FormControl className={classes.formComponent}>
+                          <TextField
+                            id="firstName-input"
+                            className={classes.textField}
+                            name="firstName"
+                            type="text"
+                            placeholder="Enter first name"
+                            onChange={handleChange}
+                            disabled={loading}
+                            InputProps={{
+                              disableUnderline: true,
+                              style: {fontSize: 12}
+                            }}
+                            aria-describedby="firstName-error"
+                          />
+                          <FormHelperText id="firstName-error" classes={{ root: classes.helperRoot, error: classes.helper }}>
+                            {  hasError('firstName') ? formState.errors.firstName[0] : null }
+                          </FormHelperText>
+                        </FormControl>
 
-                         <InputLabel shrink htmlFor="firstName">
-                            Firstname*
+                        <InputLabel shrink htmlFor="lastName">
+                           Lastname*
+                         </InputLabel>
+                         <FormControl className={classes.formComponent}>
+                           <TextField
+                             id="lastName-input"
+                             className={classes.textField}
+                             name="lastName"
+                             type="text"
+                             placeholder="Enter last name"
+                             onChange={handleChange}
+                             disabled={loading}
+                             InputProps={{
+                               disableUnderline: true,
+                               style: {fontSize: 12}
+                             }}
+                             aria-describedby="lastName-error"
+                           />
+                           <FormHelperText id="lastName-error" classes={{ root: classes.helperRoot, error: classes.helper }}>
+                             {  hasError('lastName') ? formState.errors.lastName[0] : null }
+                           </FormHelperText>
+                         </FormControl>
+
+                        <InputLabel shrink htmlFor="phoneNumber">
+                            Phone number*
                           </InputLabel>
-                          <FormControl className={classes.formComponent}>
+
+                          <FormControl error={hasError('phoneNumber')} className={classes.formComponent}>
+                              <PhoneInput
+                                name="phoneNumber"
+                                country={'ng'}
+                                specialLabel=""
+                                aria-describedby="phonenumber-error"
+                                inputStyle={{
+                                  backgroundColor: '#FFFFFF',
+                                  border: '1px solid #8692A6',
+                                  borderRadius: 6,
+                                  padding: '15px 50px',
+                                  width: '100%',
+                                  fontSize: 12,
+                                  '&:hover': {
+                                    border: '1px solid #1565D8',
+                                    backgroundrColor: '#FFFFFF',
+                                 },
+                                 '&$focused': {
+                                   border: '1px solid #1565D8',
+                                   backgroundrColor: '#FFFFFF',
+                                 },
+                                }}
+                                containerStyle={{
+                                  marginTop: 5,
+                                }}
+                                InputProps={{
+                                  disableUnderline: true,
+                                  style: {fontSize: 12}
+                                }}
+                              />
+
+                              <FormHelperText id="phonenumber-error" classes={{ root: classes.helperRoot, error: classes.helper }}>
+                                {  hasError('phoneNumber') ? formState.errors.phoneNumber[0] : null }
+                              </FormHelperText>
+                          </FormControl>
+                        <InputLabel shrink htmlFor="email">
+                            Official Email*
+                          </InputLabel>
+                          <FormControl error={hasError('email')} className={classes.formComponent}>
                             <TextField
-                              id="firstName-input"
-                              className={classes.textField}
-                              name="firstName"
-                              type="text"
-                              placeholder="Enter first name"
-                              onChange={handleChange}
-                              disabled={loading}
-                              InputProps={{
-                                disableUnderline: true,
-                                style: {fontSize: 12}
-                              }}
-                              aria-describedby="firstName-error"
-                            />
-                            <FormHelperText id="firstName-error" classes={{ error: classes.helper }}>
-                              {  hasError('firstName') ? formState.errors.firstName[0] : null }
-                            </FormHelperText>
+                                id="email-input"
+                                className={classes.textField}
+                                name="email"
+                                type="text"
+                                placeholder="Enter email address"
+                                onChange={handleChange}
+                                disabled={loading}
+                                InputProps={{
+                                  disableUnderline: true,
+                                  style: {fontSize: 12}
+                                }}
+                                aria-describedby="email-error"
+                              />
+                              <FormHelperText id="email-error" classes={{ root: classes.helperRoot, error: classes.helper }}>
+                                {  hasError('email') ? formState.errors.email[0] : null }
+                              </FormHelperText>
                           </FormControl>
 
-                          <InputLabel shrink htmlFor="lastName">
-                             Lastname*
-                           </InputLabel>
-                           <FormControl className={classes.formComponent}>
-                             <TextField
-                               id="lastName-input"
-                               className={classes.textField}
-                               name="lastName"
-                               type="text"
-                               placeholder="Enter last name"
-                               onChange={handleChange}
-                               disabled={loading}
-                               InputProps={{
-                                 disableUnderline: true,
-                                 style: {fontSize: 12}
-                               }}
-                               aria-describedby="lastName-error"
-                             />
-                             <FormHelperText id="lastName-error" classes={{ error: classes.helper }}>
-                               {  hasError('lastName') ? formState.errors.lastName[0] : null }
-                             </FormHelperText>
-                           </FormControl>
-
-                          <InputLabel shrink htmlFor="phoneNumber">
-                              Phone number*
+                          <InputLabel shrink htmlFor="designation">
+                              Designation
                             </InputLabel>
-
-                            <FormControl error={hasError('phoneNumber')} className={classes.formComponent}>
-                                <PhoneInput
-                                  name="phoneNumber"
-                                  country={'ng'}
-                                  specialLabel=""
-                                  aria-describedby="phonenumber-error"
-                                  inputStyle={{
-                                    backgroundColor: '#FFFFFF',
-                                    border: '1px solid #8692A6',
-                                    borderRadius: 6,
-                                    padding: '15px 50px',
-                                    width: '100%',
-                                    fontSize: 12,
-                                    '&:hover': {
-                                      border: '1px solid #1565D8',
-                                      backgroundrColor: '#FFFFFF',
-                                   },
-                                   '&$focused': {
-                                     border: '1px solid #1565D8',
-                                     backgroundrColor: '#FFFFFF',
-                                   },
-                                  }}
-                                  containerStyle={{
-                                    marginTop: 5,
-                                  }}
-                                  InputProps={{
-                                    disableUnderline: true,
-                                    style: {fontSize: 12}
-                                  }}
-                                />
-
-                                <FormHelperText id="phonenumber-error" classes={{ error: classes.helper }}>
-                                  {  hasError('phoneNumber') ? formState.errors.phoneNumber[0] : null }
-                                </FormHelperText>
-                            </FormControl>
-                          <InputLabel shrink htmlFor="email">
-                              Official Email*
-                            </InputLabel>
-                            <FormControl error={hasError('email')} className={classes.formComponent}>
+                            <FormControl error={hasError('designation')} className={classes.formComponent}>
                               <TextField
-                                  id="email-input"
+                                  id="designation-input"
                                   className={classes.textField}
-                                  name="email"
+                                  name="designation"
                                   type="text"
-                                  placeholder="Enter email address"
+                                  placeholder="Enter designation"
                                   onChange={handleChange}
                                   disabled={loading}
                                   InputProps={{
                                     disableUnderline: true,
                                     style: {fontSize: 12}
                                   }}
-                                  aria-describedby="email-error"
+                                  aria-describedby="designation-error"
                                 />
-                                <FormHelperText id="email-error" classes={{ error: classes.helper }}>
-                                  {  hasError('email') ? formState.errors.email[0] : null }
+                                <FormHelperText id="designation-error" classes={{ root: classes.helperRoot, error: classes.helper }}>
+                                  {  hasError('designation') ? formState.errors.designation[0] : null }
                                 </FormHelperText>
                             </FormControl>
 
-                            <InputLabel shrink htmlFor="designation">
-                                Designation
-                              </InputLabel>
-                              <FormControl error={hasError('designation')} className={classes.formComponent}>
-                                <TextField
-                                    id="designation-input"
-                                    className={classes.textField}
-                                    name="designation"
-                                    type="text"
-                                    placeholder="Enter designation"
-                                    onChange={handleChange}
-                                    disabled={loading}
-                                    InputProps={{
-                                      disableUnderline: true,
-                                      style: {fontSize: 12}
-                                    }}
-                                    aria-describedby="designation-error"
-                                  />
-                                  <FormHelperText id="designation-error" classes={{ error: classes.helper }}>
-                                    {  hasError('designation') ? formState.errors.designation[0] : null }
-                                  </FormHelperText>
-                              </FormControl>
-
-                            <InputLabel shrink htmlFor="email">
-                              Create Password*
-                            </InputLabel>
-                            <FormControl error={hasError('password')} className={classes.formComponent}>
-                            <TextField
-                              id="password-input"
-                              className={classes.textField}
-                              InputProps={{
-                                endAdornment: <InputAdornment position="end">
-                                <Button
-                                  size='small'
-                                  aria-label="toggle password visibility"
-                                  className={classes.passwordVisibility}
-                                  onClick={e => handleClickShowPassword()}
-                                >
-                                  {showPassword ? "Hide" : "Show"}
-                                </Button>
-                              </InputAdornment>,
-                                disableUnderline: true,
-                                style: {fontSize: 12}
-                              }}
-                              name="password"
-                              placeholder="Enter password"
-                              onChange={handleChange}
-                              disabled={loading}
-                              type={showPassword ? "text" : "password"}
-                              aria-describedby="password-error"
-                              />
-                              <FormHelperText id="password-error" classes={{ error: classes.helper }}>
-                                {  hasError('password') ? formState.errors.password[0] : null }
-                              </FormHelperText>
-                          </FormControl>
-
-                          <InputLabel shrink htmlFor="confirmPassword">
-                            Confirm Password*
+                          <InputLabel shrink htmlFor="email">
+                            Create Password*
                           </InputLabel>
-                          <FormControl error={hasError('confirmPassword')} className={classes.formComponent}>
+                          <FormControl error={hasError('password')} className={classes.formComponent}>
                           <TextField
                             id="password-input"
                             className={classes.textField}
@@ -708,46 +678,79 @@ const Register = () => {
                               disableUnderline: true,
                               style: {fontSize: 12}
                             }}
-                            name="confirmPassword"
-                            placeholder="Re-type password"
+                            name="password"
+                            placeholder="Enter password"
                             onChange={handleChange}
                             disabled={loading}
                             type={showPassword ? "text" : "password"}
                             aria-describedby="password-error"
                             />
-                            <FormHelperText id="password-error" classes={{ error: classes.helper }}>
-                              {  hasError('confirmPassword') ? formState.errors.confirmPassword[0] : null }
+                            <FormHelperText id="password-error" classes={{ root: classes.helperRoot, error: classes.helper }}>
+                              {  hasError('password') ? formState.errors.password[0] : null }
                             </FormHelperText>
                         </FormControl>
 
-                        <div className={classes.termsArea}>
-                          <Checkbox
-                            checked={formState.values.policy || false}
-                            className={classes.termsCheckbox}
-                            color="primary"
-                            name="policy"
-                            onChange={handleChange}
+                        <InputLabel shrink htmlFor="confirmPassword">
+                          Confirm Password*
+                        </InputLabel>
+                        <FormControl error={hasError('confirmPassword')} className={classes.formComponent}>
+                        <TextField
+                          id="password-input"
+                          className={classes.textField}
+                          InputProps={{
+                            endAdornment: <InputAdornment position="end">
+                            <Button
+                              size='small'
+                              aria-label="toggle password visibility"
+                              className={classes.passwordVisibility}
+                              onClick={e => handleClickShowPassword()}
+                            >
+                              {showPassword ? "Hide" : "Show"}
+                            </Button>
+                          </InputAdornment>,
+                            disableUnderline: true,
+                            style: {fontSize: 12}
+                          }}
+                          name="confirmPassword"
+                          placeholder="Re-type password"
+                          onChange={handleChange}
+                          disabled={loading}
+                          type={showPassword ? "text" : "password"}
+                          aria-describedby="password-error"
                           />
-                          <Typography
-                            className={classes.termsText}
-                            color="textSecondary"
-                            variant="body1"
-                          >
-                            I agree to the Terms and Conditions
-                          </Typography>
-                      </div>
-                      <Button
-                        className={classes.signUpButton}
-                        color="primary"
-                        fullWidth
-                        size="large"
-                        type="button"
-                        variant="contained"
-                        onClick={handleSignUp}
-                      >
-                        Register Account
-                      </Button>
-                   </form>
+                          <FormHelperText id="password-error" classes={{ root: classes.helperRoot, error: classes.helper }}>
+                            {  hasError('confirmPassword') ? formState.errors.confirmPassword[0] : null }
+                          </FormHelperText>
+                      </FormControl>
+
+                      <div className={classes.termsArea}>
+                        <Checkbox
+                          checked={formState.values.policy || false}
+                          className={classes.termsCheckbox}
+                          color="primary"
+                          name="policy"
+                          onChange={handleChange}
+                        />
+                        <Typography
+                          className={classes.termsText}
+                          color="textSecondary"
+                          variant="body1"
+                        >
+                          I agree to the Terms and Conditions
+                        </Typography>
+                    </div>
+                    <Button
+                      className={classes.signUpButton}
+                      color="primary"
+                      fullWidth
+                      size="large"
+                      type="button"
+                      variant="contained"
+                      onClick={handleSignUp}
+                    >
+                      Register Account
+                    </Button>
+                  </form>
                </div>
              </Paper>
            </Grid>

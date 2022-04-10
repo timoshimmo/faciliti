@@ -119,32 +119,32 @@ const Leftbar = props => {
     {
       title: 'Overview',
       href: '/home',
-      icon: <HomeIcon fontSize="small" style={{ width: 18, height: 18, fill:'none', stroke:'#ffffff', strokeLinecap:'round', strokeLinejoin:'round', strokeWidth:2 }} />
+      icon: <HomeIcon fontSize="small" style={{ width: 15, height: 15, fill:'none', stroke:'#EFF1F3', strokeLinecap:'round', strokeLinejoin:'round', strokeWidth:2 }} />
     },
     {
       title: 'Payment',
       href: '/payment',
-      icon: <NotificationsIcon fontSize="small" style={{ width: 18, height: 18, fill:'none', stroke:'#ffffff', strokeLinecap:'round', strokeLinejoin:'round', strokeWidth:2 }} />
+      icon: <NotificationsIcon fontSize="small" style={{ width: 15, height: 15, fill:'none', stroke:'#EFF1F3', strokeLinecap:'round', strokeLinejoin:'round', strokeWidth:2 }} />
     },
     {
       title: 'Message',
       href: '/notifications',
-      icon: <MessageIcon fontSize="small" style={{ width: 18, height: 18, strokeWidth:0.5 }} />
+      icon: <MessageIcon fontSize="small" style={{ width: 15, height: 15, strokeWidth:1 }} />
     },
     {
       title: 'Orders',
       href: '/orders',
-      icon: <BookmarksIcon fontSize="small" style={{ width: 18, height: 18, fill:'none', stroke:'#ffffff', strokeLinecap:'round', strokeLinejoin:'round', strokeWidth:2 }} />
+      icon: <BookmarksIcon fontSize="small" style={{ width: 15, height: 15, fill:'none', stroke:'#EFF1F3', strokeLinecap:'round', strokeLinejoin:'round', strokeWidth:2 }} />
     },
     {
       title: 'Visitors',
       href: '/visitors',
-      icon: <ProfileIcon  fontSize="small" style={{ width: 18, height: 18, fill:'none', stroke:'#ffffff', strokeLinecap:'round', strokeLinejoin:'round', strokeWidth:2 }} />
+      icon: <ProfileIcon  fontSize="small" style={{ width: 15, height: 15, fill:'none', stroke:'#EFF1F3', strokeLinecap:'round', strokeLinejoin:'round', strokeWidth:2 }} />
     },
     {
       title: 'Maintenance',
       href: '/maintenance',
-      icon: <BookmarksIcon fontSize="small" style={{ width: 18, height: 18, fill:'none', stroke:'#ffffff', strokeLinecap:'round', strokeLinejoin:'round', strokeWidth:2 }} />
+      icon: <BookmarksIcon fontSize="small" style={{ width: 15, height: 15, fill:'none', stroke:'#EFF1F3', strokeLinecap:'round', strokeLinejoin:'round', strokeWidth:2 }} />
     },
   ];
 

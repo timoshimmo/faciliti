@@ -43,7 +43,8 @@ const schema = {
 const useStyles = makeStyles(theme => ({
 
   root: {
-    minHeight: '100vh',
+    maxHeight: '100vh',
+    height: '100vh',
     maxWidth: '100%',
     backgroundImage: 'url(/images/onboarding_background.jpg)',
     backgroundSize: 'cover',
@@ -51,23 +52,35 @@ const useStyles = makeStyles(theme => ({
     backgroundPosition: 'center',
   },
   grid: {
-    minHeight: '100vh',
+    maxHeight: '100vh',
+  },
+  gridItem: {
+    width: '100%',
+    maxHeight: '100vh',
     paddingTop: 40,
     paddingBottom: 40,
     paddingLeft: 70,
-    paddingRight: 70
+    paddingRight: 70,
   },
   formPaper: {
   width: '100%',
   height: '100%',
   display: 'flex',
   justifyContent: 'center',
+  overflowY: 'scroll',
+  msOverflowStyle: 'none',
+  scrollbarWidth: 'none',
+  '&::-webkit-scrollbar': {
+    display: 'none',
+  }
 },
   formBody: {
     width: '100%',
-    height: 'auto',
-    padding: 40,
-    position: 'relative'
+    height: '100%',
+    display: 'flex',
+    flexDirection: 'column',
+    position: 'relative',
+    padding: 40
   },
   imageIcon: {
     width: 120,
@@ -121,11 +134,11 @@ textField: {
   marginTop: 5,
   '&$focused': {
     border: '1px solid #1565D8',
-    backgroundrColor: '#FFFFFF',
+    backgroundColor: '#FFFFFF',
   },
   '&:hover': {
     border: '1px solid #1565D8',
-    backgroundrColor: '#FFFFFF',
+    backgroundColor: '#FFFFFF',
  },
 },
 passwordVisibility: {
@@ -207,6 +220,9 @@ buttonProgress: {
    marginTop: -10,
    marginLeft: -12,
  },
+ helperRoot: {
+   height: 13
+ }
 }));
 
 const SignIn = props => {
@@ -218,8 +234,17 @@ const SignIn = props => {
   const [openError, setOpenError] = useState(false);
   const [serverError, setServerError] = useState(null);
 
-  const emailArr = ["tokmangwang@gmail.com", "testing@gmail.com"];
-  const passwordArr = ["12345678"];
+  const emailArr = [
+    {
+      email: "tokmangwang@gmail.com",
+      password: "12345678",
+    },
+    {
+      email: "testing@gmail.com",
+      password: "12345678",
+    }
+  ];
+//  const passwordArr = ["12345678"];
   const [loading, setLoading] = useState(false);
   const timer = React.useRef();
   //const [socialLoading, setSocialLoading] = useState(false);
@@ -264,14 +289,21 @@ const SignIn = props => {
     setShowPassword(!showPassword);
   };
 
-  const handleSuccessFulLogin = () => {
+  /*if(emailArr.includes(formState.values.email) && passwordArr.includes(formState.values.password)) {
+    history.push('/home');
+  }*/
 
+  const handleSuccessFulLogin = () => {
     if (!loading) {
       setLoading(true);
       timer.current = window.setTimeout(() => {
         setLoading(false);
-        if(emailArr.includes(formState.values.email) && passwordArr.includes(formState.values.password)) {
+      //  console.log(emailArr.filter(user => user.email === "tokmangwang@gmail.com" && user.password === "12345678"));
+        if(formState.values.email === "tokmangwang@gmail.com" && formState.values.password === "12345678") {
           history.push('/home');
+        }
+        else if(formState.values.email === "testing@gmail.com" && formState.values.password === "12345678") {
+          history.push('/overview');
         }
         else {
           setServerError("Invalid login credentials");
@@ -279,7 +311,6 @@ const SignIn = props => {
         }
       }, 2000);
     }
-
   }
 
   const hasError = field =>
@@ -293,14 +324,15 @@ const SignIn = props => {
       >
           <Grid
             item
-            lg={8}
+            lg={7}
           >
 
           </Grid>
           <Grid
             item
-            lg={4}
+            lg={5}
             xs={12}
+            className={classes.gridItem}
           >
             <Paper className={classes.formPaper} elevation={1} square>
                 <div className={classes.formBody}>
@@ -324,7 +356,7 @@ const SignIn = props => {
                       New here?{' '}
                       <Link
                         component={RouterLink}
-                        to="/signup"
+                        to="/onboarding"
                         variant="body2"
                         underline="none"
                         className={classes.redirectLink}
@@ -388,7 +420,7 @@ const SignIn = props => {
                          <InputLabel shrink htmlFor="email">
                             Email
                           </InputLabel>
-                          <FormControl className={classes.formComponent}>
+                          <FormControl error={hasError('email')} className={classes.formComponent}>
                             <TextField
                               id="email-input"
                               className={classes.textField}
@@ -402,12 +434,12 @@ const SignIn = props => {
                               }}
                               aria-describedby="email-error"
                             />
-                            <FormHelperText id="email-error" classes={{ error: classes.helper }}>
+                          <FormHelperText id="email-error" classes={{ root: classes.helperRoot, error: classes.helper }}>
                               {  hasError('email') ? formState.errors.email[0] : null }
                             </FormHelperText>
                           </FormControl>
 
-                          <InputLabel shrink htmlFor="email">
+                          <InputLabel shrink htmlFor="password">
                             Password
                           </InputLabel>
                           <FormControl error={hasError('password')} className={classes.formComponent}>
@@ -434,7 +466,7 @@ const SignIn = props => {
                             type={showPassword ? "text" : "password"}
                             aria-describedby="password-error"
                             />
-                            <FormHelperText id="password-error" classes={{ error: classes.helper }}>
+                            <FormHelperText id="password-error" classes={{ root: classes.helperRoot, error: classes.helper }}>
                               {  hasError('password') ? formState.errors.password[0] : null }
                             </FormHelperText>
                         </FormControl>

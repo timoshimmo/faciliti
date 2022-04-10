@@ -15,10 +15,11 @@ const useStyles = makeStyles(theme => ({
   item: {
     display: 'flex',
     paddingTop: 0,
-    paddingBottom: 0
+    paddingBottom: 0,
+    marginBottom: 5,
   },
   button: {
-    color: '#ffffff',
+    color: '#EFF1F3',
     padding: '10px 16px',
     justifyContent: 'flex-start',
     alignItems: 'center',
@@ -41,9 +42,9 @@ const useStyles = makeStyles(theme => ({
    },
   },
   icon: {
-    color: '#ffffff',
-    width: 20,
-    height: 20,
+    color: '#EFF1F3',
+    width: 18,
+    height: 18,
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'flex-start',
@@ -68,7 +69,7 @@ const useStyles = makeStyles(theme => ({
   },
   actionSidebar: {
     marginTop: 5,
-    marginBottom: 5,
+    marginBottom: 15,
     paddingTop: 12,
     paddingBottom: 12,
     fontWeight: 400,
@@ -89,11 +90,11 @@ const useStyles = makeStyles(theme => ({
     border: '1px solid #8692A6',
     borderRadius: 4,
     '&:hover': {
-     backgroundColor: '#FFFFFF1A',
-   },
-   position: 'absolute',
-   bottom: 0,
-   width: 'calc(100% - 32px)'
+       backgroundColor: '#FFFFFF1A',
+     },
+     position: 'absolute',
+     bottom: 0,
+     width: 'calc(100% - 32px)'
   }
 }));
 

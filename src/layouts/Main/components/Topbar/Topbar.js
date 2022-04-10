@@ -40,6 +40,7 @@ const useStyles = makeStyles(theme => ({
           <Grid
             className={classes.grid}
             container
+            alignItems="center"
           >
             <Grid
               item

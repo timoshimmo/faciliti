@@ -6,6 +6,7 @@ const primaryMain = '#1B75BC';
 const primaryDark = '#1a5faf';
 const primaryLight = '#D3ECFF';
 
+
  const palette = {
   black,
   white,
@@ -50,8 +51,9 @@ const primaryLight = '#D3ECFF';
   text: {
     primary: '#696F79',
     secondary: '#8692A6',
-    link: '#1B75BC',
-    title:'#2D2D2D'
+    link: '#43ABF0',
+    title:'#2D2D2D',
+    content: '#888888'
   },
   background: {
     default: '#F4F6F8',
@@ -73,6 +75,11 @@ const primaryLight = '#D3ECFF';
     orangeIcon: '#FF9900',
     blueIcon: '#2B81C6',
     greenIcon: '#12AD22'
+  },
+  card: {
+    blue: '#43ABF0',
+    orange: '#FF6600',
+    purple: '#BB00BF'
   }
 };
 

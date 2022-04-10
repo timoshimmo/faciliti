@@ -4,7 +4,6 @@ import {
   Grid,
   Typography,
 } from '@material-ui/core';
-import { Topbar } from '../components';
 import { OverviewArea, MeetingUpdateArea, OrderSummaryArea } from './components'
 
 
@@ -39,7 +38,6 @@ const Overview = props => {
 
     return(
       <div className={classes.root}>
-        <Topbar />
         <Grid
           className={classes.grid}
           container

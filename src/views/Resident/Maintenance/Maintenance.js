@@ -27,7 +27,6 @@ import {
   Paper,
   IconButton
 } from '@material-ui/core';
-import { Topbar } from '../components';
 import SearchIcon from '@material-ui/icons/Search';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ExpandLessIcon from '@material-ui/icons/ExpandLess';
@@ -639,7 +638,6 @@ const Maintenance = props => {
 //const { order, orderBy, rowCount, onRequestSort } = props;
     return (
       <div className={classes.root}>
-        <Topbar />
         <Grid
           className={classes.grid}
           container

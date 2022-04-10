@@ -5,7 +5,8 @@ import { RouteWithLayout } from './components';
 
 import {
   Minimal as MinimalLayout,
-  Main as MainLayout
+  Main as MainLayout,
+  Managers as ManagersLayout
  } from './layouts';
 
  import {
@@ -15,10 +16,12 @@ import {
    CompleteSignup as CompleteSignupPage,
    SignIn as SignInPage,
    Overview as OverviewPage,
+   FMOverview as FMOverviewPage,
    SelectUser as SelectUserPage,
    FullRegister as FullRegisterPage,
    PartialRegister as PartialRegisterPage,
    Payment as PaymentPage,
+   FMPayment as FMPaymentPage,
    Orders as OrdersPage,
    Visitors as VisitorsPage,
    Maintenance as MaintenancePage
@@ -82,6 +85,20 @@ import {
             layout={MainLayout}
             path="/home"
           />
+
+        <RouteWithLayout
+            component={FMOverviewPage}
+            exact
+            layout={ManagersLayout}
+            path="/overview"
+          />
+
+          <RouteWithLayout
+              component={FMPaymentPage}
+              exact
+              layout={ManagersLayout}
+              path="/fm-payments"
+            />
 
         <RouteWithLayout
             component={PaymentPage}
