@@ -18,11 +18,13 @@ import {
   IconButton,
   Paper
 } from '@material-ui/core';
+import axios from 'axios';
 import CloseIcon from '@material-ui/icons/Close';
 import MuiAlert from '@material-ui/lab/Alert';
 import validate from 'validate.js';
 import PhoneInput from 'react-phone-input-2';
 import 'react-phone-input-2/lib/material.css';
+import CircularProgress from '@material-ui/core/CircularProgress';
 //import { EstateDialog } from '../../../components';
 
 function BackButtonIcon(props) {
@@ -46,7 +48,18 @@ const schema = {
   firstName: {
     presence: { allowEmpty: false, message: 'is required' },
     length: {
-      minimum: 5,
+      minimum: 2,
+      maximum: 100
+    },
+    format: {
+     pattern: /^[a-zA-Z ]+$/,
+     message: 'should only contain letters'
+   }
+  },
+  lastName: {
+    presence: { allowEmpty: false, message: 'is required' },
+    length: {
+      minimum: 2,
       maximum: 100
     },
     format: {
@@ -267,7 +280,6 @@ flagButton: {
    },
 },
 termsArea: {
-  marginTop: -20,
   display: 'flex',
   alignItems: 'center'
 },
@@ -298,6 +310,14 @@ signUpButton: {
     '"Segoe UI Symbol"',
   ].join(','),
 },
+buttonProgress: {
+   color: theme.palette.primary.main,
+   position: 'absolute',
+   top: '50%',
+   left: '50%',
+   marginTop: -10,
+   marginLeft: -12,
+ },
 helperRoot: {
   height: 13
 }
@@ -312,9 +332,11 @@ const Register = () => {
 
    const [loading, setLoading] = useState(false);
    const [showPassword, setShowPassword] = useState(false);
+   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
    const [open, setOpen] = useState(false);
    const [serverError, setServerError] = useState(null);
    const [openDialog, setOpenDialog] = useState(false);
+   const [phoneNo, setPhoneNo] = useState('');
 
    const handleDialogOpen = () => {
      setOpenDialog(true);
@@ -370,6 +392,10 @@ const Register = () => {
     setShowPassword(!showPassword);
   };
 
+  const handleClickShowConfirmPassword = () => {
+    setShowConfirmPassword(!showConfirmPassword);
+  };
+
 /*  const handleRedirect = () => {
     history.push('/signup/completed');
   }
@@ -380,8 +406,8 @@ const Register = () => {
   if (!loading) {
     setLoading(true);
 
-    if(formState.values.firstName === '' || formState.values.phoneNumber === '' || formState.values.email === '' ||
-      formState.values.password === '') {
+    if(formState.values.firstName === '' || formState.values.lastName === '' || phoneNo.phone === ''
+    || formState.values.email === '' || formState.values.password === '') {
 
         setServerError("All fields are required");
         setOpen(true);
@@ -389,10 +415,84 @@ const Register = () => {
 
     }
     else {
-      history.push('/signup/completed');
+    //  console.log("Phone Number: " + JSON.stringify(phoneNo.phone));
+
+      let companyData = {};
+      if (typeof localStorage !== 'undefined') {
+        if(localStorage.getItem('company_details') !== null) {
+          const data = localStorage.getItem('company_details');
+          if(data !== null) {
+            companyData = JSON.parse(data);
+            console.log("Data: " + companyData);
+            let eXri = null;
+            let eName = null;
+            let rndPid = formState.values.firstName + getReference();
+
+            if(!companyData.newEstate) {
+              eXri = companyData.estate.uri;
+            }
+            if(companyData.newEstate) {
+              eName = companyData.estate;
+            }
+            const compObj = {
+              companyName : companyData.companyName,
+              companyEmail : companyData.companyEmail,
+              officeAddress : companyData.officeAddress,
+            };
+            const obj = {
+              segmentName: "SPACIOS41826",
+              emailAddress: formState.values.email,
+              firstName: formState.values.firstName,
+              lastName: formState.values.lastName,
+              telephone: phoneNo.phone,
+              role: 22,
+              emailAddressExist: true,
+              newEstate: companyData.newEstate,
+              newEstateName: eName,
+              estateXri: eXri,
+              principalId: "twang15",
+              accountCategories: [25],
+              initialPassword: formState.values.password,
+              initialPasswordVerification: formState.values.password,
+              companyDTO: {
+                companyName : companyData.companyName,
+                companyEmail : companyData.companyEmail,
+                officeAddress : companyData.officeAddress
+              }
+            };
+
+            //http://132.145.58.252:8081/spaciofm/api/
+            axios.post('/api/user-profiles/onboard-fm', obj)
+            .then(response => {
+              //const res = response.data;
+              console.log(response);
+              setLoading(false);
+              history.push('/signup/completed');
+            })
+            .catch(function (error) {
+              console.log(error);
+              setLoading(false);
+              setServerError(error);
+              const resError = error.response ? error.response.data.message : "Something went wrong please try again";
+              setOpen(true);
+
+            })
+          }
+        }
+      }
     }
   }
 }
+
+const getReference = () => {
+		  let text = "";
+		  let possible = "0123456789";
+
+		  for( let i=0; i < 3; i++ )
+			  text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+      return text;
+	 }
 
 /*
 <TextField
@@ -483,7 +583,7 @@ const Register = () => {
                       gutterBottom
                       className={classes.mainTitle}
                     >
-                      Authorized Staff Details
+                      Administrator Details
                     </Typography>
                     <Typography
                       variant="body2"
@@ -529,7 +629,7 @@ const Register = () => {
                        <InputLabel shrink htmlFor="firstName">
                           Firstname*
                         </InputLabel>
-                        <FormControl className={classes.formComponent}>
+                        <FormControl error={hasError('firstName')} className={classes.formComponent}>
                           <TextField
                             id="firstName-input"
                             className={classes.textField}
@@ -552,7 +652,7 @@ const Register = () => {
                         <InputLabel shrink htmlFor="lastName">
                            Lastname*
                          </InputLabel>
-                         <FormControl className={classes.formComponent}>
+                         <FormControl error={hasError('lastName')} className={classes.formComponent}>
                            <TextField
                              id="lastName-input"
                              className={classes.textField}
@@ -576,10 +676,11 @@ const Register = () => {
                             Phone number*
                           </InputLabel>
 
-                          <FormControl error={hasError('phoneNumber')} className={classes.formComponent}>
+                          <FormControl className={classes.formComponent}>
                               <PhoneInput
-                                name="phoneNumber"
                                 country={'ng'}
+                                name="phoneNumber"
+                                onChange={phone => setPhoneNo({ phone })}
                                 specialLabel=""
                                 aria-describedby="phonenumber-error"
                                 inputStyle={{
@@ -703,9 +804,9 @@ const Register = () => {
                               size='small'
                               aria-label="toggle password visibility"
                               className={classes.passwordVisibility}
-                              onClick={e => handleClickShowPassword()}
+                              onClick={e => handleClickShowConfirmPassword()}
                             >
-                              {showPassword ? "Hide" : "Show"}
+                              {showConfirmPassword ? "Hide" : "Show"}
                             </Button>
                           </InputAdornment>,
                             disableUnderline: true,
@@ -746,9 +847,12 @@ const Register = () => {
                       size="large"
                       type="button"
                       variant="contained"
+                      disabled={loading || !formState.values.firstName || !formState.values.lastName ||
+                        !formState.values.email || !formState.values.password || !formState.values.policy || !phoneNo.phone}
                       onClick={handleSignUp}
                     >
                       Register Account
+                      {loading && <CircularProgress size={18} className={classes.buttonProgress} />}
                     </Button>
                   </form>
                </div>

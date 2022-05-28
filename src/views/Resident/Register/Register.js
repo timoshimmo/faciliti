@@ -26,6 +26,8 @@ import 'react-phone-input-2/lib/material.css';
 import { EstateDialog } from '../components';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import AddIcon from '@material-ui/icons/Add';
+import axios from 'axios';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 function BackButtonIcon(props) {
   return (
@@ -233,6 +235,10 @@ textField: {
     border: '1px solid #1565D8',
     backgroundrColor: '#FFFFFF',
  },
+ '&::placeholder': {
+      textOverflow: 'ellipsis !important',
+      color: '#8692A6'
+    }
 },
 passwordVisibility: {
    margin: 0,
@@ -300,11 +306,20 @@ signUpButton: {
     '"Segoe UI Symbol"',
   ].join(','),
 },
+buttonProgress: {
+   color: theme.palette.primary.main,
+   position: 'absolute',
+   top: '50%',
+   left: '50%',
+   marginTop: -10,
+   marginLeft: -12,
+ },
 helperRoot: {
   height: 13
 }
 }));
 
+/*
 const NewButton = ({ children, ...other }) => (
   <Paper {...other}>
     {children}
@@ -319,7 +334,7 @@ const NewButton = ({ children, ...other }) => (
       Add Estate
     </Button>
   </Paper>
-);
+);*/
 
 const Register = () => {
 
@@ -328,10 +343,13 @@ const Register = () => {
 
    const [loading, setLoading] = useState(false);
    const [showPassword, setShowPassword] = useState(false);
+   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
    const [open, setOpen] = useState(false);
    const [serverError, setServerError] = useState(null);
    const [value, setValue] = useState(null);
    const [openDialog, setOpenDialog] = useState(false);
+   const [phoneNo, setPhoneNo] = useState('');
+   const [estates, setEstates] = useState([]);
 
    const handleBack = () => {
      history.goBack();
@@ -364,6 +382,11 @@ const Register = () => {
       }));
   }, [formState.values]);
 
+  useEffect(() => {
+    handleEstates();
+ }, []);
+
+
   const handleChange = event => {
     event.persist();
 
@@ -383,8 +406,25 @@ const Register = () => {
     }));
   };
 
+  //http://132.145.58.252:8081/spaciofm/api/
+     async function handleEstates() {
+        axios.get('http://132.145.58.252:8081/spaciofm/api/estates/?index=0&range=5')
+        .then(response => {
+          const res = response.data;
+          console.log(res);
+          setEstates(res);
+        })
+        .catch(function (error) {
+          console.log(error);
+        })
+    }
+
   const handleClickShowPassword = () => {
     setShowPassword(!showPassword);
+  };
+
+  const handleClickShowConfirmPassword = () => {
+    setShowConfirmPassword(!showConfirmPassword);
   };
 
 /*  const handleRedirect = () => {
@@ -397,8 +437,8 @@ const Register = () => {
   if (!loading) {
     setLoading(true);
 
-    if(formState.values.fullName === '' || formState.values.phoneNumber === '' || formState.values.email === '' ||
-      formState.values.password === '' || formState.values.estateFacility === '') {
+    if(formState.values.fullName === '' || phoneNo.phone === '' || formState.values.email === '' ||
+      formState.values.password === '' || value === null) {
 
         setServerError("All fields are required");
         setOpen(true);
@@ -406,11 +446,61 @@ const Register = () => {
 
     }
     else {
-      history.push('/signup/completed');
+      const nameArr = formState.values.fullName.split(" ");
+      let firstName = nameArr[0];
+      let lastName = nameArr[1];
+      let principalid = firstName + getReference();
+
+      const obj = {
+        enabled: true,
+        segmentName: "SPACIOS41826",
+        emailAddress: formState.values.email,
+        firstName: firstName,
+        lastName: lastName,
+        telephone: phoneNo.phone,
+        role: 23,
+        emailAddressExist: true,
+        estateXri: value.uri,
+        principalId: principalid,
+        accountCategories: [24],
+        initialPassword: formState.values.password,
+        initialPasswordVerification: formState.values.password,
+        companyDTO : null,
+        key : {
+          uuid : null
+        },
+      };
+
+      //http://132.145.58.252:8081/spaciofm/api/
+      axios.post('http://132.145.58.252:8081/spaciofm/api/user-profiles/onboard-resident', obj)
+      .then(response => {
+        //const res = response.data;
+        console.log(response);
+        setLoading(false);
+        history.push('/signup/completed');
+      })
+      .catch(function (error) {
+        console.log(error);
+        setLoading(false);
+        setServerError(error);
+        const resError = error.response ? error.response.data.message : "Something went wrong please try again";
+        setOpen(true);
+
+      })
     }
   }
 
 }
+
+const getReference = () => {
+		  let text = "";
+		  let possible = "0123456789";
+
+		  for( let i=0; i < 3; i++ )
+			  text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+      return text;
+	 }
 
 /*
 <TextField
@@ -550,7 +640,7 @@ const Register = () => {
                            <InputLabel shrink htmlFor="fullName">
                               Your fullname*
                             </InputLabel>
-                            <FormControl className={classes.formComponent}>
+                            <FormControl error={hasError('fullName')} className={classes.formComponent}>
                               <TextField
                                 id="fullname-input"
                                 className={classes.textField}
@@ -579,6 +669,7 @@ const Register = () => {
                                     name="phoneNumber"
                                     country={'ng'}
                                     specialLabel=""
+                                    onChange={phone => setPhoneNo({ phone })}
                                     aria-describedby="phonenumber-error"
                                     inputStyle={{
                                       backgroundColor: '#FFFFFF',
@@ -677,9 +768,9 @@ const Register = () => {
                                   size='small'
                                   aria-label="toggle password visibility"
                                   className={classes.passwordVisibility}
-                                  onClick={e => handleClickShowPassword()}
+                                  onClick={e => handleClickShowConfirmPassword()}
                                 >
-                                  {showPassword ? "Hide" : "Show"}
+                                  {showConfirmPassword ? "Hide" : "Show"}
                                 </Button>
                               </InputAdornment>,
                                 disableUnderline: true,
@@ -689,7 +780,7 @@ const Register = () => {
                               placeholder="Re-type password"
                               onChange={handleChange}
                               disabled={loading}
-                              type={showPassword ? "text" : "password"}
+                              type={showConfirmPassword ? "text" : "password"}
                               aria-describedby="password-error"
                               />
                               <FormHelperText id="password-error" classes={{ root: classes.helperRoot, error: classes.helper }}>
@@ -709,7 +800,11 @@ const Register = () => {
                                 onChange={(event, newValue) => {
                                   setValue(newValue);
                                 }}
-                                options={estateList.map((option) => option.label)}
+                                options={estates}
+                                getOptionLabel={(option) => {
+                                  // Regular option
+                                  return option.name;
+                                }}
                                 aria-describedby="estateFacility-error"
                                 renderInput={(params) => <TextField {...params} placeholder="-Please select-"
                                     InputProps={{
@@ -719,7 +814,6 @@ const Register = () => {
                                       style: {fontSize: 12}
                                     }}
                                 />}
-                                PaperComponent={NewButton}
                               />
                               <FormHelperText id="estatefacility-error" classes={{ root: classes.helperRoot, error: classes.helper }}>
                                 {  hasError('estateFacility') ? formState.errors.estateFacility[0] : null }
@@ -749,14 +843,13 @@ const Register = () => {
                           size="large"
                           type="button"
                           variant="contained"
+                          disabled={loading || !formState.values.fullName || !phoneNo.phone ||
+                            !formState.values.email || !formState.values.password || !formState.values.policy || value === null}
                           onClick={handleSignUp}
                         >
                           Register Account
+                          {loading && <CircularProgress size={18} className={classes.buttonProgress} />}
                         </Button>
-                        <EstateDialog
-                          onClose={handleDialogClose}
-                          onOpen={openDialog}
-                        />
                      </form>
                  </div>
                </Paper>

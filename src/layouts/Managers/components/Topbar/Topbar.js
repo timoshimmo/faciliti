@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/styles';
 import PropTypes from 'prop-types';
 import { Grid, Typography, Toolbar, IconButton, Button, FormControl, Select, MenuItem } from '@material-ui/core';
 import SvgIcon from '@material-ui/core/SvgIcon';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
-
+import AXIOS from '../../../../util/webservices';
 
 const useStyles = makeStyles(theme => ({
 
@@ -109,6 +109,33 @@ formComponent: {
      setActiveEstate(event.target.value);
    };
 
+   let userData = {};
+   if (typeof localStorage !== 'undefined') {
+       const user = localStorage.getItem('userDetails');
+       if(user !== null) {
+         const data = JSON.parse(user);
+         userData = data;
+       }
+   }
+
+   /*useEffect(() => {
+     handleEstates();
+    }, []);
+
+    async function handleEstates() {
+      //console.log("User Data: " + JSON.stringify(userData.crxDetails));
+       AXIOS.get(`http://132.145.58.252:8081/spaciofm/api/estates/search?index=0&range=5&estate-name=INJ`)
+       .then(response => {
+         const res = response.data;
+         console.log(res);
+         //setEstates(res);
+       })
+       .catch(function (error) {
+         console.log(error.response.status) // 401
+         console.log(error.response.data.error)
+       })
+   }*/
+
     return (
         <Toolbar
           disableGutters={true}
@@ -143,7 +170,7 @@ formComponent: {
                 className={classes.typoUsername}
                 startIcon={<AccountCircleIcon fontSize="small" style={{ marginRight: '10%' }} />}
               >
-                Halima Bassey
+                {userData.crxDetails.fullName}
               </Button>
               <FormControl className={classes.formComponent}>
                  <Select

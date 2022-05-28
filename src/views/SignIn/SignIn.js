@@ -21,11 +21,11 @@ import MuiAlert from '@material-ui/lab/Alert';
 import Collapse from '@material-ui/core/Collapse';
 import CloseIcon from '@material-ui/icons/Close';
 import CircularProgress from '@material-ui/core/CircularProgress';
-
+import axios from 'axios';
+//email: true,
 const schema = {
   email: {
     presence: { allowEmpty: false, message: 'is required' },
-    email: true,
     length: {
       maximum: 150
     }
@@ -33,9 +33,9 @@ const schema = {
   password: {
     presence: { allowEmpty: false, message: 'is required' },
     length: {
-      minimum: 6,
+      minimum: 3,
       maximum: 15,
-      message: 'must be at least 6 characters'
+      message: 'must be at least 3 characters'
     }
   }
 };
@@ -233,21 +233,8 @@ const SignIn = props => {
   const [showPassword, setShowPassword] = useState(false);
   const [openError, setOpenError] = useState(false);
   const [serverError, setServerError] = useState(null);
-
-  const emailArr = [
-    {
-      email: "tokmangwang@gmail.com",
-      password: "12345678",
-    },
-    {
-      email: "testing@gmail.com",
-      password: "12345678",
-    }
-  ];
-//  const passwordArr = ["12345678"];
   const [loading, setLoading] = useState(false);
   const timer = React.useRef();
-  //const [socialLoading, setSocialLoading] = useState(false);
 
   const [formState, setFormState] = useState({
      isValid: false,
@@ -293,7 +280,45 @@ const SignIn = props => {
     history.push('/home');
   }*/
 
-  const handleSuccessFulLogin = () => {
+  const handleLogin = () => {
+    if (!loading) {
+      setLoading(true);
+
+      const obj = {
+        username: formState.values.email,
+        password: formState.values.password,
+      };
+//http://132.145.58.252:8081/spaciofm/api/
+///api/
+      axios.post('http://132.145.58.252:8081/spaciofm/api/authenticate', obj)
+      .then(response => {
+        //const res = response.data;
+        console.log(response.data);
+        localStorage.setItem('spfmtoken', response.data.token);
+        localStorage.setItem('userDetails', JSON.stringify(response.data.userDetails));
+        setLoading(false);
+
+        if(response.data.userDetails.crxDetails.accountCategories[0] === 25) {
+        //  console.log(JSON.stringify(response.data.userDetails));
+          history.push('/overview');
+        }
+        else {
+          history.push('/home');
+        }
+
+      })
+      .catch(function (error) {
+        console.log(error.response.status);
+        console.log(error.response.data.error);
+        setLoading(false);
+        setServerError("Invalid login credentials");
+        setOpenError(true);
+
+      });
+    }
+  }
+
+/*  const handleSuccessFulLogin = () => {
     if (!loading) {
       setLoading(true);
       timer.current = window.setTimeout(() => {
@@ -311,7 +336,7 @@ const SignIn = props => {
         }
       }, 2000);
     }
-  }
+  }*/
 
   const hasError = field =>
     formState.touched[field] && formState.errors[field] ? true : false;
@@ -493,8 +518,8 @@ const SignIn = props => {
                             size="large"
                             type="button"
                             variant="contained"
-                            disabled={ loading }
-                            onClick={handleSuccessFulLogin}
+                            disabled={loading || !formState.values.email || !formState.values.password}
+                            onClick={handleLogin}
                           >
                             Sign In
                             {loading && <CircularProgress size={18} className={classes.buttonProgress} />}

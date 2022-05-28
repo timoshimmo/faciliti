@@ -7,11 +7,11 @@ const instance = axios.create({
 
 instance.interceptors.request.use(
   async config => {
-    let token = 'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbi1UZXN0MjUiLCJpc0FkbWluIjp0cnVlLCJleHAiOjE2NDkyNzc2OTcsImlhdCI6MTY0OTI3NzA5N30.7kU8vj_IbUkdY1p_i6KfgpuqMmDxwZzb7WgbrbxF5-bly3U31amMn2wdixKxkAku6V6Hrq2vgzfaU1zBD9t7cw';
+    let token = localStorage.getItem('spfmtoken');
+    console.log(token);
+
     config.headers = {
-    'Authorization': `Bearer ${token}`,
-    'Access-Control-Allow-Origin': '*',
-    'Access-Control-Allow-Credentials': false,
+    'Authorization': `Bearer ${token}`
   }
     return config;
   },

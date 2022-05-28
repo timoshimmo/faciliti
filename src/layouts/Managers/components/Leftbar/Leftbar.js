@@ -150,8 +150,9 @@ function MeetingsIcon(props) {
 
 const Leftbar = props => {
 
-  const { onDialogOpen } = props;
   const classes = useStyles();
+
+  const { onOpen, onClose } = props;
 
 /*  let userData = {};
   if (typeof localStorage !== 'undefined') {
@@ -242,7 +243,8 @@ const Leftbar = props => {
       </div>
       <SidebarNav
         pages={pages}
-        onDialogOpen={onDialogOpen}
+        onClose={onClose}
+        onOpen={onOpen}
       />
     </div>
   );
@@ -251,7 +253,8 @@ const Leftbar = props => {
 
 Leftbar.propTypes = {
   className: PropTypes.string,
-  onDialogOpen: PropTypes.func,
+  onClose: PropTypes.func,
+  onOpen: PropTypes.func,
 };
 
 export default Leftbar;

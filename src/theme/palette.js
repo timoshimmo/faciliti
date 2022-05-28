@@ -2,7 +2,7 @@ import { colors } from '@material-ui/core';
 
 const white = '#FFFFFF';
 const black = '#000000';
-const primaryMain = '#1B75BC';
+const primaryMain = '#1565D8';
 const primaryDark = '#1a5faf';
 const primaryLight = '#D3ECFF';
 
@@ -53,7 +53,9 @@ const primaryLight = '#D3ECFF';
     secondary: '#8692A6',
     link: '#43ABF0',
     title:'#2D2D2D',
-    content: '#888888'
+    content: '#888888',
+    yellow: '#F09700',
+    blue: '#0500F1'
   },
   background: {
     default: '#F4F6F8',
@@ -79,7 +81,8 @@ const primaryLight = '#D3ECFF';
   card: {
     blue: '#43ABF0',
     orange: '#FF6600',
-    purple: '#BB00BF'
+    purple: '#BB00BF',
+    red: '#FD7575'
   }
 };
 

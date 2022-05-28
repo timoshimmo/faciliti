@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/styles';
 import { Leftbar, Rightbar, Topbar } from './components';
-import { OrderDialog } from '../../views/Resident/components';
+import { NewResidentDialog } from '../../views/FacilityManager/components';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -79,32 +79,43 @@ const useStyles = makeStyles(theme => ({
 
 const Managers = props => {
   const { children } = props;
+  const [openNewResidentDialog, setOpenNewResidentDialog] = useState(false);
 
   const classes = useStyles();
+  let userData = {};
+  if (typeof localStorage !== 'undefined') {
+      const user = localStorage.getItem('userDetails');
+      if(user !== null) {
+        const data = JSON.parse(user);
+        userData = data;
+      }
+  }
 
-  const [openDialog, setOpenDialog] = useState(false);
-
-  const handleDialogOpen = () => {
-    setOpenDialog(true);
+  const handleNewResidentDialogOpen = () => {
+    setOpenNewResidentDialog(true);
   };
 
-  const handleDialogClose = () => {
-    setOpenDialog(false);
+  const handleNewResidentDialogClose = () => {
+    setOpenNewResidentDialog(false);
   };
+
 
   return (
     <div className={classes.root}>
        <div className={classes.leftDiv} >
-          <Leftbar onDialogOpen={handleDialogOpen} />
+          <Leftbar
+            onClose={handleNewResidentDialogClose}
+            onOpen={handleNewResidentDialogOpen}
+            />
         </div>
         <div className={classes.mainDiv}>
           <Topbar />
           <main className={classes.content}>
             {children}
           </main>
-          <OrderDialog
-            onClose={handleDialogClose}
-            onOpen={openDialog}
+          <NewResidentDialog
+            onClose={handleNewResidentDialogClose}
+            onOpen={openNewResidentDialog}
           />
         </div>
     </div>

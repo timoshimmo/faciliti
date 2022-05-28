@@ -24,7 +24,8 @@ import {
    FMPayment as FMPaymentPage,
    Orders as OrdersPage,
    Visitors as VisitorsPage,
-   Maintenance as MaintenancePage
+   Maintenance as MaintenancePage,
+   Meetings as MeetingsPage
  } from './views';
 
  const Routes = () => {
@@ -98,6 +99,13 @@ import {
               exact
               layout={ManagersLayout}
               path="/fm-payments"
+            />
+
+            <RouteWithLayout
+              component={MeetingsPage}
+              exact
+              layout={ManagersLayout}
+              path="/meetings"
             />
 
         <RouteWithLayout

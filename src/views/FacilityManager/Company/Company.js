@@ -18,16 +18,17 @@ import {
   IconButton,
   Paper
 } from '@material-ui/core';
-//import axios from 'axios';
+import axios from 'axios';
 import CloseIcon from '@material-ui/icons/Close';
 import MuiAlert from '@material-ui/lab/Alert';
-import Autocomplete from '@material-ui/lab/Autocomplete';
+import Autocomplete, { createFilterOptions } from '@material-ui/lab/Autocomplete';
 import validate from 'validate.js';
 import PhoneInput from 'react-phone-input-2';
 import 'react-phone-input-2/lib/material.css';
-import AXIOS from '../../../util/webservices';
+//import AXIOS from '../../../util/webservices';
 //import { EstateDialog } from '../../../components';
 import AddIcon from '@material-ui/icons/Add';
+import AutocompleteAddress from "react-google-autocomplete";
 
 function BackButtonIcon(props) {
   return (
@@ -58,7 +59,7 @@ const schema = {
      message: 'should only contain letters'
    }
   },
-  email: {
+  businessEmail: {
     presence: { allowEmpty: false, message: 'is required' },
     email: true,
     length: {
@@ -67,14 +68,10 @@ const schema = {
   },
   businessAddress: {
     presence: { allowEmpty: false, message: 'is required' },
-  length: {
-    minimum: 9,
-    maximum: 15
-  },
-  format: {
-   pattern: /^[0-9]+$/,
-   message: 'should only contain numbers'
- }
+    length: {
+      minimum: 9,
+      maximum: 150
+    },
   },
   password: {
     presence: { allowEmpty: false, message: 'is required' },
@@ -147,6 +144,8 @@ const bizType = [
   { label: 'Real Estate Developers', id: 3 },
   { label: 'Security Managers', id: 4 },
 ];
+
+const filter = createFilterOptions();
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -253,12 +252,49 @@ textField: {
   marginTop: 5,
   '&$focused': {
     border: '1px solid #1565D8',
-    backgroundrColor: '#FFFFFF',
   },
   '&:hover': {
     border: '1px solid #1565D8',
-    backgroundrColor: '#FFFFFF',
  },
+},
+
+textFieldAddress: {
+  backgroundColor: '#FFFFFF',
+  border: '1px solid #8692A6',
+  borderRadius: 6,
+  transition: theme.transitions.create(['background-color']),
+  padding: '13.5px 25px',
+  color: '#696F79',
+  fontSize: 12,
+  fontFamily: [
+    'Open Sans',
+    '-apple-system',
+    'BlinkMacSystemFont',
+    '"Segoe UI"',
+    'Roboto',
+    '"Helvetica Neue"',
+    'Arial',
+    'sans-serif',
+    '"Apple Color Emoji"',
+    '"Segoe UI Emoji"',
+    '"Segoe UI Symbol"',
+  ].join(','),
+  marginTop: 5,
+  '&$focused': {
+    border: '1px solid #1565D8',
+    outline: 'none !important',
+  },
+  '&:focus': {
+    border: '1px solid #1565D8',
+    outline: 'none !important',
+  },
+  '&:hover': {
+    border: '1px solid #1565D8',
+ },
+ '&::placeholder': {
+      textOverflow: 'ellipsis !important',
+      color: '#d5dae0'
+    }
 },
 passwordVisibility: {
    margin: 0,
@@ -326,6 +362,7 @@ signUpButton: {
     '"Segoe UI Symbol"',
   ].join(','),
 },
+
 helperRoot: {
   height: 13
 }
@@ -343,6 +380,10 @@ const Company = () => {
    const [open, setOpen] = useState(false);
    const [serverError, setServerError] = useState(null);
    const [value, setValue] = useState(null);
+   const [type, setType] = useState(null);
+   const [place, setPlace] = useState(null);
+   const [estates, setEstates] = useState([]);
+   const [newEstateStatus, setNewEstateStatus] = useState(false);
 
 //   const [openDialog, setOpenDialog] = useState(false);
 
@@ -360,9 +401,7 @@ const Company = () => {
       errors: {}
     });
 
-
    useEffect(() => {
-
       const errors = validate(formState.values, schema);
       setFormState(formState => ({
         ...formState,
@@ -371,6 +410,10 @@ const Company = () => {
       }));
       handleEstates();
   }, [formState.values]);
+
+  useEffect(() => {
+    handleEstates();
+   }, []);
 
   const handleChange = event => {
     event.persist();
@@ -399,17 +442,18 @@ const Company = () => {
      history.push('/fm-personal');
    }
 
-  async function handleEstates() {
-
-    AXIOS.get('estates/?index=0&range=5')
-    .then(response => {
-      const res = response.data;
-      console.log(response);
-    })
-    .catch(function (error) {
-      console.log(error);
-    })
-}
+//http://132.145.58.252:8081/spaciofm/api/
+   async function handleEstates() {
+      axios.get('http://132.145.58.252:8081/spaciofm/api/estates/?index=0&range=5')
+      .then(response => {
+        const res = response.data;
+        console.log(res);
+        setEstates(res);
+      })
+      .catch(function (error) {
+        console.log(error);
+      })
+  }
 
   const handleClickShowPassword = () => {
     setShowPassword(!showPassword);
@@ -421,27 +465,29 @@ const Company = () => {
 */
   const handleSignUp = event => {
     event.preventDefault();
-
-  if (!loading) {
-    setLoading(true);
-
-  /*  if(formState.values.businessName === '' || formState.values.businessAddress === '' || formState.values.email === '' ||
-      formState.values.password === '' || formState.values.estateFacility === '') {
-
+    if (!loading) {
+      setLoading(true);
+     if(formState.values.businessName === '' || formState.values.businessAddress === '' || formState.values.businessEmail === '') {
         setServerError("All fields are required");
         setOpen(true);
         setLoading(false);
+      }
+      else {
+        let estateValue;
 
+        const obj = {
+          companyName: formState.values.businessName,
+          companyEmail: formState.values.businessEmail,
+          officeAddress: place.formatted_address,
+          estate: value,
+          newEstate: newEstateStatus
+      };
+      setLoading(false);
+      localStorage.setItem('company_details', JSON.stringify(obj));
+      history.push('/fm-personal');
+      }
     }
-    else {
-      history.push('/signup/completed');
-    } */
-
-    history.push('/fm-personal');
-
   }
-
-}
 
 /*
 <TextField
@@ -481,9 +527,7 @@ const Company = () => {
        >
            <Grid
              item
-             lg={7}
-           >
-
+             lg={7}>
            </Grid>
            <Grid
              item
@@ -567,13 +611,11 @@ const Company = () => {
                                <Typography
                                  color="textSecondary"
                                  variant="body2"
-                                 style={{ fontSize: 12 }}
-                               >
+                                 style={{ fontSize: 12 }}>
                                    {serverError}
                                </Typography>
                             </MuiAlert>
                          </Collapse>
-
                          <InputLabel shrink htmlFor="businessName">
                             Business name*
                           </InputLabel>
@@ -588,7 +630,9 @@ const Company = () => {
                               disabled={loading}
                               InputProps={{
                                 disableUnderline: true,
-                                style: {fontSize: 12}
+                                style: {
+                                  fontSize: 12,
+                                }
                               }}
                               aria-describedby="businessName-error"
                             />
@@ -599,78 +643,49 @@ const Company = () => {
 
                           <InputLabel shrink htmlFor="businessAddress">
                               Business Address*
-                            </InputLabel>
-
-                            <FormControl error={hasError('businessAddress')} className={classes.formComponent}>
-                                <TextField
-                                  id="businessAddress-input"
-                                  name="businessAddress"
-                                  className={classes.textField}
-                                  type="text"
-                                  placeholder="Enter business address"
-                                  onChange={handleChange}
-                                  disabled={loading}
-                                  InputProps={{
-                                    disableUnderline: true,
-                                    style: {fontSize: 12}
-                                  }}
-                                  aria-describedby="businessAddress-error"
-                                />
-
-                                <FormHelperText id="businessAddress-error" classes={{ root: classes.helperRoot, error: classes.helper }}>
-                                  {  hasError('businessAddress') ? formState.errors.businessAddress[0] : null }
-                                </FormHelperText>
-                            </FormControl>
-                          <InputLabel shrink htmlFor="webUrl">
-                              Website URL(optional)
-                            </InputLabel>
-                            <FormControl error={hasError('webUrl')} className={classes.formComponent}>
-                              <TextField
-                                  id="webUrl-input"
-                                  className={classes.textField}
-                                  name="webUrl"
-                                  type="text"
-                                  placeholder="Enter company website"
-                                  onChange={handleChange}
-                                  disabled={loading}
-                                  InputProps={{
-                                    disableUnderline: true,
-                                    style: {fontSize: 12}
-                                  }}
-                                  aria-describedby="webUrl-error"
-                                />
-                                <FormHelperText id="webUrl-error" classes={{ root: classes.helperRoot, error: classes.helper }}>
-                                  {  hasError('webUrl') ? formState.errors.webUrl[0] : null }
-                                </FormHelperText>
-                            </FormControl>
-                            <InputLabel shrink htmlFor="businessType">
-                              Type of business*
-                            </InputLabel>
-                            <FormControl error={hasError('businessType')} className={classes.formComponent}>
-                              <Autocomplete
-                                  id="businessType-input"
-                                  name="businessType"
-                                  className={classes.textField}
-                                  value={value}
-                                  onChange={(event, newValue) => {
-                                    setValue(newValue);
-                                  }}
-                                  options={bizType.map((option) => option.label)}
-                                  aria-describedby="businessType-error"
-                                  renderInput={(params) => <TextField {...params} placeholder="-Please select-"
-                                      InputProps={{
-                                        ...params.InputProps,
-                                        disableUnderline: true,
-                                        type: 'search',
-                                        style: {fontSize: 12}
-                                      }}
-                                  />}
-                                />
-                              <FormHelperText id="businessType-error" classes={{ root: classes.helperRoot, error: classes.helper }}>
-                                {  hasError('businessType') ? formState.errors.businessType[0] : null }
-                              </FormHelperText>
+                          </InputLabel>
+                          <FormControl error={hasError('businessAddress')} className={classes.formComponent}>
+                            <AutocompleteAddress
+                              apiKey={'AIzaSyDs_8LnDD8HGjgkPO5hLk08MTFOk6FJus8'}
+                              id="businessAddress-input"
+                              className={classes.textFieldAddress}
+                              placeholder="Enter business address"
+                              onPlaceSelected={(place) => {
+                                console.log(place);
+                                setPlace(place);
+                              }}
+                              options={{
+                                types: ["address"],
+                                componentRestrictions: { country: "ng" }
+                              }}
+                              aria-describedby="businessAddress-error"
+                            />
+                            <FormHelperText id="businessAddress-error" classes={{ root: classes.helperRoot, error: classes.helper }}>
+                              {  hasError('businessAddress') ? formState.errors.businessAddress[0] : null }
+                            </FormHelperText>
                           </FormControl>
-
+                          <InputLabel shrink htmlFor="businessEmail">
+                            Business Email*
+                          </InputLabel>
+                          <FormControl error={hasError('businessEmail')} className={classes.formComponent}>
+                            <TextField
+                                id="businessEmail-input"
+                                className={classes.textField}
+                                name="businessEmail"
+                                type="email"
+                                placeholder="Enter business email"
+                                onChange={handleChange}
+                                disabled={loading}
+                                InputProps={{
+                                  disableUnderline: true,
+                                  style: {fontSize: 12}
+                                }}
+                                aria-describedby="businessEmail-error"
+                              />
+                              <FormHelperText id="businessEmail-error" classes={{ root: classes.helperRoot, error: classes.helper }}>
+                                {  hasError('businessEmail') ? formState.errors.businessEmail[0] : null }
+                              </FormHelperText>
+                        </FormControl>
                         <InputLabel shrink htmlFor="estateFacility">
                           Primary Estate/Facility
                         </InputLabel>
@@ -681,10 +696,54 @@ const Company = () => {
                               className={classes.textField}
                               value={value}
                               onChange={(event, newValue) => {
-                                setValue(newValue);
+                                if (typeof newValue === 'string') {
+                                  console.log("New Estate 1: " + newValue);
+                                  setValue({
+                                    name: newValue,
+                                  });
+                                } else if (newValue && newValue.inputValue) {
+                                  // Create a new value from the user input
+                                  console.log("New Estate 2: " + newValue.inputValue);
+                                  setValue(newValue.inputValue);
+                                  setNewEstateStatus(true);
+                                } else {
+                                  setValue(newValue);
+                                  setNewEstateStatus(false);
+                                }
+
                               }}
-                              options={estateList.map((option) => option.label)}
+                              filterOptions={(options, params) => {
+                                const filtered = filter(options, params);
+
+                                const { inputValue } = params;
+                                // Suggest the creation of a new value
+                                const isExisting = options.some((option) => inputValue === option.uri);
+                                if (inputValue !== '' && !isExisting) {
+                                  filtered.push({
+                                    inputValue,
+                                    name: `Add "${inputValue}"`,
+                                  });
+                                }
+                                return filtered;
+                              }}
+                              selectOnFocus
+                              clearOnBlur
+                              handleHomeEndKeys
+                              options={estates}
+                              getOptionLabel={(option) => {
+                                // Value selected with enter, right from the input
+                                if (typeof option === 'string') {
+                                  return option;
+                                }
+                                // Add "xxx" option created dynamically
+                                if (option.inputValue) {
+                                  return option.inputValue;
+                                }
+                                // Regular option
+                                return option.name;
+                              }}
                               aria-describedby="estateFacility-error"
+                              freeSolo
                               renderInput={(params) => <TextField {...params} placeholder="-Please select-"
                                   InputProps={{
                                     ...params.InputProps,
@@ -693,14 +752,11 @@ const Company = () => {
                                     style: {fontSize: 12}
                                   }}
                               />}
-                              PaperComponent={NewButton}
-                              classes={{ option: { fontSize: 10 } }}
                             />
                           <FormHelperText id="estatefacility-error" classes={{ root: classes.helperRoot, error: classes.helper }}>
                             {  hasError('estateFacility') ? formState.errors.estateFacility[0] : null }
                           </FormHelperText>
                       </FormControl>
-
                       <Button
                         className={classes.signUpButton}
                         color="primary"
@@ -709,8 +765,8 @@ const Company = () => {
                         type="button"
                         variant="contained"
                         onClick={handleSignUp}
-                        disabled={loading}
-                      >
+                        disabled={loading || !formState.values.businessName || place === null ||
+                          !formState.values.businessEmail || value === null}>
                         Save & Continue
                       </Button>
                    </form>
