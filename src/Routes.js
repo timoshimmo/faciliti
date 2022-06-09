@@ -24,6 +24,7 @@ import {
    FMPayment as FMPaymentPage,
    Orders as OrdersPage,
    Visitors as VisitorsPage,
+   FMVisitors as FMVisitorsPage,
    Maintenance as MaintenancePage,
    Meetings as MeetingsPage
  } from './views';
@@ -100,6 +101,13 @@ import {
               layout={ManagersLayout}
               path="/fm-payments"
             />
+
+            <RouteWithLayout
+                component={FMVisitorsPage}
+                exact
+                layout={ManagersLayout}
+                path="/fm-visitors"
+              />
 
             <RouteWithLayout
               component={MeetingsPage}

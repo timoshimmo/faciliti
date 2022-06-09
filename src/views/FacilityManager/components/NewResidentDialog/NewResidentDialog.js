@@ -279,8 +279,8 @@ const handleRegister = event => {
         emailAddress: formState.values.emailAddress,
         groupsToBeAssigned : null,
         isAdministrator : null,
-        initialPassword : "12345",
-        initialPasswordVerification : "12345",
+        initialPassword : "123456",
+        initialPasswordVerification : "123456",
         timeZone : null,
         firstName: formState.values.firstName,
         lastName: formState.values.lastName,
@@ -296,10 +296,12 @@ const handleRegister = event => {
 
       AXIOS.get('http://132.145.58.252:8081/spaciofm/api/user-profiles/register-resident')
       .then(response => {
+        setLoading(false);
         const res = response.data;
         console.log(res);
       })
       .catch(function (error) {
+        setLoading(false);
         console.log(error.response);
         console.log(error.message);
       })
@@ -493,8 +495,6 @@ const handleRegister = event => {
                         </FormHelperText>
                   </FormControl>
 
-                  <Divider />
-
                   <InputLabel shrink htmlFor="estateAddress">
                     Add Primary Facility/Estate
                   </InputLabel>
@@ -565,6 +565,7 @@ const handleRegister = event => {
            disabled={loading || !formState.values.firstName || !formState.values.lastName || !phoneNo.phone ||
              !formState.values.emailAddress || !formState.values.estateAddress || value === null}>
            Add New User
+           {loading && <CircularProgress size={18} className={classes.buttonProgress} />}
          </Button>
        </DialogActions>
     </Dialog>

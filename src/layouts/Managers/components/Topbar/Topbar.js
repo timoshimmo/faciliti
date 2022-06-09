@@ -82,12 +82,16 @@ const useStyles = makeStyles(theme => ({
   },
  },
 
+ menuDropStyle: {
+   top: '60px !important'
+ },
+
 formComponent: {
   width: 160,
   fontSize: 13
 },
 
-  }));
+}));
 
   function NotificationIcon(props) {
     return (
@@ -103,22 +107,42 @@ formComponent: {
 
     const classes = useStyles();
 
-    const [activeEstate, setActiveEstate] = useState(10);
+    let userData = {};
+    if (typeof localStorage !== 'undefined') {
+        const user = localStorage.getItem('userDetails');
+        if(user !== null) {
+          const data = JSON.parse(user);
+          userData = data;
+        }
+    }
+
+    const [activeEstate, setActiveEstate] = useState([]);
+    const [selectedEstate, setSelectedEstate] = useState('');
 
     const handleChangeEstate = (event) => {
-     setActiveEstate(event.target.value);
+     setSelectedEstate(event.target.value);
+     console.log("ESTATE VALUE: ", event.target.value);
+     const userid = localStorage.getItem('userId');
+
+     AXIOS.put(`http://132.145.58.252:8081/spaciofm/api/user-profiles/current-estate/`,
+       {
+         "user-id": userid,
+         "contact-id": userData.crxDetails.contactXRI,
+      })
+     .then(response => {
+       const res = response.data;
+       console.log(res);
+
+     })
+     .catch(function (error) {
+       console.log(error.response);
+       console.log(error.message);
+     })
    };
 
-   let userData = {};
-   if (typeof localStorage !== 'undefined') {
-       const user = localStorage.getItem('userDetails');
-       if(user !== null) {
-         const data = JSON.parse(user);
-         userData = data;
-       }
-   }
 
-   /*useEffect(() => {
+
+   useEffect(() => {
      handleEstates();
     }, []);
 
@@ -128,13 +152,14 @@ formComponent: {
        .then(response => {
          const res = response.data;
          console.log(res);
-         //setEstates(res);
+         setActiveEstate(res);
+        // setSelectedEstate(res[0].uri);
        })
        .catch(function (error) {
-         console.log(error.response.status) // 401
-         console.log(error.response.data.error)
+         console.log(error.response);
+         console.log(error.message);
        })
-   }*/
+   }
 
     return (
         <Toolbar
@@ -175,8 +200,8 @@ formComponent: {
               <FormControl className={classes.formComponent}>
                  <Select
                    className={classes.selectParent}
-                   value={activeEstate}
                    onChange={handleChangeEstate}
+                   MenuProps={{ classes: { paper: classes.menuDropStyle } }}
                    InputProps={{
                      disableUnderline: true,
                      style: {fontSize: 12}
@@ -185,9 +210,11 @@ formComponent: {
                      standard: classes.selectStyle
                    }}
                  >
-                   <MenuItem value={10}>Sunrise Hills Estate</MenuItem>
-                   <MenuItem value={20}>Gwarinpa Estate</MenuItem>
-                   <MenuItem value={30}>Apo Quarters</MenuItem>
+                  {
+                    activeEstate.map((row, index) => (
+                      <MenuItem value={row.uri}>{row.name}</MenuItem>
+                    ))
+                  }
                  </Select>
               </FormControl>
             </Grid>

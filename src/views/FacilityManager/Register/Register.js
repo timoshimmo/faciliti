@@ -360,7 +360,6 @@ const Register = () => {
 
 
    useEffect(() => {
-
       const errors = validate(formState.values, schema);
       setFormState(formState => ({
         ...formState,
@@ -462,11 +461,17 @@ const Register = () => {
             };
 
             //http://132.145.58.252:8081/spaciofm/api/
-            axios.post('/api/user-profiles/onboard-fm', obj)
+            ///api/user-profiles/onboard-fm
+            axios.post('http://132.145.58.252:8081/spaciofm/api/user-profiles/onboard-fm', obj)
             .then(response => {
               //const res = response.data;
               console.log(response);
               setLoading(false);
+              if (typeof localStorage !== 'undefined') {
+                if(localStorage.getItem('company_details') !== null) {
+                    localStorage.removeItem('company_details');
+                }
+              }
               history.push('/signup/completed');
             })
             .catch(function (error) {

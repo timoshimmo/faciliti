@@ -194,7 +194,7 @@ const Leftbar = props => {
     },
     {
       title: 'Visitors',
-      href: '/visitors',
+      href: '/fm-visitors',
       icon: <VisitorsIcon  fontSize="small" style={{ width: 18, height: 18, fill:'none', stroke:'#EFF1F3', strokeLinecap:'round', strokeLinejoin:'round', strokeWidth:2 }} />
     },
     {

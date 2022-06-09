@@ -10,6 +10,7 @@ export { default as Payment } from './Resident/Payments';
 export { default as FMPayment } from './FacilityManager/Payment';
 export { default as Orders } from './Resident/Orders';
 export { default as Visitors } from './Resident/Visitors';
+export { default as FMVisitors } from './FacilityManager/Visitors';
 export { default as Maintenance } from './Resident/Maintenance';
 export { default as FMBusiness } from './FacilityManager/Company';
 export { default as FMPersonal } from './FacilityManager/Register';

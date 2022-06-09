@@ -112,6 +112,15 @@ const OverviewArea = props => {
 
   const classes = useStyles();
 
+  let userData = {};
+  if (typeof localStorage !== 'undefined') {
+      const user = localStorage.getItem('userDetails');
+      if(user !== null) {
+        const data = JSON.parse(user);
+        userData = data;
+      }
+  }
+
   return (
     <Grid container direction="row" spacing={1}>
       <Grid
@@ -141,7 +150,7 @@ const OverviewArea = props => {
                         variant="body1"
                         color="primary"
                         className={classes.actionTitle}>
-                        Tunde Ednut
+                        {userData.crxDetails.fullName}
                       </Typography>
                       <Typography
                         variant="body2"

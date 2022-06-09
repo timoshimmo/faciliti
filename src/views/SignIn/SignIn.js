@@ -295,14 +295,19 @@ const SignIn = props => {
         //const res = response.data;
         console.log(response.data);
         localStorage.setItem('spfmtoken', response.data.token);
+        localStorage.setItem('provider', JSON.stringify(response.data.userDetails.crxDetails.providerName));
+        localStorage.setItem('tenantId', JSON.stringify(response.data.userDetails.crxDetails.segmentName));
+        localStorage.setItem('userId', JSON.stringify(response.data.userDetails.crxDetails.userId));
         localStorage.setItem('userDetails', JSON.stringify(response.data.userDetails));
+
         setLoading(false);
 
         if(response.data.userDetails.crxDetails.accountCategories[0] === 25) {
-        //  console.log(JSON.stringify(response.data.userDetails));
+          console.log("USERDETAILS: " + JSON.stringify(response.data.userDetails));
           history.push('/overview');
         }
         else {
+          console.log("USERDETAILS: " + JSON.stringify(response.data.userDetails));
           history.push('/home');
         }
 

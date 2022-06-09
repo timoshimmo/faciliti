@@ -55,7 +55,9 @@ const primaryLight = '#D3ECFF';
     title:'#2D2D2D',
     content: '#888888',
     yellow: '#F09700',
-    blue: '#0500F1'
+    blue: '#0500F1',
+    green: '#187616',
+    red: '#F10000'
   },
   background: {
     default: '#F4F6F8',
@@ -79,7 +81,7 @@ const primaryLight = '#D3ECFF';
     greenIcon: '#12AD22'
   },
   card: {
-    blue: '#43ABF0',
+    blue: '#1B75BC',
     orange: '#FF6600',
     purple: '#BB00BF',
     red: '#FD7575'

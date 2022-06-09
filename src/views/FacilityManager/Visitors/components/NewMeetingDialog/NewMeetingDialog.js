@@ -322,11 +322,17 @@ const NewMeetingDialog = props => {
 
   const [peopleList, setPeopleList] = useState([
       { key: 0,
-        xri: "xri://@openmdx*org.opencrx.kernel.account1/provider/CRX/segment/INJREAM26606/account/R766BOBU81L9OS69941RBA7DF",
-        name: 'Jagger Grimjaw',
-        email: "timoshimmo@yahoo.com",
-        accountCategories: [25]
-      }
+        xri: "xri://@openmdx*org.opencrx.kernel.account1/provider/CRX/segment/INJREAM26606/account/LPULYV3BULDKC22TCCMSW9ZD5",
+        name: 'Mr Gbenga Lasisi',
+        email: "gbengalasisi@email.com",
+        accountCategories: [24]
+      },
+      { key: 1,
+        xri: "xri://@openmdx*org.opencrx.kernel.account1/provider/CRX/segment/INJREAM26606/account/9HNUMHC5KFUUK22TCCMSW9ZD5",
+        name: 'Stella Ejiofor',
+        email: "stellaejiofor@email.com",
+        accountCategories: [24]
+      },
     ]);
 
     const [contactList, setContactList] = useState([]);
@@ -374,15 +380,15 @@ const NewMeetingDialog = props => {
       userId: userData.crxDetails.userId
       */
 
-      console.log("Meeting Name: " + JSON.stringify(formState.values.meetingTitle));
+    //  console.log("Contact List: " + JSON.stringify(contactList));
       const obj = {
         name: formState.values.meetingTitle,
         phoneNumber: null,
-        description: formState.values.meetingTitle,
+        description: null,
         dueBy: formState.values.dueDate,
         contactXris: contactList,
         segmentName: 'INJREAM26606',
-        userId: 'JAGG66'
+        userId: userData.crxDetails.userId
       };
 
       //let token = localStorage.getItem('spfmtoken')
@@ -419,7 +425,9 @@ const NewMeetingDialog = props => {
       setUpdateLoading(true);
 
       const obj = {
-        description: formState.values.meetingTitle,
+        name: formState.values.meetingTitle,
+        phoneNumber: null,
+        description: null,
         dueBy: formState.values.dueDate,
         contactXris: contactList,
         segmentName: 'INJREAM26606',

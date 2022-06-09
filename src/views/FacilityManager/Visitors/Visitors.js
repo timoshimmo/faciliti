@@ -35,7 +35,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const Meetings = props => {
+const Visitors = props => {
 
     const classes = useStyles();
 
@@ -77,4 +77,4 @@ const Meetings = props => {
     );
 }
 
-export default Meetings;
+export default Visitors;

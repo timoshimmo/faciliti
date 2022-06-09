@@ -33,87 +33,48 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ExpandLessIcon from '@material-ui/icons/ExpandLess';
 import AXIOS from '../../../../../util/webservices';
 import moment from 'moment';
-import CircularProgress from '@material-ui/core/CircularProgress';
 
 const rows = [
   {
-    "name": "Security Meeting",
-     "description": null,
-     "createdAt": "2022-05-28T13:10:25.538+00:00",
-     "meetingNumber": "1001001",
-     "dueBy": "2022-05-30T10:40:00.000+00:00",
-     "numberOfAttendees": 2,
+     "resident": "Mike Ozekhome",
+     "contact": "07010265291",
+     "createdAt": "2022-05-28",
+     "visitors": "Tims & Family",
+     "dueBy": "2022-05-30",
+     "visitorsCount": 2,
      "xri": "xri://@openmdx*org.opencrx.kernel.activity1/provider/CRX/segment/INJREAM26606/activity/R1JEH2B66ZHM4YCN99GJPA8KF",
-     "key": {
-         "uuid": "R1JEH2B66ZHM4YCN99GJPA8KF"
-     },
-     "status": "Scheduled"
+     "status": 0
  },
  {
-      "name": "INJREAM Visit",
-      "description": "for injreal2 estate",
-      "createdAt": "2022-05-28T10:38:44.048+00:00",
-      "meetingNumber": "1001000",
-      "dueBy": "2022-12-31T21:14:23.000+00:00",
-      "numberOfAttendees": 2,
-      "xri": "xri://@openmdx*org.opencrx.kernel.activity1/provider/CRX/segment/INJREAM26606/activity/3F9LEQK24Q0OCYCN99GJPA8KF",
-      "key": {
-          "uuid": "3F9LEQK24Q0OCYCN99GJPA8KF"
-      },
-      "status": "Scheduled"
-  },
-  {
-      "name": "New Years Meeting",
-      "description": null,
-      "createdAt": "2022-05-27T21:25:36.937+00:00",
-      "meetingNumber": "1000803",
-      "dueBy": "2017-05-28T12:30:00.000+00:00",
-      "numberOfAttendees": 2,
-      "xri": "xri://@openmdx*org.opencrx.kernel.activity1/provider/CRX/segment/INJREAM26606/activity/L6Y9OPSE9OHYKYCN99GJPA8KF",
-      "key": {
-          "uuid": "L6Y9OPSE9OHYKYCN99GJPA8KF"
-      },
-      "status": "Scheduled"
-  },
-  {
-      "name": "Exco meeting",
-      "description": "first estate meeting",
-      "createdAt": "2022-05-27T20:46:21.371+00:00",
-      "meetingNumber": "1000802",
-      "dueBy": "2022-04-17T21:14:23.000+00:00",
-      "numberOfAttendees": 2,
-      "xri": "xri://@openmdx*org.opencrx.kernel.activity1/provider/CRX/segment/INJREAM26606/activity/RUDLRWIZN1HIKYCN99GJPA8KF",
-      "key": {
-          "uuid": "RUDLRWIZN1HIKYCN99GJPA8KF"
-      },
-      "status": "Scheduled"
-  },
-  {
-      "name": "INJREAM Meeting",
-      "description": "for injreal2 estate",
-      "createdAt": "2022-05-27T14:34:53.818+00:00",
-      "meetingNumber": "1000801",
-      "dueBy": "2022-12-31T21:14:23.000+00:00",
-      "numberOfAttendees": 2,
-      "xri": "xri://@openmdx*org.opencrx.kernel.activity1/provider/CRX/segment/INJREAM26606/activity/3N9K4250LS5WSYCN99GJPA8KF",
-      "key": {
-          "uuid": "3N9K4250LS5WSYCN99GJPA8KF"
-      },
-      "status": "Scheduled"
-  },
-  {
-      "name": "Exco meeting",
-      "description": "first estate meeting",
-      "createdAt": "2022-05-24T21:19:34.687+00:00",
-      "meetingNumber": "1000800",
-      "dueBy": "2022-04-17T21:14:23.000+00:00",
-      "numberOfAttendees": 2,
-      "xri": "xri://@openmdx*org.opencrx.kernel.activity1/provider/CRX/segment/INJREAM26606/activity/L6BVW4GRMDYI4WHHUIUROR238",
-      "key": {
-          "uuid": "L6BVW4GRMDYI4WHHUIUROR238"
-      },
-      "status": "Scheduled"
-  }
+    "resident": "Adebike Dabiri",
+    "contact": "07010265291",
+    "createdAt": "2022-05-28",
+    "visitors": "Raymond",
+    "dueBy": "2022-05-30",
+    "visitorsCount": 1,
+    "xri": "xri://@openmdx*org.opencrx.kernel.activity1/provider/CRX/segment/INJREAM26606/activity/R1JEH2B66ZHM4YCN99GJPA8KF",
+    "status": 1
+},
+{
+   "resident": "Mary Okon",
+   "contact": "07010265291",
+   "createdAt": "2022-05-28",
+   "visitors": "Tayo & Friends",
+   "dueBy": "2022-05-30",
+   "visitorsCount": 6,
+   "xri": "xri://@openmdx*org.opencrx.kernel.activity1/provider/CRX/segment/INJREAM26606/activity/R1JEH2B66ZHM4YCN99GJPA8KF",
+   "status": 0
+},
+{
+   "resident": "Fulus Kaze",
+   "contact": "07010265291",
+   "createdAt": "2022-05-28",
+   "visitors": "Family",
+   "dueBy": "2022-05-30",
+   "visitorsCount": 4,
+   "xri": "xri://@openmdx*org.opencrx.kernel.activity1/provider/CRX/segment/INJREAM26606/activity/R1JEH2B66ZHM4YCN99GJPA8KF",
+   "status": 2
+}
 ];
 
 const StyledTableCell = withStyles((theme) => ({
@@ -194,14 +155,14 @@ const headCells = [
     label: 'DATE CREATED',
   },
   {
-    id: 'title',
+    id: 'visitors',
     numeric: false,
-    label: 'MEETING TITLE',
+    label: 'VISITORS',
   },
   {
-    id: 'id',
+    id: 'personCount',
     numeric: false,
-    label: 'MEETING ID',
+    label: 'PERSON COUNT',
   },
   {
     id: 'due',
@@ -209,20 +170,20 @@ const headCells = [
     label: 'DUE DATE',
   },
   {
-    id: 'attendees',
+    id: 'contact',
     numeric: true,
-    label: 'NUMBER OF ATTENDEES',
+    label: 'CONTACT',
+  },
+  {
+    id: 'resident',
+    numeric: true,
+    label: 'RESIDENT',
   },
   {
     id: 'status',
     numeric: true,
     label: 'STATUS',
-  },
-  {
-    id: 'delete',
-    numeric: true,
-    label: '',
-  },
+  }
 ];
 
 function EnhancedTableHead(props) {
@@ -483,7 +444,7 @@ const EnhancedTableToolbar = (props) => {
               fontWeight: 600,
             }}
           >
-            Meeting Log
+            Visitors Request Log
           </Typography>
         </Grid>
         <Grid
@@ -617,17 +578,6 @@ const EnhancedTableToolbar = (props) => {
                     </Grid>
                 </Popover>
             </Grid>
-            <Grid
-            item
-            lg={3.5}>
-            <Button
-              className={styles.filterMenuButton}
-              variant="contained"
-              onClick={onHandleDialogOpen}
-              >
-              Create New Meeting
-            </Button>
-            </Grid>
           </Grid>
         </Grid>
       </Grid>
@@ -678,14 +628,6 @@ const useStyles = makeStyles(theme => ({
     color: theme.palette.text.content,
     borderColor: theme.palette.text.content
   },
-  buttonProgress: {
-     color: theme.palette.primary.main,
-     position: 'absolute',
-     top: '75%',
-     left: '55%',
-     marginTop: -10,
-     marginLeft: -12,
-   }
 
 }));
 
@@ -704,14 +646,13 @@ const Logs = props => {
       }
   }
 
+  const [logs, setLogs] = useState([]);
   const [order, setOrder] = useState('asc');
-  const [orderBy, setOrderBy] = useState('due');
+  const [orderBy, setOrderBy] = useState('calories');
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
   const [selectedRow, setSelectedRow] = useState([]);
-  const [meetings, setMeetings] = useState([]);
-  const [loading, setLoading] = useState(false);
 
   const [checkState, setCheckState] = useState({
    all: false,
@@ -729,36 +670,26 @@ const Logs = props => {
 
   const handleGetAll = () => {
 
-      if(!loading) {
+  /*  const obj = {
+      segmentName : "INJREAM26606",
+      userId : userData.crxDetails.userId,
+      index : 0,
+      range : 10
+    };*/
 
-        setLoading(true);
-
-        /*const obj = {
-          segmentName : "INJREAM26606",
-          userId : userData.crxDetails.userId,
-          index : 0,
-          range : 10
-        };*/
-
-        AXIOS.get('http://132.145.58.252:8081/spaciofm/api/meetings/?index=0&range=5')
-          .then(response => {
-            setLoading(false);
-            const res = response.data.response;
-            console.log("ALL MEETINGS:" + JSON.stringify(res));
-            setMeetings(res);
-          })
-          .catch(function (error) {
-            setLoading(false);
-            console.log(error.response);
-            console.log(error.message);
-          })
-      }
-
-
+    AXIOS.get('http://132.145.58.252:8081/spaciofm/api/meetings/?index=0&range=5')
+      .then(response => {
+        const res = response.data;
+        console.log("ALL MEETINGS:" + res);
+      })
+      .catch(function (error) {
+        console.log(error.response);
+        console.log(error.message);
+      })
   }
 
   const handleSelectedRow = (index) => {
-    const selectedRow = meetings[index];
+    const selectedRow = rows[index];
     setSelectedRow(selectedRow);
     setMeetingDetails([...meetingDetails, selectedRow]);
     handleDialogOpen();
@@ -796,7 +727,7 @@ const handleFilter = () => {
 }
 
  const emptyRows =
-  page > 0 ? Math.max(0, (1 + page) * rowsPerPage - meetings.length) : 0;
+  page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
 
   return (
     <Paper style={{ width: '100%' }}>
@@ -818,77 +749,68 @@ const handleFilter = () => {
                 order={order}
                 orderBy={orderBy}
                 onRequestSort={handleRequestSort}
-                rowCount={meetings.length}/>
+                rowCount={rows.length}/>
               <TableBody>
-                {loading ?
+                {stableSort(rows, getComparator(order, orderBy))
+                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                  .map((row, index) => {
 
-                  (<CircularProgress size={25} className={classes.buttonProgress} />)
-                  :
-                  (
-                    stableSort(meetings, getComparator(order, orderBy))
-                      .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                      .map((row, index) => {
-
-                        return (
-                          <StyledTableRow hover role="button" key={row.key.uuid} onClick={()=>handleSelectedRow(index)}>
-                            <StyledTableCell component="th" scope="row">
-                                {moment(row.createdAt).format('DD/MM/YYYY hh:mm:ss A')}
-                            </StyledTableCell>
-                            <StyledTableCell style={{ maxWidth: 100, whiteSpace: 'nowrap' }}>
-                              <Box
-                                 component="div"
-                                 my={2}
-                                 textOverflow="ellipsis"
-                                 overflow="hidden"
-                                 bgcolor="transparent"
-                               >
-                                 {row.name}
-                               </Box>
-                            </StyledTableCell>
-                            <StyledTableCell>
-                                 {row.key.uuid}
-                            </StyledTableCell>
-                            <StyledTableCell>
-                              {moment(row.dueBy).format('DD/MM/YYYY hh:mm:ss A')}
-                            </StyledTableCell>
-                            <StyledTableCell align="center" style={{ maxWidth: 80, whiteSpace: 'nowrap' }}>
-                            <Box
-                               component="div"
-                               my={1}
-                               textOverflow="ellipsis"
-                               overflow="hidden"
-                               bgcolor="transparent"
-                             >
-                                {row.numberOfAttendees} attendee(s)
-                              </Box>
-                            </StyledTableCell>
-                            <StyledTableCell align="center">
-                              {row.status === "Scheduled" ?
-                              <Chip
-                                label="Scheduled"
-                                variant="outlined"
-                                classes={{ root: classes.chipStyles, label: classes.chipLabelStyle }}
-                              />
-                              :
-                              <Chip
-                                label="Pending"
-                                variant="outlined"
-                                classes={{ root: classes.chipStyles, label: classes.chipLabelStyle }}
-                              />
-                            }
-                            </StyledTableCell>
-                            <StyledTableCell align="center">
-                              <IconButton size="small">
-                                <DeleteIcon style={{  width: 16,height: 17, fill:'none', }} />
-                              </IconButton>
-                            </StyledTableCell>
-                          </StyledTableRow>
-                        );
-                      })
-                  )
-
-                }
-
+                    return (
+                      <StyledTableRow hover role="button" key={row.key.uuid} onClick={()=>handleSelectedRow(index)}>
+                        <StyledTableCell component="th" scope="row">
+                            {moment(row.createdAt).format('DD/MM/YYYY hh:mm:ss A')}
+                        </StyledTableCell>
+                        <StyledTableCell style={{ maxWidth: 100, whiteSpace: 'nowrap' }}>
+                          <Box
+                             component="div"
+                             my={2}
+                             textOverflow="ellipsis"
+                             overflow="hidden"
+                             bgcolor="transparent"
+                           >
+                             {row.name}
+                           </Box>
+                        </StyledTableCell>
+                        <StyledTableCell>
+                             {row.key.uuid}
+                        </StyledTableCell>
+                        <StyledTableCell>
+                          {moment(row.dueBy).format('DD/MM/YYYY hh:mm:ss A')}
+                        </StyledTableCell>
+                        <StyledTableCell align="center" style={{ maxWidth: 80, whiteSpace: 'nowrap' }}>
+                        <Box
+                           component="div"
+                           my={1}
+                           textOverflow="ellipsis"
+                           overflow="hidden"
+                           bgcolor="transparent"
+                         >
+                            {row.numberOfAttendees} attendee(s)
+                          </Box>
+                        </StyledTableCell>
+                        <StyledTableCell align="center">
+                          {row.status === "Scheduled" ?
+                          <Chip
+                            label="Scheduled"
+                            variant="outlined"
+                            classes={{ root: classes.chipStyles, label: classes.chipLabelStyle }}
+                          />
+                          :
+                          <Chip
+                            label="Pending"
+                            variant="outlined"
+                            classes={{ root: classes.chipStyles, label: classes.chipLabelStyle }}
+                          />
+                        }
+                        </StyledTableCell>
+                        <StyledTableCell align="center">
+                          <IconButton size="small">
+                            <DeleteIcon style={{  width: 16,height: 17, fill:'none', }} />
+                          </IconButton>
+                        </StyledTableCell>
+                      </StyledTableRow>
+                    );
+                  })}
                   {emptyRows > 0 && (
                     <TableRow
                       style={{

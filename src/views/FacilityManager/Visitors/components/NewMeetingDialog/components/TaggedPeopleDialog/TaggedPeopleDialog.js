@@ -32,12 +32,6 @@ function UserIcon(props) {
   );
 }
 
-/*
-segment : "INJREAM26606",
-userId : "JAGG66",
-
-*/
-
 const useStyles = makeStyles(theme => ({
   dialogtitleStyle: {
     margin: 0,
@@ -154,14 +148,14 @@ const TaggedPeopleDialog = props => {
     event.persist();
     setSearchQuery(event.target.value);
     const obj = {
-      segment: userData.crxDetails.segmentName,
-      userId: userData.crxDetails.userId,
+      segment : "INJREAM26606",
+      userId : "JAGG66",
       index : 0,
       range : 10,
-      name : event.target.value
+      name : "et"
     };
 
-    AXIOS.post('http://132.145.58.252:8081/spaciofm/api/contacts/search', obj)
+    AXIOS.get('http://132.145.58.252:8081/spaciofm/api/contacts/search', { params: obj })
     .then(response => {
       const res = response.data;
       console.log(res);

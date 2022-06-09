@@ -76,25 +76,14 @@ const useStyles = makeStyles(theme => ({
 
     const classes = useStyles();
 
-    //const [checkedData, setCheckedData] = useState([]);
-  //  const [anchorEl, setAnchorEl] = useState(null);
-  //  const openPostMenu = Boolean(anchorEl);
-  //  const checkid = openPostMenu ? 'simple-popover' : undefined;
-  //  const [checkProfilePic, setCheckProfilePic] = useState(false);
-  //  const [checkStans, setCheckStans] = useState(false);
-  //  const [checkCreators, setCheckCreators] = useState(false);
-  //  const [checkFree, setCheckFree] = useState(false);
-
-  //  const [openDrawer, setOpenDrawer] = useState(false);
-
-  /*  const handleFilterMenuClick = (event) => {
-      setAnchorEl(event.currentTarget);
-    };
-
-    const handleFilterMenuClose = () => {
-      setAnchorEl(null);
-    };
-*/
+    let userData = {};
+    if (typeof localStorage !== 'undefined') {
+        const user = localStorage.getItem('userDetails');
+        if(user !== null) {
+          const data = JSON.parse(user);
+          userData = data;
+        }
+    }
 
     return (
 
@@ -132,7 +121,7 @@ const useStyles = makeStyles(theme => ({
                   className={classes.typoUsername}
                   startIcon={<AccountCircleIcon fontSize="small" style={{ marginRight: '10%' }} />}
                 >
-                  Tunde Ednut
+                  {userData.crxDetails.fullName}
                 </Button>
             </Grid>
           </Grid>

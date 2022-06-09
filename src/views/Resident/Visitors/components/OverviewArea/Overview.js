@@ -152,7 +152,7 @@ const Overview = props => {
                     variant="body1"
                     color="primary"
                     className={classes.valueStyle}>
-                    30
+                    0
                   </Typography>
                 </Grid>
             </Grid>
@@ -190,7 +190,7 @@ const Overview = props => {
                     variant="body1"
                     color="primary"
                     className={classes.valueStyle}>
-                    18
+                    0
                   </Typography>
                 </Grid>
             </Grid>
@@ -228,7 +228,7 @@ const Overview = props => {
                     variant="body1"
                     color="primary"
                     className={classes.valueStyle}>
-                    120
+                    0
                   </Typography>
                 </Grid>
             </Grid>

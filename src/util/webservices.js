@@ -8,10 +8,17 @@ const instance = axios.create({
 instance.interceptors.request.use(
   async config => {
     let token = localStorage.getItem('spfmtoken');
-    console.log(token);
+    let provider = localStorage.getItem('provider');
+    let tenantId = localStorage.getItem('tenantId');
+    let userId = localStorage.getItem('userId');
+    //console.log(token);
 
     config.headers = {
-    'Authorization': `Bearer ${token}`
+    'Authorization': `Bearer ${token}`,
+    'provider': 'CRX',
+    'tenantId' : 'INJREAM26606',
+    'userId' : 'JAGG66'
+
   }
     return config;
   },

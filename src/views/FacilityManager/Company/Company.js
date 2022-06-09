@@ -385,6 +385,16 @@ const Company = () => {
    const [estates, setEstates] = useState([]);
    const [newEstateStatus, setNewEstateStatus] = useState(false);
 
+   let companyData = {};
+   if (typeof localStorage !== 'undefined') {
+     if(localStorage.getItem('company_details') !== null) {
+       const data = localStorage.getItem('company_details');
+       if(data !== null) {
+         companyData = JSON.parse(data);
+       }
+     }
+  }
+
 //   const [openDialog, setOpenDialog] = useState(false);
 
   /* const handleDialogOpen = () => {
@@ -408,11 +418,18 @@ const Company = () => {
         isValid: errors ? false : true,
         errors: errors || {}
       }));
-      handleEstates();
+
   }, [formState.values]);
 
   useEffect(() => {
+    if(companyData !== null || companyData !== undefined || companyData.length > 0) {
+      console.log("COMPANY DATA: " + JSON.stringify(companyData));
+      formState.values.businessName = companyData.companyName;
+      formState.values.businessEmail = companyData.companyEmail;
+      setValue(companyData.estate);
+    }
     handleEstates();
+    //andleEstates();
    }, []);
 
   const handleChange = event => {
@@ -435,6 +452,11 @@ const Company = () => {
   };
 
   const handleBack = () => {
+    if (typeof localStorage !== 'undefined') {
+      if(localStorage.getItem('company_details') !== null) {
+          localStorage.removeItem('company_details');
+      }
+    }
     history.goBack();
   };
 
@@ -627,6 +649,7 @@ const Company = () => {
                               type="text"
                               placeholder="Enter business name"
                               onChange={handleChange}
+                              value={formState.values.businessName}
                               disabled={loading}
                               InputProps={{
                                 disableUnderline: true,
@@ -650,8 +673,8 @@ const Company = () => {
                               id="businessAddress-input"
                               className={classes.textFieldAddress}
                               placeholder="Enter business address"
+
                               onPlaceSelected={(place) => {
-                                console.log(place);
                                 setPlace(place);
                               }}
                               options={{
@@ -675,6 +698,7 @@ const Company = () => {
                                 type="email"
                                 placeholder="Enter business email"
                                 onChange={handleChange}
+                                value={formState.values.businessEmail}
                                 disabled={loading}
                                 InputProps={{
                                   disableUnderline: true,
