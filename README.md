@@ -1,5 +1,12 @@
 # Getting Started with Create React App
 
+#  "scripts": {
+#    "start": "react-scripts start",
+#    "build": "react-scripts build",
+#    "test": "react-scripts test",
+#    "eject": "react-scripts eject"
+#  },
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
