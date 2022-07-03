@@ -338,8 +338,8 @@ const NewMeetingDialog = props => {
     const [contactList, setContactList] = useState([]);
 
     useEffect(() => {
-      console.log("MEETING DETAILS: " + JSON.stringify(meetingDetails));
-      console.log("MEETING DETAILS LENGTH: " + JSON.stringify(meetingDetails.length));
+  //    console.log("MEETING DETAILS: " + JSON.stringify(meetingDetails));
+  //    console.log("MEETING DETAILS LENGTH: " + JSON.stringify(meetingDetails.length));
       if(meetingDetails.length > 0) {
         formState.values.meetingTitle = meetingDetails[0].name;
         formState.values.dueDate = moment(meetingDetails[0].dueBy).format('yyyy-MM-DDThh:mm');
@@ -405,7 +405,7 @@ const NewMeetingDialog = props => {
       AXIOS.post('http://132.145.58.252:8081/spaciofm/api/meetings/', obj)
       .then(response => {
         const res = response.data;
-        console.log(res);
+    //    console.log(res);
         setLoading(false);
         onClose();
       })
@@ -438,7 +438,7 @@ const NewMeetingDialog = props => {
       AXIOS.put(`http://132.145.58.252:8081/spaciofm/api/meetings/${meetingDetails[0].key.uuid}`, obj)
       .then(response => {
         const res = response.data;
-        console.log(res);
+      //  console.log(res);
         setUpdateLoading(false);
         onClose();
       })

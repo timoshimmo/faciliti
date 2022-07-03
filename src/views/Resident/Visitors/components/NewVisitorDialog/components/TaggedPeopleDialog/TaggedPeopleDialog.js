@@ -166,7 +166,7 @@ const TaggedPeopleDialog = props => {
     })
     .then(response => {
       const res = response.data;
-  //    console.log("ALL CONTACTS: ", res);
+      console.log("ALL CONTACTS: ", res);
       //setLoading(false);
     })
     .catch(function (error) {
@@ -193,7 +193,7 @@ const TaggedPeopleDialog = props => {
     AXIOS.post('http://132.145.58.252:8081/spaciofm/api/contacts/search', obj)
     .then(response => {
       const res = response.data;
-  //    console.log(res);
+      console.log(res);
       setPeopleList(res);
     })
     .catch(function (error) {
@@ -218,7 +218,7 @@ const TaggedPeopleDialog = props => {
     AXIOS.post('http://132.145.58.252:8081/spaciofm/api/contacts/search', obj)
     .then(response => {
       const res = response.data;
-    //  console.log(res);
+      console.log(res);
       setPeopleList(res);
     })
     .catch(function (error) {

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/styles';
 import {
   Grid,
@@ -7,7 +7,7 @@ import {
   CardContent,
   CardActions,
 } from '@material-ui/core';
-import { Overview, Logs } from './components';
+import { Overview, Logs, NewVisitorDialog } from './components';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -38,6 +38,18 @@ const Visitors = props => {
 
     const classes = useStyles();
 
+    const [openDialog, setOpenDialog] = useState(false);
+    const [visitorDetails, setVisitorDetails] = useState([]);
+
+    const handleDialogOpen = () => {
+      setOpenDialog(true);
+    };
+
+    const handleDialogClose = () => {
+      setOpenDialog(false);
+    };
+
+
     return (
       <div className={classes.root}>
         <Grid
@@ -58,7 +70,7 @@ const Visitors = props => {
           <Grid
           item
           lg={12}>
-            <Overview />
+            <Overview handleDialogOpen={handleDialogOpen} />
           </Grid>
           <Grid
             item
@@ -77,6 +89,11 @@ const Visitors = props => {
                 <Logs />
               </Grid>
         </Grid>
+        <NewVisitorDialog
+          onClose={handleDialogClose}
+          onOpen={openDialog}
+          visitorDetails={visitorDetails}
+        />
       </div>
     );
 }

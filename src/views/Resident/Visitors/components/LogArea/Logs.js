@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import { withStyles, makeStyles } from '@material-ui/styles';
 import {
   Typography,
@@ -9,6 +10,7 @@ import {
   TableHead,
   TableRow,
   Box,
+  TableSortLabel,
   TablePagination,
   Paper,
 } from '@material-ui/core';
@@ -36,6 +38,116 @@ const StyledTableRow = withStyles((theme) => ({
       backgroundColor: "#FFFFFF",
   },
 }))(TableRow);
+
+function descendingComparator(a, b, orderBy) {
+  if (b[orderBy] < a[orderBy]) {
+    return -1;
+  }
+  if (b[orderBy] > a[orderBy]) {
+    return 1;
+  }
+  return 0;
+}
+
+function getComparator(order, orderBy) {
+  return order === 'desc'
+    ? (a, b) => descendingComparator(a, b, orderBy)
+    : (a, b) => -descendingComparator(a, b, orderBy);
+}
+
+function stableSort(array, comparator) {
+  const stabilizedThis = array.map((el, index) => [el, index]);
+  stabilizedThis.sort((a, b) => {
+    const order = comparator(a[0], b[0]);
+    if (order !== 0) return order;
+    return a[1] - b[1];
+  });
+  return stabilizedThis.map((el) => el[0]);
+}
+
+const headCells = [
+  {
+    id: 'registered',
+    numeric: false,
+    label: 'REGISTERED ON',
+  },
+  {
+    id: 'visitor',
+    numeric: false,
+    label: 'VISITOR',
+  },
+  {
+    id: 'persons',
+    numeric: false,
+    label: 'PERSON(S)',
+  },
+  {
+    id: 'due',
+    numeric: false,
+    label: 'DUE DATE',
+  },
+  {
+    id: 'contact',
+    numeric: true,
+    label: 'CONTACT',
+  },
+  {
+    id: 'status',
+    numeric: true,
+    label: 'STATUS',
+  },
+];
+
+function EnhancedTableHead(props) {
+  const { order, orderBy, rowCount, onRequestSort } = props;
+  const createSortHandler = (property) => (event) => {
+    onRequestSort(event, property);
+  };
+
+  return (
+    <TableHead>
+      <TableRow>
+        {headCells.map((headCell) => (
+          <StyledTableCell
+            key={headCell.id}
+            align={headCell.numeric ? 'center' : 'left'}
+            sortDirection={orderBy === headCell.id ? order : false}
+          >
+            <TableSortLabel
+              active={orderBy === headCell.id}
+              direction={orderBy === headCell.id ? order : 'asc'}
+              onClick={createSortHandler(headCell.id)}
+            >
+              {headCell.label}
+              {orderBy === headCell.id ? (
+                <span style={{
+                    border: 0,
+                    clip: 'rect(0 0 0 0)',
+                    height: 1,
+                    margin: -1,
+                    overflow: 'hidden',
+                    padding: 0,
+                    position: 'absolute',
+                    top: 20,
+                    width: 1,
+                }}>
+                  {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
+                </span>
+              ) : null}
+            </TableSortLabel>
+          </StyledTableCell>
+        ))}
+      </TableRow>
+    </TableHead>
+  );
+}
+
+EnhancedTableHead.propTypes = {
+  onRequestSort: PropTypes.func.isRequired,
+  order: PropTypes.oneOf(['asc', 'desc']).isRequired,
+  orderBy: PropTypes.string.isRequired,
+  rowCount: PropTypes.number.isRequired,
+};
 
 function createLogs( id, registered, visitor, persons, duedate, contact, status) {
   return { id, registered, visitor, persons, duedate, contact, status };

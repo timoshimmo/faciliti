@@ -42,14 +42,14 @@ const schema = {
   firstName: {
     presence: { allowEmpty: false, message: 'is required' },
     length: {
-      minimum: 4,
+      minimum: 2,
       maximum: 100
     }
   },
   lastName: {
     presence: { allowEmpty: false, message: 'is required' },
     length: {
-      minimum: 4,
+      minimum: 2,
       maximum: 100
     }
   },
@@ -272,7 +272,7 @@ const handleRegister = event => {
         modifiedAt : null,
         uri : null,
         errorMsg : null,
-        segmentName: userData.crxDetails.segmentName,
+        segmentName: 'INJREAM26606',
         editedFields : null,
         editedValues : null,
         editedOperands : null,
@@ -294,7 +294,7 @@ const handleRegister = event => {
         companyDTO: null
       };
 
-      AXIOS.get('http://132.145.58.252:8081/spaciofm/api/user-profiles/register-resident')
+      AXIOS.get('user-profiles/register-resident')
       .then(response => {
         setLoading(false);
         const res = response.data;

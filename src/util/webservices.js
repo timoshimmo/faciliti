@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const instance = axios.create({
-  baseURL: `http://140.238.127.236:8081/spaciofm/api/`,
+  baseURL: `http://132.145.58.252:8081/spaciofm/api/`,
   withCredentials: false,
 });
 
@@ -12,14 +12,14 @@ instance.interceptors.request.use(
     let tenantId = localStorage.getItem('tenantId');
     let userId = localStorage.getItem('userId');
     //console.log(token);
+    //'JAGG66'
 
     config.headers = {
-    'Authorization': `Bearer ${token}`,
-    'provider': 'CRX',
-    'tenantId' : 'INJREAM26606',
-    'userId' : 'JAGG66'
-
-  }
+      'Authorization': `Bearer ${token}`,
+      'provider': 'CRX',
+      'tenantId' : 'INJREAM26606',
+      'userId' : 'JAGG66'
+    }
     return config;
   },
   error => {

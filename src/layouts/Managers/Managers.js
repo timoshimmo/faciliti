@@ -1,8 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/styles';
 import { Leftbar, Rightbar, Topbar } from './components';
 import { NewResidentDialog } from '../../views/FacilityManager/components';
+import { useHistory } from 'react-router-dom';
+//import { history } from '../../helpers';
+
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -82,14 +85,41 @@ const Managers = props => {
   const [openNewResidentDialog, setOpenNewResidentDialog] = useState(false);
 
   const classes = useStyles();
-  let userData = {};
+  let history = useHistory();
+
+  if (typeof localStorage !== 'undefined') {
+    if(!localStorage.getItem('spfmtoken')) {
+      //  console.log("LOCAL STORAGE TOKEN: ", localStorage.getItem('spfmtoken'));
+        history.push('/signin');
+    }
+  }
+
+/*  history.listen((newLocation, action) => {
+  if (action === "POP") {
+      // If a "POP" action event occurs,
+      // Send user back to the originating location
+      history.go(1);
+
+    }
+
+  });*/
+
+  useEffect(() => {
+     window.history.pushState(null, '', window.location.href)
+     window.onpopstate = () => {
+         window.location.reload();
+     }
+
+ }, []);
+
+/*  let userData = {};
   if (typeof localStorage !== 'undefined') {
       const user = localStorage.getItem('userDetails');
       if(user !== null) {
         const data = JSON.parse(user);
         userData = data;
       }
-  }
+  }*/
 
   const handleNewResidentDialogOpen = () => {
     setOpenNewResidentDialog(true);

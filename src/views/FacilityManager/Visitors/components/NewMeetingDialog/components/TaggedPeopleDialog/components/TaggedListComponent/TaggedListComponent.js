@@ -58,14 +58,14 @@ const TaggedListComponent = props => {
       newChecked.push(value);
       setLiveTaggedList([...liveTaggedList, value]);
       let num = liveTaggedList.length + 1;
-      console.log("XRI:" + JSON.stringify(value.xri));
+  //    console.log("XRI:" + JSON.stringify(value.xri));
       setContactList([...contactList, value.xri]);
       handleSetText('Invite ' + num.toString() + ' attendee(s)');
     } else {
       newChecked.splice(currentIndex, 1);
       setLiveTaggedList(liveTaggedList.filter(e => e !== value));
       let num = liveTaggedList.length - 1;
-      console.log("XRI:" + JSON.stringify(value.xri));
+  //    console.log("XRI:" + JSON.stringify(value.xri));
     //  setContactList([...contactList, value.xri]);
       setContactList(contactList.filter(e => e !== value.xri));
       handleSetText('Invite ' + num.toString() + ' attendee(s)');

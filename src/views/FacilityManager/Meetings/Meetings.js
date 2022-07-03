@@ -42,6 +42,8 @@ const Meetings = props => {
     const [openDialog, setOpenDialog] = useState(false);
     const [meetingDetails, setMeetingDetails] = useState([]);
 
+    const [edit, setEdit] = useState(false);
+
 
     const handleDialogOpen = () => {
       setOpenDialog(true);
@@ -65,13 +67,14 @@ const Meetings = props => {
           <Grid
             item
             lg={12}>
-              <Logs handleDialogOpen={handleDialogOpen} setMeetingDetails={setMeetingDetails} meetingDetails={meetingDetails}/>
+              <Logs handleDialogOpen={handleDialogOpen} setMeetingDetails={setMeetingDetails} meetingDetails={meetingDetails} setEdit={setEdit} />
           </Grid>
         </Grid>
         <NewMeetingDialog
           onClose={handleDialogClose}
           onOpen={openDialog}
           meetingDetails={meetingDetails}
+          edit={edit}
         />
       </div>
     );

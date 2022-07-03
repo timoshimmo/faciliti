@@ -76,14 +76,14 @@ const schema = {
   },
   phoneNumber: {
     presence: { allowEmpty: false, message: 'is required' },
-  length: {
-    minimum: 9,
-    maximum: 15
-  },
-  format: {
-   pattern: /^[0-9]+$/,
-   message: 'should only contain numbers'
- }
+    length: {
+      minimum: 9,
+      maximum: 15
+    },
+    format: {
+     pattern: /^[0-9]+$/,
+     message: 'should only contain numbers'
+   }
   },
   password: {
     presence: { allowEmpty: false, message: 'is required' },

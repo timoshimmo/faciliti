@@ -117,11 +117,18 @@ const SidebarNav = props => {
   const loc = useLocation();
 
   const handleLogout = () => {
+    if (typeof localStorage !== 'undefined') {
+      localStorage.removeItem('spfmtoken');
+      localStorage.removeItem('provider');
+      localStorage.removeItem('tenantId');
+      localStorage.removeItem('userId');
+      localStorage.removeItem('userDetails');
+    }
     history.push('/signin');
   }
 
   const handleReload = () => {
-    console.log("LOCATION: " + loc.pathname);
+//    console.log("LOCATION: " + loc.pathname);
     if(loc.pathname === '/home') {
       window.location.reload(true);
     }

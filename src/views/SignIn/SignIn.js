@@ -22,6 +22,7 @@ import Collapse from '@material-ui/core/Collapse';
 import CloseIcon from '@material-ui/icons/Close';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import axios from 'axios';
+//import { history } from '../../helpers';
 //email: true,
 const schema = {
   email: {
@@ -132,10 +133,6 @@ textField: {
   transition: theme.transitions.create(['background-color']),
   padding: '7px 25px',
   marginTop: 5,
-  '&$focused': {
-    border: '1px solid #1565D8',
-    backgroundColor: '#FFFFFF',
-  },
   '&:hover': {
     border: '1px solid #1565D8',
     backgroundColor: '#FFFFFF',
@@ -245,6 +242,14 @@ const SignIn = props => {
 
    useEffect(() => {
 
+     if (typeof localStorage !== 'undefined') {
+       localStorage.removeItem('spfmtoken');
+       localStorage.removeItem('provider');
+       localStorage.removeItem('tenantId');
+       localStorage.removeItem('userId');
+       localStorage.removeItem('userDetails');
+     }
+
       const errors = validate(formState.values, schema);
       setFormState(formState => ({
         ...formState,
@@ -293,7 +298,7 @@ const SignIn = props => {
       axios.post('http://132.145.58.252:8081/spaciofm/api/authenticate', obj)
       .then(response => {
         //const res = response.data;
-        console.log(response.data);
+      //  console.log(response.data);
         localStorage.setItem('spfmtoken', response.data.token);
         localStorage.setItem('provider', JSON.stringify(response.data.userDetails.crxDetails.providerName));
         localStorage.setItem('tenantId', JSON.stringify(response.data.userDetails.crxDetails.segmentName));
@@ -303,18 +308,18 @@ const SignIn = props => {
         setLoading(false);
 
         if(response.data.userDetails.crxDetails.accountCategories[0] === 25) {
-          console.log("USERDETAILS: " + JSON.stringify(response.data.userDetails));
+      //    console.log("USERDETAILS: " + JSON.stringify(response.data.userDetails));
           history.push('/overview');
         }
         else {
-          console.log("USERDETAILS: " + JSON.stringify(response.data.userDetails));
+        //  console.log("USERDETAILS: " + JSON.stringify(response.data.userDetails));
           history.push('/home');
         }
 
       })
       .catch(function (error) {
-        console.log(error.response.status);
-        console.log(error.response.data.error);
+      //  console.log(error.response.status);
+      //  console.log(error.response.data.error);
         setLoading(false);
         setServerError("Invalid login credentials");
         setOpenError(true);

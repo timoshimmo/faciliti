@@ -158,7 +158,7 @@ const TaggedPeopleDialog = props => {
     AXIOS.get('http://132.145.58.252:8081/spaciofm/api/contacts/search', { params: obj })
     .then(response => {
       const res = response.data;
-      console.log(res);
+    //  console.log(res);
     })
     .catch(function (error) {
       console.log(error.response);

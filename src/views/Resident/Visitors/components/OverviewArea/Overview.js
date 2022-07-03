@@ -119,6 +119,8 @@ const Overview = props => {
 
   const classes = useStyles();
 
+  const { handleDialogOpen } = props;
+
   return (
     <Grid container direction="row" spacing={1}>
       <Grid
@@ -244,6 +246,7 @@ const Overview = props => {
               disableripple="true"
               disabletouchripple="true"
               style={{ height: '100%'}}
+              onClick={handleDialogOpen}
             >
               <CardContent className={classes.cardContentStyle}>
                 <Grid container direction="row" alignItems="center" className={classes.gridAction}>

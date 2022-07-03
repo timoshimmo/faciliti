@@ -245,6 +245,13 @@ const SidebarNav = props => {
 //  const [open, setOpen] = React.useState(false);
 
   const handleLogout = () => {
+    if (typeof localStorage !== 'undefined') {
+      localStorage.removeItem('spfmtoken');
+      localStorage.removeItem('provider');
+      localStorage.removeItem('tenantId');
+      localStorage.removeItem('userId');
+      localStorage.removeItem('userDetails');
+    }
     history.push('/signin');
   }
 
@@ -253,7 +260,7 @@ const SidebarNav = props => {
    }, []);
 
    async function handleMenus() {
-     console.log("User Data: " + JSON.stringify(userData.crxDetails));
+  //   console.log("User Data: " + JSON.stringify(userData.crxDetails));
       AXIOS.get(`http://132.145.58.252:8081/spaciofm/api/user-profiles/new-menu?id=twang15&segmentName=SPACIOS41826`)
       .then(response => {
         const res = response.data;

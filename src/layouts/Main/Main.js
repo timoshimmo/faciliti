@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/styles';
 import { Leftbar, Rightbar, Topbar } from './components';
 import { OrderDialog } from '../../views/Resident/components';
+import { useHistory } from 'react-router-dom';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -68,6 +69,22 @@ const Main = props => {
   const { children } = props;
 
   const classes = useStyles();
+  let history = useHistory();
+
+  if (typeof localStorage !== 'undefined') {
+    if(!localStorage.getItem('spfmtoken')) {
+      //  console.log("LOCAL STORAGE TOKEN: ", localStorage.getItem('spfmtoken'));
+        history.push('/signin');
+    }
+  }
+
+  useEffect(() => {
+     window.history.pushState(null, '', window.location.href)
+     window.onpopstate = () => {
+         window.location.reload();
+     }
+
+ }, []);
 
   const [openDialog, setOpenDialog] = useState(false);
 

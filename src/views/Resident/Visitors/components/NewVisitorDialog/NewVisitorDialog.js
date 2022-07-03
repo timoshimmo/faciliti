@@ -8,9 +8,9 @@ import {
   TextField,
   Dialog,
   DialogActions,
+  InputLabel,
   DialogContent,
   DialogTitle,
-  InputLabel,
   IconButton,
   Slide,
   FormControl,
@@ -28,6 +28,8 @@ import AXIOS from '../../../../../util/webservices';
 //import axios from 'axios';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import moment from 'moment';
+import PhoneInput from 'react-phone-input-2';
+import 'react-phone-input-2/lib/material.css';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -56,7 +58,7 @@ function AttachmentIcon(props) {
 
 const schema = {
 
-  meetingTitle: {
+  visitorName: {
     presence: { allowEmpty: false, message: 'is required' },
     length: {
       minimum: 3
@@ -67,6 +69,17 @@ const schema = {
     length: {
       minimum: 3
     }
+  },
+  phoneNumber: {
+    presence: { allowEmpty: false, message: 'is required' },
+    length: {
+      minimum: 9,
+      maximum: 15
+    },
+    format: {
+     pattern: /^[0-9]+$/,
+     message: 'should only contain numbers'
+   }
   }
 }
 
@@ -131,16 +144,19 @@ const useStyles = makeStyles(theme => ({
  },
  formComponentSimple: {
    width: '100%',
-   marginBottom: theme.spacing(1),
-   marginTop: theme.spacing(2),
    fontSize: 11,
 },
  formComponent: {
    width: '100%',
-   marginBottom: theme.spacing(1),
-   marginTop: theme.spacing(2),
    fontSize: 11
 },
+
+labelStyle: {
+  width: '100%',
+  marginTop: theme.spacing(2),
+  fontSize: 15
+},
+
 helperError: {
   fontSize: 11,
   color: '#e53935',
@@ -282,6 +298,7 @@ subtitleSpacing: {
      borderRadius: 6,
      transition: theme.transitions.create(['background-color']),
      padding: '7px 25px',
+     marginBottom: theme.spacing(2),
      marginTop: 5,
      '&$focused': {
        border: '1px solid #1565D8',
@@ -295,11 +312,11 @@ subtitleSpacing: {
 }));
 
 
-const NewMeetingDialog = props => {
+const NewVisitorDialog = props => {
 
   const classes = useStyles();
 
-  const { onOpen, onClose, meetingDetails, edit } = props;
+  const { onOpen, onClose, visitorDetails } = props;
 
   let userData = {};
   if (typeof localStorage !== 'undefined') {
@@ -317,6 +334,21 @@ const NewMeetingDialog = props => {
   const [serverError, setServerError] = useState(null);
   const [loading, setLoading] = useState(false);
   const [updateLoading, setUpdateLoading] = useState(false);
+  const [categoryData, setCategoryData] = useState([]);
+
+  const [avatarList, setAvatarList] = useState([]);
+  const [phoneNo, setPhoneNo] = useState('');
+
+  const [dummyList, setDummyList] = useState([
+      { key: 0,
+        xri: "xri://@openmdx*org.opencrx.kernel.account1/provider/CRX/segment/INJREAM26606/account/R766BOBU81L9OS69941RBA7DF",
+        name: 'Jagger Grimjaw',
+        email: "timoshimmo@yahoo.com",
+        accountCategories: [25]
+      }
+    ]);
+
+  const [contactList, setContactList] = useState([]);
   const [formState, setFormState] = useState({
     isValid: false,
     values: {},
@@ -335,31 +367,17 @@ const NewMeetingDialog = props => {
 
  }, [formState.values]);
 
-  const [categoryData, setCategoryData] = useState([]);
-
-  const [avatarList, setAvatarList] = useState([]);
-
-  const [dummyList, setDummyList] = useState([
-      { key: 0,
-        xri: "xri://@openmdx*org.opencrx.kernel.account1/provider/CRX/segment/INJREAM26606/account/R766BOBU81L9OS69941RBA7DF",
-        name: 'Jagger Grimjaw',
-        email: "timoshimmo@yahoo.com",
-        accountCategories: [25]
-      }
-    ]);
-
-    const [contactList, setContactList] = useState([]);
 
     useEffect(() => {
-    //  console.log("MEETING DETAILS: " + JSON.stringify(meetingDetails));
-    //  console.log("MEETING DETAILS LENGTH: " + JSON.stringify(meetingDetails.length));
-      if(meetingDetails.length > 0 && edit) {
-        formState.values.meetingTitle = meetingDetails[0].name;
-        formState.values.dueDate = moment(meetingDetails[0].dueBy).format('yyyy-MM-DDThh:mm');
+    //  console.log("MEETING DETAILS: " + JSON.stringify(visitorDetails));
+    //  console.log("MEETING DETAILS LENGTH: " + JSON.stringify(visitorDetails.length));
+      if(visitorDetails.length > 0) {
+        formState.values.meetingTitle = visitorDetails[0].name;
+        formState.values.dueDate = moment(visitorDetails[0].dueBy).format('yyyy-MM-DDThh:mm');
         setAvatarList(dummyList);
       }
 
-   }, [meetingDetails, selectedDate]);
+   }, [visitorDetails, selectedDate]);
 
   /*  const [contactList, setContactList] = useState([
       "xri://@openmdx*org.opencrx.kernel.account1/provider/CRX/segment/INJREAM26606/account/9HNUMHC5KFUUK22TCCMSW9ZD5",
@@ -394,12 +412,11 @@ const NewMeetingDialog = props => {
 
     //  console.log("Selected Users: " + JSON.stringify(contactList));
       const obj = {
-        name: formState.values.meetingTitle,
-        phoneNumber: null,
-        description: formState.values.meetingTitle,
+        name: formState.values.visitorName,
+        phoneNumber: phoneNo.phone,
+        description: formState.values.visitorName,
         dueBy: formState.values.dueDate,
         contactXris: contactList,
-        assignee: userData.crxDetails.fullName,
         segmentName: 'INJREAM26606',
         userId: 'JAGG66'
       };
@@ -413,10 +430,10 @@ const NewMeetingDialog = props => {
       })
       */
 
-      AXIOS.post('http://132.145.58.252:8081/spaciofm/api/meetings/', obj)
+      AXIOS.post('visits/', obj)
       .then(response => {
         const res = response.data;
-      //  console.log(res);
+        console.log(res);
         setLoading(false);
         onClose();
       })
@@ -429,7 +446,7 @@ const NewMeetingDialog = props => {
       })
     }
   }
-//  userId: userData.crxDetails.userId
+
   const handleUpdate = () => {
 
     if (!updateLoading) {
@@ -440,14 +457,14 @@ const NewMeetingDialog = props => {
         dueBy: formState.values.dueDate,
         contactXris: contactList,
         segmentName: 'INJREAM26606',
-        userId: 'JAGG66'
+        userId: userData.crxDetails.userId
       };
 
 
-      AXIOS.put(`http://132.145.58.252:8081/spaciofm/api/meetings/${meetingDetails[0].key.uuid}`, obj)
+      AXIOS.put(`http://132.145.58.252:8081/spaciofm/api/meetings/${visitorDetails[0].key.uuid}`, obj)
       .then(response => {
         const res = response.data;
-      //  console.log(res);
+        console.log(res);
         setUpdateLoading(false);
         onClose();
       })
@@ -491,7 +508,7 @@ const NewMeetingDialog = props => {
 
     <Dialog fullWidth maxWidth="sm" onClose={onClose} aria-labelledby="order-dialog" open={onOpen} TransitionComponent={Transition}>
       <DialogTitle disableTypography className={classes.dialogtitleStyle}>
-           <Typography variant="h4" gutterBottom className={classes.dialogTopicStyle}>Create Meeting</Typography>
+           <Typography variant="h4" gutterBottom className={classes.dialogTopicStyle}>Create Schedule</Typography>
            <Typography variant="body1" className={classes.dialogSubTopicStyle}>For the security reasons it is important to give accurate details of your guest(s)</Typography>
        </DialogTitle>
        <DialogContent className={classes.dialogContentStyle}>
@@ -526,47 +543,91 @@ const NewMeetingDialog = props => {
            <form autoComplete="off">
             <Grid container>
               <Grid item lg={12}>
-                <FormControl  error={hasError('meetingTitle')} className={classes.formComponentSimple}>
+                <FormControl  error={hasError('visitorName')} className={classes.formComponentSimple}>
                     <TextField
-                      id="meeting-title"
-                      label="Meeting Title"
+                      id="vistor-name"
+                      label="Enter Visitor name"
                       variant="standard"
                       fullWidth
-                      name="meetingTitle"
+                      name="visitorName"
                       type="text"
                       className={classes.ordertitleStyle}
                       onChange={handleChange}
                       value={formState.values.meetingTitle}
-                      aria-describedby="title-error"
+                      aria-describedby="visitor-name-error"
+                      InputProps={{
+                        style: {fontSize: 13}
+                      }}
                     />
-                  <FormHelperText id="title-error" classes={{ root:classes.helperRoot, error: classes.helperError }}>
-                      {  hasError('meetingTitle') ? formState.errors.meetingTitle[0] : null }
+                  <FormHelperText id="visitor-name-error" classes={{ root:classes.helperRoot, error: classes.helperError }}>
+                      {  hasError('visitorName') ? formState.errors.visitorName[0] : null }
                     </FormHelperText>
                   </FormControl>
               </Grid>
 
               <Grid item lg={12}>
-                <InputLabel shrink htmlFor="dueDate">
+                <InputLabel className={classes.labelStyle} shrink htmlFor="dueDate">
                    Set Due Date &amp; Time
                  </InputLabel>
                 <FormControl className={classes.formComponent}>
                   <TextField
                       id="meeting-date-time"
-                      className={classes.textField}
                       name="dueDate"
                       type="datetime-local"
                       onChange={handleChange}
                       value={formState.values.dueDate}
+                      className={classes.textField}
                       InputProps={{
                         disableUnderline: true,
-                        style: {fontSize: 12}
+                        style: {fontSize: 13}
                       }}
                       InputLabelProps={{
                         shrink: true,
                       }}
                       aria-describedby="meeting-date-time-error"
-                    />
+                  />
                 </FormControl>
+              </Grid>
+              <Grid item lg={12}>
+                <InputLabel className={classes.labelStyle} shrink htmlFor="phoneNumber">
+                    Add Phone number
+                  </InputLabel>
+                  <FormControl className={classes.formComponent}>
+                      <PhoneInput
+                        country={'ng'}
+                        name="phoneNumber"
+                        onChange={phone => setPhoneNo({ phone })}
+                        specialLabel=""
+                        aria-describedby="phonenumber-error"
+                        inputStyle={{
+                          backgroundColor: '#FFFFFF',
+                          border: '1px solid #8692A6',
+                          borderRadius: 6,
+                          padding: '15px 50px',
+                          width: '100%',
+                          fontSize: 12,
+                          '&:hover': {
+                            border: '1px solid #1565D8',
+                            backgroundrColor: '#FFFFFF',
+                         },
+                         '&$focused': {
+                           border: '1px solid #1565D8',
+                           backgroundrColor: '#FFFFFF',
+                         },
+                        }}
+                        containerStyle={{
+                          marginTop: 5,
+                        }}
+                        InputProps={{
+                          disableUnderline: true,
+                          style: {fontSize: 13}
+                        }}
+                      />
+
+                      <FormHelperText id="phonenumber-error" classes={{ root: classes.helperRoot, error: classes.helper }}>
+                        {  hasError('phoneNumber') ? formState.errors.phoneNumber[0] : null }
+                      </FormHelperText>
+                  </FormControl>
               </Grid>
              </Grid>
            </form>
@@ -616,7 +677,7 @@ const NewMeetingDialog = props => {
                   >
                   Cancel
                 </Button>
-                {meetingDetails.length > 0 ?
+                {visitorDetails.length > 0 ?
                   (<Button
                       variant="contained"
                       classes={{ root: classes.buttonCreateStyle }}
@@ -625,7 +686,7 @@ const NewMeetingDialog = props => {
                       disabled={updateLoading}
                       >
                       Update
-                      {loading && <CircularProgress size={18} className={classes.buttonProgress} />}
+                      {updateLoading && <CircularProgress size={18} className={classes.buttonProgress} />}
                     </Button>)
                     :
                     (<Button
@@ -633,9 +694,9 @@ const NewMeetingDialog = props => {
                           classes={{ root: classes.buttonCreateStyle }}
                           startIcon={<AddIcon style={{ fontSize: 16, color: '#FFFFFF' }}/>}
                           onClick={handleSave}
-                          disabled={loading || !formState.values.meetingTitle || !formState.values.dueDate || contactList.length < 1}
+                          disabled={loading || !formState.values.visitorName || !formState.values.dueDate || contactList.length < 1 || !phoneNo.phone}
                           >
-                          Save & Submit
+                          Save & Create
                           {loading && <CircularProgress size={18} className={classes.buttonProgress} />}
                         </Button>)
                 }
@@ -655,9 +716,9 @@ const NewMeetingDialog = props => {
   );
 }
 
-NewMeetingDialog.propTypes = {
+NewVisitorDialog.propTypes = {
   onClose: PropTypes.func,
   onOpen: PropTypes.bool,
 };
 
-export default NewMeetingDialog;
+export default NewVisitorDialog;

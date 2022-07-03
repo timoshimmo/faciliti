@@ -1,11 +1,10 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { makeStyles } from '@material-ui/styles';
 import {
   Grid,
   Typography,
 } from '@material-ui/core';
 import { OverviewArea, MeetingUpdateArea } from './components'
-
 
 const useStyles = makeStyles(theme => ({
   root: {

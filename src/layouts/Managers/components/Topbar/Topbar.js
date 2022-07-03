@@ -107,6 +107,8 @@ formComponent: {
 
     const classes = useStyles();
 
+    //{userData.crxDetails.fullName}
+
     let userData = {};
     if (typeof localStorage !== 'undefined') {
         const user = localStorage.getItem('userDetails');
@@ -121,17 +123,17 @@ formComponent: {
 
     const handleChangeEstate = (event) => {
      setSelectedEstate(event.target.value);
-     console.log("ESTATE VALUE: ", event.target.value);
+  //   console.log("ESTATE VALUE: ", event.target.value);
      const userid = localStorage.getItem('userId');
 
      AXIOS.put(`http://132.145.58.252:8081/spaciofm/api/user-profiles/current-estate/`,
        {
-         "user-id": userid,
+         userId: userid,
          "contact-id": userData.crxDetails.contactXRI,
       })
      .then(response => {
        const res = response.data;
-       console.log(res);
+    //   console.log(res);
 
      })
      .catch(function (error) {
@@ -151,9 +153,9 @@ formComponent: {
        AXIOS.get(`http://132.145.58.252:8081/spaciofm/api/estates/search?index=0&range=5&estate-name=INJ`)
        .then(response => {
          const res = response.data;
-         console.log(res);
+      //   console.log(res);
          setActiveEstate(res);
-        // setSelectedEstate(res[0].uri);
+         setSelectedEstate(res[0].uri);
        })
        .catch(function (error) {
          console.log(error.response);
@@ -195,6 +197,7 @@ formComponent: {
                 className={classes.typoUsername}
                 startIcon={<AccountCircleIcon fontSize="small" style={{ marginRight: '10%' }} />}
               >
+
                 {userData.crxDetails.fullName}
               </Button>
               <FormControl className={classes.formComponent}>

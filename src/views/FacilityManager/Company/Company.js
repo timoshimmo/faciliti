@@ -423,7 +423,7 @@ const Company = () => {
 
   useEffect(() => {
     if(companyData !== null || companyData !== undefined || companyData.length > 0) {
-      console.log("COMPANY DATA: " + JSON.stringify(companyData));
+  //    console.log("COMPANY DATA: " + JSON.stringify(companyData));
       formState.values.businessName = companyData.companyName;
       formState.values.businessEmail = companyData.companyEmail;
       setValue(companyData.estate);
@@ -469,7 +469,7 @@ const Company = () => {
       axios.get('http://132.145.58.252:8081/spaciofm/api/estates/?index=0&range=5')
       .then(response => {
         const res = response.data;
-        console.log(res);
+      //  console.log(res);
         setEstates(res);
       })
       .catch(function (error) {
@@ -721,13 +721,13 @@ const Company = () => {
                               value={value}
                               onChange={(event, newValue) => {
                                 if (typeof newValue === 'string') {
-                                  console.log("New Estate 1: " + newValue);
+                                //  console.log("New Estate 1: " + newValue);
                                   setValue({
                                     name: newValue,
                                   });
                                 } else if (newValue && newValue.inputValue) {
                                   // Create a new value from the user input
-                                  console.log("New Estate 2: " + newValue.inputValue);
+                                //  console.log("New Estate 2: " + newValue.inputValue);
                                   setValue(newValue.inputValue);
                                   setNewEstateStatus(true);
                                 } else {
@@ -800,7 +800,6 @@ const Company = () => {
        </Grid>
      </div>
    );
-
 };
 
 export default withRouter(Company);

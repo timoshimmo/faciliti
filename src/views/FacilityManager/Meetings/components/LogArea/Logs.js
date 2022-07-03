@@ -681,7 +681,7 @@ const useStyles = makeStyles(theme => ({
   buttonProgress: {
      color: theme.palette.primary.main,
      position: 'absolute',
-     top: '75%',
+     bottom: '25%',
      left: '55%',
      marginTop: -10,
      marginLeft: -12,
@@ -693,7 +693,7 @@ const Logs = props => {
 
   const classes = useStyles();
 
-  const { handleDialogOpen, setMeetingDetails, meetingDetails } = props;
+  const { handleDialogOpen, setMeetingDetails, meetingDetails, setEdit } = props;
 
   let userData = {};
   if (typeof localStorage !== 'undefined') {
@@ -712,6 +712,7 @@ const Logs = props => {
   const [selectedRow, setSelectedRow] = useState([]);
   const [meetings, setMeetings] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [dataSize, setDataSize] = useState(0);
 
   const [checkState, setCheckState] = useState({
    all: false,
@@ -721,16 +722,29 @@ const Logs = props => {
 
  useEffect(() => {
    handleGetAll();
+  // handleCount();
 }, []);
 
   const [anchorEl, setAnchorEl] = useState(null);
   const openPostMenu = Boolean(anchorEl);
   const checkid = openPostMenu ? 'simple-popover' : undefined;
 
+  const handleCount = () => {
+    AXIOS.get(`meetings/count`)
+      .then(response => {
+        const res = response.data.response;
+        //console.log("MEETINGS COUNT:" + JSON.stringify(res));
+        //setDataSize(res);
+      })
+      .catch(function (error) {
+        console.log(error.response);
+        console.log(error.message);
+      })
+  }
+
   const handleGetAll = () => {
 
       if(!loading) {
-
         setLoading(true);
 
         /*const obj = {
@@ -740,11 +754,11 @@ const Logs = props => {
           range : 10
         };*/
 
-        AXIOS.get('http://132.145.58.252:8081/spaciofm/api/meetings/?index=0&range=5')
+        AXIOS.get(`meetings/?index=${page}&range=${rowsPerPage}`)
           .then(response => {
             setLoading(false);
             const res = response.data.response;
-            console.log("ALL MEETINGS:" + JSON.stringify(res));
+      //      console.log("ALL MEETINGS:" + JSON.stringify(res));
             setMeetings(res);
           })
           .catch(function (error) {
@@ -753,14 +767,13 @@ const Logs = props => {
             console.log(error.message);
           })
       }
-
-
   }
 
   const handleSelectedRow = (index) => {
     const selectedRow = meetings[index];
     setSelectedRow(selectedRow);
     setMeetingDetails([...meetingDetails, selectedRow]);
+    setEdit(true);
     handleDialogOpen();
   };
 
@@ -913,8 +926,6 @@ const handleFilter = () => {
            />
         </div>
       </div>
-
-
    </Paper>
   );
 }
