@@ -87,19 +87,17 @@ const schema = {
   },
   password: {
     presence: { allowEmpty: false, message: 'is required' },
-    length: {
-      minimum: 6,
-      maximum: 15,
-      message: 'must be at least 6 characters'
-    },
+    format: {
+     pattern: /^(?=.*\d)(?=.*[a-zA-Z])[a-zA-Z0-9]{6,}$/,
+     message: 'must have at least 6 characters, one lower case, one uppercase and a number'
+   }
   },
   confirmPassword: {
   presence: { allowEmpty: false, message: 'is required' },
-  length: {
-    minimum: 6,
-    maximum: 15,
-    message: 'must be at least 6 characters'
-  },
+  format: {
+   pattern: /^(?=.*\d)(?=.*[a-zA-Z])[a-zA-Z0-9]{6,}$/,
+   message: 'must have at least 6 characters, one lower case, one uppercase and a number'
+ },
   equality: "password"
 },
 estateFacility: {
@@ -319,7 +317,7 @@ buttonProgress: {
    marginLeft: -12,
  },
 helperRoot: {
-  height: 13
+  height: 17
 }
 }));
 

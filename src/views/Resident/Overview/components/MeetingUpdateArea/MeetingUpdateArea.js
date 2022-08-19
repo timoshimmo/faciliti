@@ -198,7 +198,7 @@ const useStyles = makeStyles(theme => ({
      position: 'absolute',
      top: '60%',
      left: '50%',
-     marginTop: -10,
+     marginTop: 10,
      marginLeft: -12,
    }
 
@@ -260,7 +260,7 @@ const MeetingUpdateArea = props => {
           .then(response => {
             setLoading(false);
             const res = response.data.response;
-            console.log("ALL MEETINGS:" + JSON.stringify(res));
+          //  console.log("ALL MEETINGS:" + JSON.stringify(res));
             setMeetings(res);
           })
           .catch(function (error) {

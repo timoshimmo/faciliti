@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/styles';
 import { Leftbar, Rightbar, Topbar } from './components';
 import { OrderDialog } from '../../views/Resident/components';
+import { ModalProvider } from '../../views/modal/modal-context.tsx';
+import ModalManager from '../../views/modal/modal-manager';
 import { useHistory } from 'react-router-dom';
 
 const useStyles = makeStyles(theme => ({
@@ -98,6 +100,7 @@ const Main = props => {
 
   return (
     <div className={classes.root}>
+      <ModalProvider>
        <div className={classes.leftDiv} >
           <Leftbar onDialogOpen={handleDialogOpen} />
         </div>
@@ -106,6 +109,7 @@ const Main = props => {
             <main className={classes.content}>
               {children}
             </main>
+            <ModalManager />
             <OrderDialog
               onClose={handleDialogClose}
               onOpen={openDialog}
@@ -114,6 +118,7 @@ const Main = props => {
         <div className={classes.rightDiv}>
           <Rightbar />
         </div>
+      </ModalProvider>
     </div>
   );
 };

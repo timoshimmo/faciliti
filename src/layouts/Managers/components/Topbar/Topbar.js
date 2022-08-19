@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/styles';
+import { useHistory } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { Grid, Typography, Toolbar, IconButton, Button, FormControl, Select, MenuItem } from '@material-ui/core';
 import SvgIcon from '@material-ui/core/SvgIcon';
@@ -96,7 +97,7 @@ formComponent: {
   function NotificationIcon(props) {
     return (
       <SvgIcon {...props} width="30" height="30" viewBox="0 0 30 30">
-          <path fill-rule="evenodd" clip-rule="evenodd" d="M22.5 15C18.3579 15 15 11.6421 15 7.5C15 3.35787 18.3579 0 22.5 0C26.6421 0 30 3.35787 30 7.5C30 11.6421 26.6421 15 22.5 15ZM27 7.5C27 9.98528 24.9853 12 22.5 12C20.0147 12 18 9.98528 18 7.5C18 5.01472 20.0147 3 22.5 3C24.9853 3 27 5.01472 27 7.5Z" fill="#1B75BC"/>
+          <path fillRule="evenodd" clipRule="evenodd" d="M22.5 15C18.3579 15 15 11.6421 15 7.5C15 3.35787 18.3579 0 22.5 0C26.6421 0 30 3.35787 30 7.5C30 11.6421 26.6421 15 22.5 15ZM27 7.5C27 9.98528 24.9853 12 22.5 12C20.0147 12 18 9.98528 18 7.5C18 5.01472 20.0147 3 22.5 3C24.9853 3 27 5.01472 27 7.5Z" fill="#1B75BC"/>
           <path d="M24 16.5H27V27C27 28.6569 25.6569 30 24 30H3C1.34315 30 0 28.6569 0 27V6C0 4.34315 1.34315 3 3 3H13.5V6H3V27H24V16.5Z" fill="#1B75BC"/>
       </SvgIcon>
     );
@@ -106,10 +107,11 @@ formComponent: {
   const Topbar = props => {
 
     const classes = useStyles();
-
+    let history = useHistory();
     //{userData.crxDetails.fullName}
 
     let userData = {};
+    let estate
     if (typeof localStorage !== 'undefined') {
         const user = localStorage.getItem('userDetails');
         if(user !== null) {
@@ -122,22 +124,22 @@ formComponent: {
     const [selectedEstate, setSelectedEstate] = useState('');
 
     const handleChangeEstate = (event) => {
-     setSelectedEstate(event.target.value);
-  //   console.log("ESTATE VALUE: ", event.target.value);
-     const userid = localStorage.getItem('userId');
 
-     AXIOS.put(`http://132.145.58.252:8081/spaciofm/api/user-profiles/current-estate/`,
-       {
-         userId: userid,
-         "contact-id": userData.crxDetails.contactXRI,
-      })
+     //console.log("USERID: ", userData.crxDetails.userId + " CONTACTXRI: " + userData.crxDetails.contactXRI);
+     //const userid = localStorage.getItem('userId');
+
+
+     AXIOS.put(`http://132.145.58.252:8081/spaciofm/api/user-profiles/current-estate/?user-id=${userData.crxDetails.userId}&contact-id=${userData.crxDetails.contactXRI}&estate-id=${event.target.value}`)
      .then(response => {
        const res = response.data;
-    //   console.log(res);
-
+       //console.log(res);
+       if(res.result && res.errors !== null) {
+         console.log("SUCCESS!!!");
+       }
+       localStorage.setItem('currentEstateXri', JSON.stringify(event.target.value));
+       setSelectedEstate(event.target.value);
      })
      .catch(function (error) {
-       console.log(error.response);
        console.log(error.message);
      })
    };
@@ -150,17 +152,25 @@ formComponent: {
 
     async function handleEstates() {
       //console.log("User Data: " + JSON.stringify(userData.crxDetails));
-       AXIOS.get(`http://132.145.58.252:8081/spaciofm/api/estates/search?index=0&range=5&estate-name=INJ`)
+       AXIOS.get(`http://132.145.58.252:8081/spaciofm/api/estates/?index=0&range=5`)
        .then(response => {
          const res = response.data;
       //   console.log(res);
-         setActiveEstate(res);
-         setSelectedEstate(res[0].uri);
+        // console.log("CURRENT ESTATE: " + userData.crxDetails.currentEstateXri);
+          const currEstateXri = localStorage.getItem('currentEstateXri');
+          const estateXRI = JSON.parse(currEstateXri);
+          setActiveEstate(res);
+          setSelectedEstate(estateXRI);
+        // setSelectedEstate("xri://@openmdx*org.opencrx.kernel.account1/provider/CRX/segment/SPACIOS41826/account/L482PW5MO27E48MCTM1LGLCLS");
        })
        .catch(function (error) {
          console.log(error.response);
          console.log(error.message);
        })
+   }
+
+   const handleProfile = () => {
+      history.push('/profile');
    }
 
     return (
@@ -195,6 +205,7 @@ formComponent: {
               </IconButton>
               <Button
                 className={classes.typoUsername}
+                onClick={handleProfile}
                 startIcon={<AccountCircleIcon fontSize="small" style={{ marginRight: '10%' }} />}
               >
 
@@ -203,19 +214,20 @@ formComponent: {
               <FormControl className={classes.formComponent}>
                  <Select
                    className={classes.selectParent}
+                   value={selectedEstate}
                    onChange={handleChangeEstate}
                    MenuProps={{ classes: { paper: classes.menuDropStyle } }}
-                   InputProps={{
+                   inputprops={{
                      disableUnderline: true,
                      style: {fontSize: 12}
                    }}
                    classes={{
-                     standard: classes.selectStyle
+                     root: classes.selectStyle
                    }}
                  >
                   {
                     activeEstate.map((row, index) => (
-                      <MenuItem value={row.uri}>{row.name}</MenuItem>
+                      <MenuItem key={row.uri} value={row.uri}>{row.name}</MenuItem>
                     ))
                   }
                  </Select>

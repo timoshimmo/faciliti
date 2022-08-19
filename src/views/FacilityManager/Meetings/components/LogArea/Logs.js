@@ -35,86 +35,6 @@ import AXIOS from '../../../../../util/webservices';
 import moment from 'moment';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
-const rows = [
-  {
-    "name": "Security Meeting",
-     "description": null,
-     "createdAt": "2022-05-28T13:10:25.538+00:00",
-     "meetingNumber": "1001001",
-     "dueBy": "2022-05-30T10:40:00.000+00:00",
-     "numberOfAttendees": 2,
-     "xri": "xri://@openmdx*org.opencrx.kernel.activity1/provider/CRX/segment/INJREAM26606/activity/R1JEH2B66ZHM4YCN99GJPA8KF",
-     "key": {
-         "uuid": "R1JEH2B66ZHM4YCN99GJPA8KF"
-     },
-     "status": "Scheduled"
- },
- {
-      "name": "INJREAM Visit",
-      "description": "for injreal2 estate",
-      "createdAt": "2022-05-28T10:38:44.048+00:00",
-      "meetingNumber": "1001000",
-      "dueBy": "2022-12-31T21:14:23.000+00:00",
-      "numberOfAttendees": 2,
-      "xri": "xri://@openmdx*org.opencrx.kernel.activity1/provider/CRX/segment/INJREAM26606/activity/3F9LEQK24Q0OCYCN99GJPA8KF",
-      "key": {
-          "uuid": "3F9LEQK24Q0OCYCN99GJPA8KF"
-      },
-      "status": "Scheduled"
-  },
-  {
-      "name": "New Years Meeting",
-      "description": null,
-      "createdAt": "2022-05-27T21:25:36.937+00:00",
-      "meetingNumber": "1000803",
-      "dueBy": "2017-05-28T12:30:00.000+00:00",
-      "numberOfAttendees": 2,
-      "xri": "xri://@openmdx*org.opencrx.kernel.activity1/provider/CRX/segment/INJREAM26606/activity/L6Y9OPSE9OHYKYCN99GJPA8KF",
-      "key": {
-          "uuid": "L6Y9OPSE9OHYKYCN99GJPA8KF"
-      },
-      "status": "Scheduled"
-  },
-  {
-      "name": "Exco meeting",
-      "description": "first estate meeting",
-      "createdAt": "2022-05-27T20:46:21.371+00:00",
-      "meetingNumber": "1000802",
-      "dueBy": "2022-04-17T21:14:23.000+00:00",
-      "numberOfAttendees": 2,
-      "xri": "xri://@openmdx*org.opencrx.kernel.activity1/provider/CRX/segment/INJREAM26606/activity/RUDLRWIZN1HIKYCN99GJPA8KF",
-      "key": {
-          "uuid": "RUDLRWIZN1HIKYCN99GJPA8KF"
-      },
-      "status": "Scheduled"
-  },
-  {
-      "name": "INJREAM Meeting",
-      "description": "for injreal2 estate",
-      "createdAt": "2022-05-27T14:34:53.818+00:00",
-      "meetingNumber": "1000801",
-      "dueBy": "2022-12-31T21:14:23.000+00:00",
-      "numberOfAttendees": 2,
-      "xri": "xri://@openmdx*org.opencrx.kernel.activity1/provider/CRX/segment/INJREAM26606/activity/3N9K4250LS5WSYCN99GJPA8KF",
-      "key": {
-          "uuid": "3N9K4250LS5WSYCN99GJPA8KF"
-      },
-      "status": "Scheduled"
-  },
-  {
-      "name": "Exco meeting",
-      "description": "first estate meeting",
-      "createdAt": "2022-05-24T21:19:34.687+00:00",
-      "meetingNumber": "1000800",
-      "dueBy": "2022-04-17T21:14:23.000+00:00",
-      "numberOfAttendees": 2,
-      "xri": "xri://@openmdx*org.opencrx.kernel.activity1/provider/CRX/segment/INJREAM26606/activity/L6BVW4GRMDYI4WHHUIUROR238",
-      "key": {
-          "uuid": "L6BVW4GRMDYI4WHHUIUROR238"
-      },
-      "status": "Scheduled"
-  }
-];
 
 const StyledTableCell = withStyles((theme) => ({
   head: {
@@ -170,11 +90,11 @@ function stableSort(array, comparator) {
 function DeleteIcon(props) {
   return (
     <SvgIcon {...props} width="16" height="17" viewBox="0 0 16 17">
-      <path d="M14.75 3.5L1 3.50001" stroke="#FF2828" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-      <path d="M6.00037 7.25V12.25" stroke="#FF2828" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-      <path d="M9.75037 7.25V12.25" stroke="#FF2828" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-      <path d="M13.4993 3.5V15.375C13.4993 15.5408 13.4334 15.6997 13.3162 15.8169C13.199 15.9342 13.04 16 12.8743 16H2.87427C2.70851 16 2.54954 15.9342 2.43233 15.8169C2.31512 15.6997 2.24927 15.5408 2.24927 15.375V3.5" stroke="#FF2828" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-      <path d="M11 3.5V2.25C11 1.91848 10.8683 1.60054 10.6339 1.36612C10.3995 1.1317 10.0815 1 9.75 1H6C5.66848 1 5.35054 1.1317 5.11612 1.36612C4.8817 1.60054 4.75 1.91848 4.75 2.25V3.5" stroke="#FF2828" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M14.75 3.5L1 3.50001" stroke="#FF2828" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+      <path d="M6.00037 7.25V12.25" stroke="#FF2828" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+      <path d="M9.75037 7.25V12.25" stroke="#FF2828" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+      <path d="M13.4993 3.5V15.375C13.4993 15.5408 13.4334 15.6997 13.3162 15.8169C13.199 15.9342 13.04 16 12.8743 16H2.87427C2.70851 16 2.54954 15.9342 2.43233 15.8169C2.31512 15.6997 2.24927 15.5408 2.24927 15.375V3.5" stroke="#FF2828" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+      <path d="M11 3.5V2.25C11 1.91848 10.8683 1.60054 10.6339 1.36612C10.3995 1.1317 10.0815 1 9.75 1H6C5.66848 1 5.35054 1.1317 5.11612 1.36612C4.8817 1.60054 4.75 1.91848 4.75 2.25V3.5" stroke="#FF2828" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
     </SvgIcon>
   );
 }
@@ -182,7 +102,7 @@ function DeleteIcon(props) {
 function FilterIcon(props) {
   return (
     <SvgIcon {...props} width="26" height="24" viewBox="0 0 26 24">
-      <path d="M2.2558 0.996094H23.1881C23.3769 0.996094 23.5617 1.05094 23.7199 1.15395C23.8781 1.25697 24.003 1.40373 24.0794 1.57639C24.1557 1.74905 24.1803 1.94018 24.1501 2.12655C24.1199 2.31292 24.0362 2.4865 23.9092 2.6262L15.8991 11.4374C15.736 11.6168 15.6456 11.8505 15.6456 12.0929V18.991C15.6456 19.1515 15.606 19.3094 15.5303 19.4509C15.4546 19.5923 15.3451 19.7129 15.2117 19.8019L11.3134 22.4007C11.1667 22.4986 10.9961 22.5547 10.8199 22.5633C10.6437 22.5718 10.4685 22.5323 10.313 22.4491C10.1575 22.3658 10.0275 22.242 9.93682 22.0906C9.84618 21.9393 9.7983 21.7662 9.7983 21.5898V12.0929C9.7983 11.8505 9.70794 11.6168 9.54486 11.4374L1.53469 2.6262C1.40769 2.4865 1.324 2.31292 1.2938 2.12655C1.2636 1.94018 1.28818 1.74905 1.36456 1.57639C1.44094 1.40373 1.56583 1.25697 1.72405 1.15395C1.88227 1.05094 2.067 0.996094 2.2558 0.996094V0.996094Z" stroke="#8692A6" stroke-width="1.94911" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M2.2558 0.996094H23.1881C23.3769 0.996094 23.5617 1.05094 23.7199 1.15395C23.8781 1.25697 24.003 1.40373 24.0794 1.57639C24.1557 1.74905 24.1803 1.94018 24.1501 2.12655C24.1199 2.31292 24.0362 2.4865 23.9092 2.6262L15.8991 11.4374C15.736 11.6168 15.6456 11.8505 15.6456 12.0929V18.991C15.6456 19.1515 15.606 19.3094 15.5303 19.4509C15.4546 19.5923 15.3451 19.7129 15.2117 19.8019L11.3134 22.4007C11.1667 22.4986 10.9961 22.5547 10.8199 22.5633C10.6437 22.5718 10.4685 22.5323 10.313 22.4491C10.1575 22.3658 10.0275 22.242 9.93682 22.0906C9.84618 21.9393 9.7983 21.7662 9.7983 21.5898V12.0929C9.7983 11.8505 9.70794 11.6168 9.54486 11.4374L1.53469 2.6262C1.40769 2.4865 1.324 2.31292 1.2938 2.12655C1.2636 1.94018 1.28818 1.74905 1.36456 1.57639C1.44094 1.40373 1.56583 1.25697 1.72405 1.15395C1.88227 1.05094 2.067 0.996094 2.2558 0.996094V0.996094Z" stroke="#8692A6" strokeWidth="1.94911" strokeLinecap="round" strokeLinejoin="round"/>
     </SvgIcon>
   );
 }
@@ -472,7 +392,7 @@ const EnhancedTableToolbar = (props) => {
       <Grid container alignItems='center'>
         <Grid
         item
-        lg={5}
+        lg={6}
         className={styles.titleArea}>
         <Typography
             variant="h4"
@@ -488,19 +408,17 @@ const EnhancedTableToolbar = (props) => {
         </Grid>
         <Grid
         item
-        lg={7}>
-        <Grid container spacing={2} justify="flex-end" alignItems='center'>
+        lg={6}>
+        <Grid container spacing={2} justifyContent="space-between" alignItems='center'>
           <Grid
-          item
-          lg={1.3}>
+          item>
             <Button
               className={styles.exportLinkStyle}>
               Export CSV
             </Button>
         </Grid>
           <Grid
-          item
-          lg={5}>
+          item>
               <FormControl style={{
                 fontSize: 10,
                 width: '100%'
@@ -535,8 +453,7 @@ const EnhancedTableToolbar = (props) => {
               </FormControl>
             </Grid>
             <Grid
-            item
-            lg={1.2}>
+            item>
             <IconButton
               aria-describedby={checkid}
               onClick={onMenuClick}
@@ -596,7 +513,7 @@ const EnhancedTableToolbar = (props) => {
                    </FormControl>
                     <Grid
                       container
-                      justify="space-evenly"
+                      justifyContent="space-evenly"
                       style={{ paddingTop: 10, paddingBottom: 10, borderRadius: 70 }}
                       >
                       <Button
@@ -618,8 +535,7 @@ const EnhancedTableToolbar = (props) => {
                 </Popover>
             </Grid>
             <Grid
-            item
-            lg={3.5}>
+            item>
             <Button
               className={styles.filterMenuButton}
               variant="contained"
@@ -638,8 +554,8 @@ const EnhancedTableToolbar = (props) => {
 EnhancedTableToolbar.propTypes = {
   onOpenMenu: PropTypes.bool.isRequired,
   onHandleMenuClose: PropTypes.func.isRequired,
-  anchorEl: PropTypes.bool.isRequired,
-  checkid: PropTypes.string.isRequired,
+  anchorEl: PropTypes.bool,
+  checkid: PropTypes.string,
   onMenuClick: PropTypes.func.isRequired,
   onHandleFilter: PropTypes.func.isRequired,
   onHandleDialogOpen: PropTypes.func
@@ -680,11 +596,10 @@ const useStyles = makeStyles(theme => ({
   },
   buttonProgress: {
      color: theme.palette.primary.main,
-     position: 'absolute',
-     bottom: '25%',
-     left: '55%',
-     marginTop: -10,
-     marginLeft: -12,
+     marginTop: 10,
+     marginBottom: 10,
+     marginLeft: '50%',
+     zIndex: 10
    }
 
 }));
@@ -720,16 +635,15 @@ const Logs = props => {
    closed: false,
  });
 
+ const [anchorEl, setAnchorEl] = useState(null);
+ const openPostMenu = Boolean(anchorEl);
+ const checkid = openPostMenu ? 'simple-popover' : undefined;
+
  useEffect(() => {
    handleGetAll();
-  // handleCount();
 }, []);
 
-  const [anchorEl, setAnchorEl] = useState(null);
-  const openPostMenu = Boolean(anchorEl);
-  const checkid = openPostMenu ? 'simple-popover' : undefined;
-
-  const handleCount = () => {
+/*  const handleCount = () => {
     AXIOS.get(`meetings/count`)
       .then(response => {
         const res = response.data.response;
@@ -740,7 +654,7 @@ const Logs = props => {
         console.log(error.response);
         console.log(error.message);
       })
-  }
+  }*/
 
   const handleGetAll = () => {
 
@@ -758,7 +672,7 @@ const Logs = props => {
           .then(response => {
             setLoading(false);
             const res = response.data.response;
-      //      console.log("ALL MEETINGS:" + JSON.stringify(res));
+            console.log("ALL MEETINGS:" + JSON.stringify(res));
             setMeetings(res);
           })
           .catch(function (error) {
@@ -769,10 +683,15 @@ const Logs = props => {
       }
   }
 
-  const handleSelectedRow = (index) => {
-    const selectedRow = meetings[index];
-    setSelectedRow(selectedRow);
-    setMeetingDetails([...meetingDetails, selectedRow]);
+  const handleCreateNew = () => {
+    setEdit(false);
+    handleDialogOpen();
+  }
+
+  const handleSelectedRow = (item) => {
+  //  const selectedRow = meetings[index];
+  //  setSelectedRow(selectedRow);
+    setMeetingDetails(item);
     setEdit(true);
     handleDialogOpen();
   };
@@ -823,8 +742,9 @@ const handleFilter = () => {
           checkState={checkState}
           onHandleCheckChange={handleCheckChange}
           onHandleFilter={handleFilter}
-          onHandleDialogOpen={handleDialogOpen}/>
+          onHandleDialogOpen={handleCreateNew}/>
         <div>
+          {loading && <CircularProgress size={25} className={classes.buttonProgress} /> }
           <TableContainer>
             <Table className={classes.table} aria-label="customized table">
               <EnhancedTableHead
@@ -833,74 +753,66 @@ const handleFilter = () => {
                 onRequestSort={handleRequestSort}
                 rowCount={meetings.length}/>
               <TableBody>
-                {loading ?
+                {stableSort(meetings, getComparator(order, orderBy))
+                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                  .map((row, index) => {
 
-                  (<CircularProgress size={25} className={classes.buttonProgress} />)
-                  :
-                  (
-                    stableSort(meetings, getComparator(order, orderBy))
-                      .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                      .map((row, index) => {
-
-                        return (
-                          <StyledTableRow hover role="button" key={row.key.uuid} onClick={()=>handleSelectedRow(index)}>
-                            <StyledTableCell component="th" scope="row">
-                                {moment(row.createdAt).format('DD/MM/YYYY hh:mm:ss A')}
-                            </StyledTableCell>
-                            <StyledTableCell style={{ maxWidth: 100, whiteSpace: 'nowrap' }}>
-                              <Box
-                                 component="div"
-                                 my={2}
-                                 textOverflow="ellipsis"
-                                 overflow="hidden"
-                                 bgcolor="transparent"
-                               >
-                                 {row.name}
-                               </Box>
-                            </StyledTableCell>
-                            <StyledTableCell>
-                                 {row.key.uuid}
-                            </StyledTableCell>
-                            <StyledTableCell>
-                              {moment(row.dueBy).format('DD/MM/YYYY hh:mm:ss A')}
-                            </StyledTableCell>
-                            <StyledTableCell align="center" style={{ maxWidth: 80, whiteSpace: 'nowrap' }}>
-                            <Box
-                               component="div"
-                               my={1}
-                               textOverflow="ellipsis"
-                               overflow="hidden"
-                               bgcolor="transparent"
-                             >
-                                {row.numberOfAttendees} attendee(s)
-                              </Box>
-                            </StyledTableCell>
-                            <StyledTableCell align="center">
-                              {row.status === "Scheduled" ?
-                              <Chip
-                                label="Scheduled"
-                                variant="outlined"
-                                classes={{ root: classes.chipStyles, label: classes.chipLabelStyle }}
-                              />
-                              :
-                              <Chip
-                                label="Pending"
-                                variant="outlined"
-                                classes={{ root: classes.chipStyles, label: classes.chipLabelStyle }}
-                              />
-                            }
-                            </StyledTableCell>
-                            <StyledTableCell align="center">
-                              <IconButton size="small">
-                                <DeleteIcon style={{  width: 16,height: 17, fill:'none', }} />
-                              </IconButton>
-                            </StyledTableCell>
-                          </StyledTableRow>
-                        );
-                      })
-                  )
-
-                }
+                    return (
+                      <StyledTableRow hover role="button" key={row.key.uuid} onClick={()=>handleSelectedRow(row)}>
+                        <StyledTableCell component="th" scope="row">
+                            {moment(row.createdAt).format('DD/MM/YYYY hh:mm:ss A')}
+                        </StyledTableCell>
+                        <StyledTableCell style={{ maxWidth: 100, whiteSpace: 'nowrap' }}>
+                          <Box
+                             component="div"
+                             my={2}
+                             textOverflow="ellipsis"
+                             overflow="hidden"
+                             bgcolor="transparent"
+                           >
+                             {row.name}
+                           </Box>
+                        </StyledTableCell>
+                        <StyledTableCell>
+                             {row.key.uuid}
+                        </StyledTableCell>
+                        <StyledTableCell>
+                          {moment(row.dueBy).format('DD/MM/YYYY hh:mm:ss A')}
+                        </StyledTableCell>
+                        <StyledTableCell align="center" style={{ maxWidth: 80, whiteSpace: 'nowrap' }}>
+                        <Box
+                           component="div"
+                           my={1}
+                           textOverflow="ellipsis"
+                           overflow="hidden"
+                           bgcolor="transparent"
+                         >
+                            {row.meetingParties.length} attendee(s)
+                          </Box>
+                        </StyledTableCell>
+                        <StyledTableCell align="center">
+                          {row.status === "Scheduled" ?
+                          <Chip
+                            label="Scheduled"
+                            variant="outlined"
+                            classes={{ root: classes.chipStyles, label: classes.chipLabelStyle }}
+                          />
+                          :
+                          <Chip
+                            label="Pending"
+                            variant="outlined"
+                            classes={{ root: classes.chipStyles, label: classes.chipLabelStyle }}
+                          />
+                        }
+                        </StyledTableCell>
+                        <StyledTableCell align="center">
+                          <IconButton size="small">
+                            <DeleteIcon style={{  width: 16,height: 17, fill:'none', }} />
+                          </IconButton>
+                        </StyledTableCell>
+                      </StyledTableRow>
+                    );
+                  })}
 
                   {emptyRows > 0 && (
                     <TableRow
@@ -918,7 +830,7 @@ const handleFilter = () => {
           <TablePagination
              rowsPerPageOptions={[5, 10, 25]}
              component="div"
-             count={rows.length}
+             count={meetings.length}
              rowsPerPage={rowsPerPage}
              page={page}
              onPageChange={handleChangePage}

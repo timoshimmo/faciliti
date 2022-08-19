@@ -84,7 +84,9 @@ const primaryLight = '#D3ECFF';
     blue: '#1B75BC',
     orange: '#FF6600',
     purple: '#BB00BF',
-    red: '#FD7575'
+    red: '#FD7575',
+    purple: '#951FDE',
+    turquoise: '#43ABF0'
   }
 };
 

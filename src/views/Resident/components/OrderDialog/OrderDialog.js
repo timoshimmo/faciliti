@@ -20,6 +20,11 @@ import AddIcon from '@material-ui/icons/Add';
 import AvatarGroup from '@material-ui/lab/AvatarGroup';
 import validate from 'validate.js';
 import { ChipComponent, TaggedPeopleComponent, CategoryDialog, TaggedPeopleDialog } from './components';
+import AXIOS from '../../../../util/webservices';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import MuiAlert from '@material-ui/lab/Alert';
+import Collapse from '@material-ui/core/Collapse';
+import CloseIcon from '@material-ui/icons/Close';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -58,6 +63,12 @@ const schema = {
     presence: { allowEmpty: false, message: 'is required' },
     length: {
       minimum: 1
+    }
+  },
+  dueDate: {
+    presence: { allowEmpty: false, message: 'is required' },
+    length: {
+      minimum: 3
     }
   }
 }
@@ -147,7 +158,7 @@ btnIconStyle: {
   marginLeft: 8
 },
 btnAreaContainer: {
-  paddingTop: theme.spacing(2),
+  paddingTop: theme.spacing(1),
   paddingLeft: theme.spacing(2),
   paddingRight: theme.spacing(2),
 },
@@ -241,26 +252,30 @@ const OrderDialog = props => {
  }, [formState.values]);
 
   const [categoryData, setCategoryData] = useState([]);
-
-  const [avatarList, setAvatarList] = useState([
-    { key: 0, name: 'Mr Gbenga Lasisi', email: "gbengalasisi@email.com", avatar: "/images/ga.png", role: "Facility Manager" },
-    ]);
+  const [selectedCategory, setSelectedCategory] = useState([]);
+  const [peopleList, setPeopleList] = useState([]);
+  const [avatarList, setAvatarList] = useState([]);
+  const [contactList, setContactList] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [openError, setOpenError] = useState(false);
+  const [serverError, setServerError] = useState(null);
 
     const [categoryList, setCategoryList] = useState([
-      { key: 0, label: 'Carpentry' },
-      { key: 1, label: 'Electrical' },
-      { key: 2, label: 'Fumigation' },
-      { key: 3, label: 'Painting' },
-      { key: 4, label: 'Plumbing' },
-      { key: 5, label: 'Welding' },
+      { key: "xri://@openmdx*org.opencrx.kernel.activity1/provider/CRX/segment/INJREAM26606/activityCategory/3PKHAH11AT97W22TCCMSW9ZD5", label: 'Carpentry' },
+      { key: "xri://@openmdx*org.opencrx.kernel.activity1/provider/CRX/segment/INJREAM26606/activityCategory/3PKHAH11AT97WRRETVVDDDFFG", label: 'Electrical' },
+      { key: "xri://@openmdx*org.opencrx.kernel.activity1/provider/CRX/segment/INJREAM26606/activityCategory/3PKHAH11AT97WAQPLLLSZXXCV", label: 'Fumigation' },
+      { key: "xri://@openmdx*org.opencrx.kernel.activity1/provider/CRX/segment/INJREAM26606/activityCategory/3PKHAH11AT97WOIYKKKTTTKKD", label: 'Painting' },
+      { key: "xri://@openmdx*org.opencrx.kernel.activity1/provider/CRX/segment/INJREAM26606/activityCategory/3PKHAH11AT97W495WEER59AAS", label: 'Plumbing' },
+      { key: "xri://@openmdx*org.opencrx.kernel.activity1/provider/CRX/segment/INJREAM26606/activityCategory/3PKHAH11AT97W596WOPLAASS5", label: 'Welding' },
       ]);
 
-    const [peopleList, setPeopleList] = useState([
+/*    const [peopleList, setPeopleList] = useState([
       { key: 0, name: 'Mr Gbenga Lasisi', email: "gbengalasisi@email.com", avatar: "/images/ga.png", role: "Facility Manager" },
       { key: 1, name: 'Stella Ejiofor', email: "stellaejiofor@email.com", avatar: "/images/ba.png", role: "Exco" },
       { key: 2, name: 'Nnamdi Oji', email: "nnamdioji@email.com", avatar: "/images/ga.png", role: "Exco" },
       { key: 3, name: 'Rhummie West', email: "rhummie_west@email.com", avatar: "/images/ba.png", role: "Exco" },
       ]);
+*/
 
   const handleChange = event => {
     event.persist();
@@ -279,7 +294,40 @@ const OrderDialog = props => {
   };
 
   const handleSave = () => {
-      onClose()
+
+    if (!loading) {
+      setLoading(true);
+
+      /*
+      segmentName: userData.crxDetails.segmentName,
+      userId: userData.crxDetails.userId
+      */
+
+      console.log("Categories: " + JSON.stringify(selectedCategory));
+      const obj = {
+        name: formState.values.orderTitle,
+        description: formState.values.description,
+        dueBy: formState.values.dueDate,
+        contactXris: contactList,
+        categories: selectedCategory
+      };
+
+
+      AXIOS.post('/meetings', obj)
+      .then(response => {
+        const res = response.data;
+        console.log(res);
+        setLoading(false);
+        onClose();
+      })
+      .catch(function (error) {
+        setLoading(false);
+        console.log(error.response);
+        console.log(error.message);
+        setServerError("There was a problem adding an order. Pls try again");
+        setOpenError(true);
+      })
+    }
   }
 
   const handleDialogOpen = () => {
@@ -301,13 +349,14 @@ const OrderDialog = props => {
 
   const categoryItems = () => {
       return categoryData.map((category, i) => {
-          return <ChipComponent obj={category} idx={i} setCategoryData={setCategoryData} setCategoryList={setCategoryList} categoryList={categoryList} />;
+          return <ChipComponent obj={category} idx={i} setCategoryData={setCategoryData}
+            setCategoryList={setCategoryList} categoryList={categoryList} selectedCategory={selectedCategory} setSelectedCategory={setSelectedCategory} />;
       })
   }
 
   const taggedPeopleItems = () => {
       return avatarList.map((avatar, i) => {
-          return <TaggedPeopleComponent obj={avatar} setAvatarList={setAvatarList} />;
+          return <TaggedPeopleComponent obj={avatar} key={i} setAvatarList={setAvatarList} />;
       })
   }
 
@@ -321,6 +370,34 @@ const OrderDialog = props => {
            <Typography variant="h4">Create Order</Typography>
        </DialogTitle>
        <DialogContent className={classes.dialogContentStyle}>
+         <div className={classes.errorArea}>
+           <Collapse in={openError}>
+               <MuiAlert
+                 severity="error"
+                 action={
+                    <IconButton
+                      aria-label="close"
+                      color="inherit"
+                      size="small"
+                      onClick={() => {
+                        setOpenError(false);
+                      }}
+                    >
+                      <CloseIcon fontSize="inherit" />
+                    </IconButton>
+                  }
+                  className={classes.subtitleSpacing}
+                 >
+                 <Typography
+                   color="textSecondary"
+                   variant="body2"
+                   style={{ fontSize: 12 }}
+                 >
+                     {serverError}
+                 </Typography>
+              </MuiAlert>
+          </Collapse>
+         </div>
            <form autoComplete="off">
             <Grid container>
               <Grid item lg={12}>
@@ -366,6 +443,24 @@ const OrderDialog = props => {
                 </Grid>
               </Grid>
              </Grid>
+               <FormControl className={classes.formComponent}>
+                 <TextField
+                     id="meeting-date-time"
+                     className={classes.textField}
+                     name="dueDate"
+                     type="datetime-local"
+                     placeholder="Select date &amp; time"
+                     onChange={handleChange}
+                     value={formState.values.dueDate}
+                     InputProps={{
+                       style: {fontSize: 13}
+                     }}
+                     InputLabelProps={{
+                       shrink: true,
+                     }}
+                     aria-describedby="meeting-date-time-error"
+                   />
+               </FormControl>
              <FormControl error={hasError('orderDescription')} className={classes.formComponent}>
                <TextField
                  id="description"
@@ -450,8 +545,11 @@ const OrderDialog = props => {
                     classes={{ root: classes.buttonCreateStyle }}
                     startIcon={<AddIcon style={{ fontSize: 16, color: '#FFFFFF' }}/>}
                     onClick={handleSave}
+                    disabled={loading || !formState.values.orderTitle || !formState.values.description || !formState.values.dueDate
+                       || contactList.length < 1 || categoryList.length < 1}
                     >
                     Save & Create
+                    {loading && <CircularProgress size={18} className={classes.buttonProgress} />}
                   </Button>
                   </Grid>
             </Grid>
@@ -465,13 +563,15 @@ const OrderDialog = props => {
         setCategoryData={setCategoryData}
         categoryList={categoryList}
         setCategoryList={setCategoryList}
+        setSelectedCategory={setSelectedCategory}
+        selectedCategory={selectedCategory}
       />
       <TaggedPeopleDialog
         onClose={handlePeopleDialogClose}
         onOpen={openPeopleDialog}
-        peopleList={peopleList}
+        setContactList={setContactList}
+        contactList={contactList}
         setAvatarList={setAvatarList}
-        avatarList={avatarList}
       />
     </Dialog>
   );

@@ -23,7 +23,7 @@ import MuiAlert from '@material-ui/lab/Alert';
 import Collapse from '@material-ui/core/Collapse';
 import CloseIcon from '@material-ui/icons/Close';
 import validate from 'validate.js';
-import { ChipComponent, TaggedPeopleComponent, TaggedPeopleDialog } from './components';
+//import { ChipComponent, TaggedPeopleComponent, TaggedPeopleDialog } from './components';
 import AXIOS from '../../../../../util/webservices';
 //import axios from 'axios';
 import CircularProgress from '@material-ui/core/CircularProgress';
@@ -316,7 +316,7 @@ const NewVisitorDialog = props => {
 
   const classes = useStyles();
 
-  const { onOpen, onClose, visitorDetails } = props;
+  const { onOpen, onClose, visitorDetails, edit } = props;
 
   let userData = {};
   if (typeof localStorage !== 'undefined') {
@@ -357,27 +357,40 @@ const NewVisitorDialog = props => {
   });
 
   useEffect(() => {
+      const errors = validate(formState.values, schema);
+      setFormState(formState => ({
+        ...formState,
+        isValid: errors ? false : true,
+        errors: errors || {}
+      }));
 
-     const errors = validate(formState.values, schema);
-     setFormState(formState => ({
-       ...formState,
-       isValid: errors ? false : true,
-       errors: errors || {}
-     }));
 
  }, [formState.values]);
 
 
     useEffect(() => {
-    //  console.log("MEETING DETAILS: " + JSON.stringify(visitorDetails));
-    //  console.log("MEETING DETAILS LENGTH: " + JSON.stringify(visitorDetails.length));
-      if(visitorDetails.length > 0) {
-        formState.values.meetingTitle = visitorDetails[0].name;
-        formState.values.dueDate = moment(visitorDetails[0].dueBy).format('yyyy-MM-DDThh:mm');
-        setAvatarList(dummyList);
+      //console.log("EDIT: " + edit);
+      if(edit) {
+
+      //  console.log("VISITOR DETAILS: " + JSON.stringify(visitorDetails));
+        setFormState(formState => ({
+          ...formState,
+          values: {
+            ...formState.values,
+            visitorName: visitorDetails.name,
+            dueDate: moment(visitorDetails.dueBy).format('yyyy-MM-DDThh:mm'),
+            phoneNumber: visitorDetails.phoneNumber
+          }
+
+        }));
+        setPhoneNo({phone: visitorDetails.phoneNumber});
+      //  setAvatarList(dummyList);
+      }
+      else {
+        formState.values = {};
       }
 
-   }, [visitorDetails, selectedDate]);
+   }, [visitorDetails, edit]);
 
   /*  const [contactList, setContactList] = useState([
       "xri://@openmdx*org.opencrx.kernel.account1/provider/CRX/segment/INJREAM26606/account/9HNUMHC5KFUUK22TCCMSW9ZD5",
@@ -396,6 +409,11 @@ const NewVisitorDialog = props => {
     }));
   };
 
+  const handleCloseVisitorDialog = () => {
+    //setEdit(false);
+    onClose()
+  }
+
    const handleDateChange = (date) => {
      setSelectedDate(date);
    };
@@ -405,32 +423,17 @@ const NewVisitorDialog = props => {
     if (!loading) {
       setLoading(true);
 
-      /*
-      segmentName: userData.crxDetails.segmentName,
-      userId: userData.crxDetails.userId
-      */
-
-    //  console.log("Selected Users: " + JSON.stringify(contactList));
+      console.log("New Visitor: " + JSON.stringify(formState.values));
+      console.log("Phone: " + phoneNo.phone);
       const obj = {
         name: formState.values.visitorName,
         phoneNumber: phoneNo.phone,
         description: formState.values.visitorName,
         dueBy: formState.values.dueDate,
-        contactXris: contactList,
-        segmentName: 'INJREAM26606',
-        userId: 'JAGG66'
+        contactXris: ["xri://@openmdx*org.opencrx.kernel.account1/provider/CRX/segment/INJREAM26606/account/9HNUMHC5KFUUK22TCCMSW9ZD5"],
       };
 
-      //let token = localStorage.getItem('spfmtoken')
-      /*
-      axios.post('http://132.145.58.252:8081/spaciofm/api/meetings/', obj, {
-        headers: {
-          Authorization : `Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJKQUdHNjYiLCJpc1VzZXIiOnRydWUsImV4cCI6MTY1MzQzMjM2MCwiaWF0IjoxNjUzNDMxNzYwfQ.nvT7dzcr4WgBkFMWehUk-uA0ap29vrM-fw_QKUTztglfOYb3K43rZup_FlTtpFDh7p5a5AXcp-Mqj4KVJjvWgw`
-        }
-      })
-      */
-
-      AXIOS.post('visits/', obj)
+      AXIOS.post('/visits', obj)
       .then(response => {
         const res = response.data;
         console.log(res);
@@ -453,15 +456,11 @@ const NewVisitorDialog = props => {
       setUpdateLoading(true);
 
       const obj = {
-        description: formState.values.meetingTitle,
-        dueBy: formState.values.dueDate,
-        contactXris: contactList,
-        segmentName: 'INJREAM26606',
-        userId: userData.crxDetails.userId
+        description: formState.values.visitorName
       };
 
 
-      AXIOS.put(`http://132.145.58.252:8081/spaciofm/api/meetings/${visitorDetails[0].key.uuid}`, obj)
+      AXIOS.put(`visits/${visitorDetails.key.uuid}`, obj)
       .then(response => {
         const res = response.data;
         console.log(res);
@@ -495,11 +494,11 @@ const NewVisitorDialog = props => {
     setOpenPeopleDialog(false);
   };
 
-  const taggedPeopleItems = () => {
+/*  const taggedPeopleItems = () => {
       return avatarList.map((avatar, i) => {
           return <TaggedPeopleComponent obj={avatar} key={i} setAvatarList={setAvatarList} />;
       })
-  }
+  } */
 
   const hasError = field =>
     formState.touched[field] && formState.errors[field] ? true : false;
@@ -553,7 +552,7 @@ const NewVisitorDialog = props => {
                       type="text"
                       className={classes.ordertitleStyle}
                       onChange={handleChange}
-                      value={formState.values.meetingTitle}
+                      value={formState.values.visitorName}
                       aria-describedby="visitor-name-error"
                       InputProps={{
                         style: {fontSize: 13}
@@ -597,6 +596,7 @@ const NewVisitorDialog = props => {
                         country={'ng'}
                         name="phoneNumber"
                         onChange={phone => setPhoneNo({ phone })}
+                        value={formState.values.phoneNumber}
                         specialLabel=""
                         aria-describedby="phonenumber-error"
                         inputStyle={{
@@ -634,36 +634,43 @@ const NewVisitorDialog = props => {
        </DialogContent>
        <DialogActions>
          <Grid container className={classes.btnAreaContainer} direction="column" justify="flex-end">
+          {/*
+
+            <Grid item>
+              <Typography
+                variant="body1"
+                color="secondary"
+                className={classes.tagAreaTitle}
+              >
+                Invite People
+              </Typography>
+            </Grid>
+          */}
           <Grid item>
-            <Typography
-              variant="body1"
-              color="secondary"
-              className={classes.tagAreaTitle}
-            >
-              Invite People
-            </Typography>
-          </Grid>
-          <Grid item>
-            <Grid container alignItems='center'>
+            <Grid container alignItems='center' justify="flex-end">
+            {/*
+
               <Grid
-                item
-                lg={7}
-                className={classes.taggedPeopleArea}
-                >
-                  <div className={classes.avatarListContainer}>
-                    <AvatarGroup max={7} spacing="small" classes={{ avatar: classes.smallAvatar }}>
-                      {taggedPeopleItems()}
-                    </AvatarGroup>
-                  </div>
-                  <div className={classes.addButtonArea}>
-                    <IconButton
-                    size="small"
-                    classes={{ root: classes.btnAddPeopleStyle }}
-                    onClick={handlePeopleDialogOpen}>
-                      <AddIcon style={{ fontSize: 16, color: '#FFFFFF' }} />
-                    </IconButton>
-                  </div>
-                </Grid>
+                  item
+                  lg={7}
+                  className={classes.taggedPeopleArea}
+                  >
+                    <div className={classes.avatarListContainer}>
+                      <AvatarGroup max={7} spacing="small" classes={{ avatar: classes.smallAvatar }}>
+                        {taggedPeopleItems()}
+                      </AvatarGroup>
+                    </div>
+                    <div className={classes.addButtonArea}>
+                      <IconButton
+                      size="small"
+                      classes={{ root: classes.btnAddPeopleStyle }}
+                      onClick={handlePeopleDialogOpen}>
+                        <AddIcon style={{ fontSize: 16, color: '#FFFFFF' }} />
+                      </IconButton>
+                    </div>
+                  </Grid>
+
+            */}
                 <Grid
                   item
                   lg={5}
@@ -673,11 +680,11 @@ const NewVisitorDialog = props => {
                   variant="outlined"
                   color="secondary"
                   classes={{ root: classes.buttonCancelStyle }}
-                  onClick={onClose}
+                  onClick={handleCloseVisitorDialog}
                   >
                   Cancel
                 </Button>
-                {visitorDetails.length > 0 ?
+                {edit ?
                   (<Button
                       variant="contained"
                       classes={{ root: classes.buttonCreateStyle }}
@@ -694,7 +701,7 @@ const NewVisitorDialog = props => {
                           classes={{ root: classes.buttonCreateStyle }}
                           startIcon={<AddIcon style={{ fontSize: 16, color: '#FFFFFF' }}/>}
                           onClick={handleSave}
-                          disabled={loading || !formState.values.visitorName || !formState.values.dueDate || contactList.length < 1 || !phoneNo.phone}
+                          disabled={loading || !formState.values.visitorName || !formState.values.dueDate || !phoneNo.phone}
                           >
                           Save & Create
                           {loading && <CircularProgress size={18} className={classes.buttonProgress} />}
@@ -705,13 +712,17 @@ const NewVisitorDialog = props => {
           </Grid>
          </Grid>
       </DialogActions>
-      <TaggedPeopleDialog
-        onClose={handlePeopleDialogClose}
-        onOpen={openPeopleDialog}
-        setAvatarList={setAvatarList}
-        setContactList={setContactList}
-        contactList={contactList}
-      />
+      {/*
+
+        <TaggedPeopleDialog
+          onClose={handlePeopleDialogClose}
+          onOpen={openPeopleDialog}
+          setAvatarList={setAvatarList}
+          setContactList={setContactList}
+          contactList={contactList}
+        />
+      */}
+
     </Dialog>
   );
 }

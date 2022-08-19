@@ -47,8 +47,6 @@ const TaggedListComponent = props => {
 
   const [checked, setChecked] = useState([0]);
 
-  let test = 0;
-
   const handleToggle = (value) => () => {
     //props.obj.map(function (obj) { return obj.name; }).indexOf(studentNameToSearch);
     const currentIndex = checked.indexOf(value);
@@ -58,14 +56,14 @@ const TaggedListComponent = props => {
       newChecked.push(value);
       setLiveTaggedList([...liveTaggedList, value]);
       let num = liveTaggedList.length + 1;
-      console.log("XRI:" + JSON.stringify(value.uri));
+    //  console.log("XRI:" + JSON.stringify(value.uri));
       setContactList([...contactList, value.uri]);
       handleSetText('Invite ' + num.toString() + ' attendee(s)');
     } else {
       newChecked.splice(currentIndex, 1);
       setLiveTaggedList(liveTaggedList.filter(e => e !== value));
       let num = liveTaggedList.length - 1;
-      console.log("XRI:" + JSON.stringify(value.uri));
+    //  console.log("XRI:" + JSON.stringify(value.uri));
     //  setContactList([...contactList, value.xri]);
       setContactList(contactList.filter(e => e !== value.uri));
       handleSetText('Invite ' + num.toString() + ' attendee(s)');

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles, makeStyles } from '@material-ui/styles';
 import {
@@ -14,6 +14,9 @@ import {
   TablePagination,
   Paper,
 } from '@material-ui/core';
+import moment from 'moment';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import AXIOS from '../../../../../util/webservices';
 
 const StyledTableCell = withStyles((theme) => ({
   head: {
@@ -187,6 +190,13 @@ const useStyles = makeStyles(theme => ({
     color: theme.palette.priority.blue,
     fontSize: 11
   },
+  buttonProgress: {
+     color: theme.palette.primary.main,
+     marginTop: 10,
+     marginBottom: 10,
+     marginLeft: '50%',
+     zIndex: 10
+   }
 
 }));
 
@@ -194,8 +204,37 @@ const Logs = props => {
 
   const classes = useStyles();
 
+  const { handleDialogOpen, setVisitorDetails, visitorDetails, setEdit } = props;
+
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [loading, setLoading] = useState(false);
+  const [visitsLog, setVisitsLog] = useState([]);
+
+  useEffect(() => {
+    handleGetAll();
+ }, []);
+
+  const handleGetAll = () => {
+
+    AXIOS.get('visits?index=0&range=5')
+      .then(response => {
+        const res = response.data;
+        setVisitsLog(res.response);
+      })
+      .catch(function (error) {
+        console.log(error.response);
+        console.log(error.message);
+      })
+  }
+
+  const handleSelectedRow = (item) => {
+  //  const selectedRow = meetings[index];
+  //  setSelectedRow(selectedRow);
+    setVisitorDetails(item);
+    setEdit(true);
+    handleDialogOpen();
+  };
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -209,6 +248,7 @@ const Logs = props => {
   return (
     <Paper style={{ width: '100%' }}>
       <TableContainer>
+        {loading && <CircularProgress size={25} className={classes.buttonProgress} /> }
         <Table className={classes.table} aria-label="customized table">
           <TableHead>
             <TableRow>
@@ -221,10 +261,10 @@ const Logs = props => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows.map((row) => (
-                <StyledTableRow key={row.id}>
+            {visitsLog.map((row) => (
+                <StyledTableRow hover role="button" key={row.key.uuid} onClick={()=>handleSelectedRow(row)}>
                   <StyledTableCell component="th" scope="row">
-                    {row.registered}
+                    {moment(row.createdAt).format('DD/MM/YYYY hh:mm:ss A')}
                   </StyledTableCell>
                   <StyledTableCell style={{ maxWidth: 100, whiteSpace: 'nowrap' }}>
                     <Box
@@ -232,16 +272,16 @@ const Logs = props => {
                        my={2}
                        textOverflow="ellipsis"
                        overflow="hidden"
-                       bgcolor="#ffffff"
+                       bgcolor="transparent"
                      >
-                       {row.visitor}
+                       {row.name}
                      </Box>
                   </StyledTableCell>
                   <StyledTableCell align="center">
-                       {row.persons}
+                       {row.numberOfTaggedContacts}
                   </StyledTableCell>
                   <StyledTableCell>
-                    {row.duedate}
+                    {moment(row.dueBy).format('DD/MM/YYYY hh:mm:ss A')}
                   </StyledTableCell>
                   <StyledTableCell align="center" style={{ maxWidth: 80, whiteSpace: 'nowrap' }}>
                   <Box
@@ -249,13 +289,13 @@ const Logs = props => {
                      my={1}
                      textOverflow="ellipsis"
                      overflow="hidden"
-                     bgcolor="#ffffff"
+                     bgcolor="transparent"
                    >
-                      {row.contact}
+                      {row.phoneNumber}
                     </Box>
                   </StyledTableCell>
                   <StyledTableCell align="center">
-                    {row.status === 0 ? 'Pending' : row.status === 1 ? 'Checked-in' : 'Expired' }
+                    {row.status === "Scheduled" ? 'Scheduled' : 'Pending' }
                   </StyledTableCell>
                 </StyledTableRow>
             ))}
@@ -265,7 +305,7 @@ const Logs = props => {
       <TablePagination
          rowsPerPageOptions={[5, 10, 25]}
          component="div"
-         count={rows.length}
+         count={visitsLog.length}
          rowsPerPage={rowsPerPage}
          page={page}
          onPageChange={handleChangePage}

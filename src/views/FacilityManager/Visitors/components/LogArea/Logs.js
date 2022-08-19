@@ -33,6 +33,7 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ExpandLessIcon from '@material-ui/icons/ExpandLess';
 import AXIOS from '../../../../../util/webservices';
 import moment from 'moment';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 const rows = [
   {
@@ -43,6 +44,9 @@ const rows = [
      "dueBy": "2022-05-30",
      "visitorsCount": 2,
      "xri": "xri://@openmdx*org.opencrx.kernel.activity1/provider/CRX/segment/INJREAM26606/activity/R1JEH2B66ZHM4YCN99GJPA8KF",
+     "key": {
+        "uuid": "L4TV8570ZMZU40R8O8C0ULROJ"
+     },
      "status": 0
  },
  {
@@ -53,6 +57,9 @@ const rows = [
     "dueBy": "2022-05-30",
     "visitorsCount": 1,
     "xri": "xri://@openmdx*org.opencrx.kernel.activity1/provider/CRX/segment/INJREAM26606/activity/R1JEH2B66ZHM4YCN99GJPA8KF",
+    "key": {
+       "uuid": "L4TV8570ZMZU40R8O8C0ULROJ"
+    },
     "status": 1
 },
 {
@@ -63,6 +70,9 @@ const rows = [
    "dueBy": "2022-05-30",
    "visitorsCount": 6,
    "xri": "xri://@openmdx*org.opencrx.kernel.activity1/provider/CRX/segment/INJREAM26606/activity/R1JEH2B66ZHM4YCN99GJPA8KF",
+   "key": {
+      "uuid": "L4TV8570ZMZU40R8O8C0ULROJ"
+   },
    "status": 0
 },
 {
@@ -73,6 +83,9 @@ const rows = [
    "dueBy": "2022-05-30",
    "visitorsCount": 4,
    "xri": "xri://@openmdx*org.opencrx.kernel.activity1/provider/CRX/segment/INJREAM26606/activity/R1JEH2B66ZHM4YCN99GJPA8KF",
+   "key": {
+      "uuid": "L4TV8570ZMZU40R8O8C0ULROJ"
+   },
    "status": 2
 }
 ];
@@ -89,8 +102,8 @@ const StyledTableCell = withStyles((theme) => ({
   body: {
     fontSize: 12,
     color: '#696F79',
-    paddingTop: 0,
-    paddingBottom: 0,
+    paddingTop: 10,
+    paddingBottom: 10,
     borderBottom: '1px solid #D6D6D6',
   },
 }))(TableCell);
@@ -628,7 +641,13 @@ const useStyles = makeStyles(theme => ({
     color: theme.palette.text.content,
     borderColor: theme.palette.text.content
   },
-
+  buttonProgress: {
+     color: theme.palette.primary.main,
+     marginTop: 10,
+     marginBottom: 10,
+     marginLeft: '50%',
+     zIndex: 10
+   }
 }));
 
 const Logs = props => {
@@ -646,12 +665,12 @@ const Logs = props => {
       }
   }
 
-  const [logs, setLogs] = useState([]);
+  const [visitsLog, setVisitsLog] = useState([]);
   const [order, setOrder] = useState('asc');
   const [orderBy, setOrderBy] = useState('calories');
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
-
+  const [loading, setLoading] = useState(false);
   const [selectedRow, setSelectedRow] = useState([]);
 
   const [checkState, setCheckState] = useState({
@@ -660,29 +679,25 @@ const Logs = props => {
    closed: false,
  });
 
+ const [anchorEl, setAnchorEl] = useState(null);
+ const openPostMenu = Boolean(anchorEl);
+ const checkid = openPostMenu ? 'simple-popover' : undefined;
+
  useEffect(() => {
    handleGetAll();
 }, []);
 
-  const [anchorEl, setAnchorEl] = useState(null);
-  const openPostMenu = Boolean(anchorEl);
-  const checkid = openPostMenu ? 'simple-popover' : undefined;
-
   const handleGetAll = () => {
 
-  /*  const obj = {
-      segmentName : "INJREAM26606",
-      userId : userData.crxDetails.userId,
-      index : 0,
-      range : 10
-    };*/
-
-    AXIOS.get('http://132.145.58.252:8081/spaciofm/api/meetings/?index=0&range=5')
+    AXIOS.get('visits?index=0&range=5')
       .then(response => {
         const res = response.data;
-        console.log("ALL MEETINGS:" + res);
+       console.log("ALL VISITS:" + JSON.stringify(res));
+        setLoading(false);
+        setVisitsLog(res.response);
       })
       .catch(function (error) {
+        setLoading(false);
         console.log(error.response);
         console.log(error.message);
       })
@@ -743,18 +758,18 @@ const handleFilter = () => {
           onHandleFilter={handleFilter}
           onHandleDialogOpen={handleDialogOpen}/>
         <div>
+          {loading && <CircularProgress size={25} className={classes.buttonProgress} /> }
           <TableContainer>
             <Table className={classes.table} aria-label="customized table">
               <EnhancedTableHead
                 order={order}
                 orderBy={orderBy}
                 onRequestSort={handleRequestSort}
-                rowCount={rows.length}/>
+                rowCount={visitsLog.length}/>
               <TableBody>
-                {stableSort(rows, getComparator(order, orderBy))
+                {stableSort(visitsLog, getComparator(order, orderBy))
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                   .map((row, index) => {
-
                     return (
                       <StyledTableRow hover role="button" key={row.key.uuid} onClick={()=>handleSelectedRow(index)}>
                         <StyledTableCell component="th" scope="row">
@@ -771,8 +786,8 @@ const handleFilter = () => {
                              {row.name}
                            </Box>
                         </StyledTableCell>
-                        <StyledTableCell>
-                             {row.key.uuid}
+                        <StyledTableCell align="center">
+                             {row.numberOfTaggedContacts}
                         </StyledTableCell>
                         <StyledTableCell>
                           {moment(row.dueBy).format('DD/MM/YYYY hh:mm:ss A')}
@@ -785,8 +800,11 @@ const handleFilter = () => {
                            overflow="hidden"
                            bgcolor="transparent"
                          >
-                            {row.numberOfAttendees} attendee(s)
+                            {row.phoneNumber}
                           </Box>
+                        </StyledTableCell>
+                        <StyledTableCell align="center">
+                          {row.key.uuid}
                         </StyledTableCell>
                         <StyledTableCell align="center">
                           {row.status === "Scheduled" ?
@@ -802,11 +820,6 @@ const handleFilter = () => {
                             classes={{ root: classes.chipStyles, label: classes.chipLabelStyle }}
                           />
                         }
-                        </StyledTableCell>
-                        <StyledTableCell align="center">
-                          <IconButton size="small">
-                            <DeleteIcon style={{  width: 16,height: 17, fill:'none', }} />
-                          </IconButton>
                         </StyledTableCell>
                       </StyledTableRow>
                     );
@@ -827,7 +840,7 @@ const handleFilter = () => {
           <TablePagination
              rowsPerPageOptions={[5, 10, 25]}
              component="div"
-             count={rows.length}
+             count={visitsLog.length}
              rowsPerPage={rowsPerPage}
              page={page}
              onPageChange={handleChangePage}

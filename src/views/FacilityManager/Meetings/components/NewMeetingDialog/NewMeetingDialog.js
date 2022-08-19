@@ -348,23 +348,26 @@ const NewMeetingDialog = props => {
       }
     ]);
 
+
     const [contactList, setContactList] = useState([]);
 
     useEffect(() => {
-    //  console.log("MEETING DETAILS: " + JSON.stringify(meetingDetails));
-    //  console.log("MEETING DETAILS LENGTH: " + JSON.stringify(meetingDetails.length));
-      if(meetingDetails.length > 0 && edit) {
-        formState.values.meetingTitle = meetingDetails[0].name;
-        formState.values.dueDate = moment(meetingDetails[0].dueBy).format('yyyy-MM-DDThh:mm');
+      if(edit) {
+        //console.log("MEETING DETAILS: " + JSON.stringify(meetingDetails));
+        //console.log("MEETING DETAILS LENGTH: " + JSON.stringify(meetingDetails));
+        setFormState(formState => ({
+          ...formState,
+          values: {
+            ...formState.values,
+            meetingTitle: meetingDetails.name,
+            dueDate: moment(meetingDetails.dueBy).format('yyyy-MM-DDThh:mm')
+          }
+        }));
         setAvatarList(dummyList);
       }
 
-   }, [meetingDetails, selectedDate]);
+   }, [meetingDetails]);
 
-  /*  const [contactList, setContactList] = useState([
-      "xri://@openmdx*org.opencrx.kernel.account1/provider/CRX/segment/INJREAM26606/account/9HNUMHC5KFUUK22TCCMSW9ZD5",
-      "xri://@openmdx*org.opencrx.kernel.account1/provider/CRX/segment/INJREAM26606/account/9HNUMHC5KFUUK22TCCMSW9ZD5"
-    ]);*/
 
   const handleChange = event => {
     event.persist();
@@ -395,28 +398,17 @@ const NewMeetingDialog = props => {
     //  console.log("Selected Users: " + JSON.stringify(contactList));
       const obj = {
         name: formState.values.meetingTitle,
-        phoneNumber: null,
+        phoneNumber: userData.crxDetails.callCenterExtNo,
         description: formState.values.meetingTitle,
         dueBy: formState.values.dueDate,
         contactXris: contactList,
-        assignee: userData.crxDetails.fullName,
-        segmentName: 'INJREAM26606',
-        userId: 'JAGG66'
       };
 
-      //let token = localStorage.getItem('spfmtoken')
-      /*
-      axios.post('http://132.145.58.252:8081/spaciofm/api/meetings/', obj, {
-        headers: {
-          Authorization : `Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJKQUdHNjYiLCJpc1VzZXIiOnRydWUsImV4cCI6MTY1MzQzMjM2MCwiaWF0IjoxNjUzNDMxNzYwfQ.nvT7dzcr4WgBkFMWehUk-uA0ap29vrM-fw_QKUTztglfOYb3K43rZup_FlTtpFDh7p5a5AXcp-Mqj4KVJjvWgw`
-        }
-      })
-      */
 
-      AXIOS.post('http://132.145.58.252:8081/spaciofm/api/meetings/', obj)
+      AXIOS.post('/meetings', obj)
       .then(response => {
         const res = response.data;
-      //  console.log(res);
+        console.log(res);
         setLoading(false);
         onClose();
       })
@@ -429,22 +421,20 @@ const NewMeetingDialog = props => {
       })
     }
   }
-//  userId: userData.crxDetails.userId
+
   const handleUpdate = () => {
+
+    //LPX097LY1NBAK4L6BTWV4YV3P
 
     if (!updateLoading) {
       setUpdateLoading(true);
 
       const obj = {
         description: formState.values.meetingTitle,
-        dueBy: formState.values.dueDate,
-        contactXris: contactList,
-        segmentName: 'INJREAM26606',
-        userId: 'JAGG66'
       };
 
 
-      AXIOS.put(`http://132.145.58.252:8081/spaciofm/api/meetings/${meetingDetails[0].key.uuid}`, obj)
+      AXIOS.put(`meetings/${meetingDetails.key.uuid}`, obj)
       .then(response => {
         const res = response.data;
       //  console.log(res);
@@ -616,7 +606,7 @@ const NewMeetingDialog = props => {
                   >
                   Cancel
                 </Button>
-                {meetingDetails.length > 0 ?
+                {edit ?
                   (<Button
                       variant="contained"
                       classes={{ root: classes.buttonCreateStyle }}

@@ -34,6 +34,7 @@ const useStyles = makeStyles(theme => ({
 
 const LiveFeedComponent = props => {
 
+  const { obj } = props;
   const classes = useStyles();
 
   return (
@@ -42,7 +43,7 @@ const LiveFeedComponent = props => {
         className={classes.listItem}
         disableripple="true"
         disabletouchripple="true"
-        key={props.obj.idx}
+        key={obj.id}
       >
 
         <Card className={classes.cardroot} elevation={1}>
@@ -52,13 +53,13 @@ const LiveFeedComponent = props => {
                     variant="body1"
                     className={classes.liveFeedTitle}
                   >
-                    {props.obj.title}
+                    {obj.title}
                   </Typography>
                   <Typography
                     variant="subtitle1"
                     className={classes.liveFeedSubTitle}
                   >
-                    {props.obj.dateTime}
+                    {obj.dateTime}
                   </Typography>
               </CardContent>
             </CardActionArea>

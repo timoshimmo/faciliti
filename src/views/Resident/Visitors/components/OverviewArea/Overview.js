@@ -14,7 +14,7 @@ import AddIcon from '@material-ui/icons/Add';
 function RedArrowIcon(props) {
   return (
     <SvgIcon {...props} width="28" height="26" viewBox="0 0 28 26">
-      <path d="M11.5596 9.5H17.8764M17.8764 9.5V15.5M17.8764 9.5L10.5068 16.5M26.8247 13C26.8247 19.6274 21.1684 25 14.1911 25C7.21384 25 1.55762 19.6274 1.55762 13C1.55762 6.37258 7.21384 1 14.1911 1C21.1684 1 26.8247 6.37258 26.8247 13Z" stroke="#BC1B1B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M11.5596 9.5H17.8764M17.8764 9.5V15.5M17.8764 9.5L10.5068 16.5M26.8247 13C26.8247 19.6274 21.1684 25 14.1911 25C7.21384 25 1.55762 19.6274 1.55762 13C1.55762 6.37258 7.21384 1 14.1911 1C21.1684 1 26.8247 6.37258 26.8247 13Z" stroke="#BC1B1B" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
     </SvgIcon>
   );
 }
@@ -22,7 +22,7 @@ function RedArrowIcon(props) {
 function GreenArrowIcon(props) {
   return (
     <SvgIcon {...props} width="28" height="26" viewBox="0 0 28 26">
-      <path d="M11.5596 9.5H17.8764M17.8764 9.5V15.5M17.8764 9.5L10.5068 16.5M26.8247 13C26.8247 19.6274 21.1684 25 14.1911 25C7.21384 25 1.55762 19.6274 1.55762 13C1.55762 6.37258 7.21384 1 14.1911 1C21.1684 1 26.8247 6.37258 26.8247 13Z" stroke="#1EBC1B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M11.5596 9.5H17.8764M17.8764 9.5V15.5M17.8764 9.5L10.5068 16.5M26.8247 13C26.8247 19.6274 21.1684 25 14.1911 25C7.21384 25 1.55762 19.6274 1.55762 13C1.55762 6.37258 7.21384 1 14.1911 1C21.1684 1 26.8247 6.37258 26.8247 13Z" stroke="#1EBC1B" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
     </SvgIcon>
   );
 }
@@ -30,7 +30,7 @@ function GreenArrowIcon(props) {
 function BlueArrowIcon(props) {
   return (
     <SvgIcon {...props} width="28" height="26" viewBox="0 0 28 26">
-      <path d="M11.5596 9.5H17.8764M17.8764 9.5V15.5M17.8764 9.5L10.5068 16.5M26.8247 13C26.8247 19.6274 21.1684 25 14.1911 25C7.21384 25 1.55762 19.6274 1.55762 13C1.55762 6.37258 7.21384 1 14.1911 1C21.1684 1 26.8247 6.37258 26.8247 13Z" stroke="#1B75BC" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M11.5596 9.5H17.8764M17.8764 9.5V15.5M17.8764 9.5L10.5068 16.5M26.8247 13C26.8247 19.6274 21.1684 25 14.1911 25C7.21384 25 1.55762 19.6274 1.55762 13C1.55762 6.37258 7.21384 1 14.1911 1C21.1684 1 26.8247 6.37258 26.8247 13Z" stroke="#1B75BC" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
     </SvgIcon>
   );
 }
@@ -119,7 +119,12 @@ const Overview = props => {
 
   const classes = useStyles();
 
-  const { handleDialogOpen } = props;
+  const { handleDialogOpen, setEdit } = props;
+
+  const handleCreateNew = () => {
+    setEdit(false);
+    handleDialogOpen();
+  }
 
   return (
     <Grid container direction="row" spacing={1}>
@@ -246,7 +251,7 @@ const Overview = props => {
               disableripple="true"
               disabletouchripple="true"
               style={{ height: '100%'}}
-              onClick={handleDialogOpen}
+              onClick={handleCreateNew}
             >
               <CardContent className={classes.cardContentStyle}>
                 <Grid container direction="row" alignItems="center" className={classes.gridAction}>

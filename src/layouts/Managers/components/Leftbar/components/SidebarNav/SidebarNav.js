@@ -18,6 +18,7 @@ import Fade from '@material-ui/core/Fade';
 import Paper from '@material-ui/core/Paper';
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 import AXIOS from '../../../../../../util/webservices';
+import { useModalAction } from '../../../../../../views/modal/modal-context.tsx';
 
 
 const useStyles = makeStyles(theme => ({
@@ -231,6 +232,8 @@ const SidebarNav = props => {
   let history = useHistory();
   const loc = useLocation();
 
+  const { openModal } = useModalAction();
+
   let userData = {};
   if (typeof localStorage !== 'undefined') {
       const user = localStorage.getItem('userDetails');
@@ -251,13 +254,16 @@ const SidebarNav = props => {
       localStorage.removeItem('tenantId');
       localStorage.removeItem('userId');
       localStorage.removeItem('userDetails');
+      localStorage.removeItem('currentEstateXri');
     }
     history.push('/signin');
   }
 
-  useEffect(() => {
+/*  useEffect(() => {
     handleMenus();
    }, []);
+
+   */
 
    async function handleMenus() {
   //   console.log("User Data: " + JSON.stringify(userData.crxDetails));
@@ -277,13 +283,17 @@ const SidebarNav = props => {
     setAnchorEl(anchorEl ? null : event.currentTarget);
   };
 
+  const handleOpenServiceContract = () => {
+    return openModal('SERVICE_CONTRACT');
+  }
+
  const open = Boolean(anchorEl);
 
  const handleClickAway = () => {
    setAnchorEl(null);
  };
 
- const opneNewResident = () => {
+ const openNewResident = () => {
    setAnchorEl(null);
    onOpen();
  }
@@ -303,7 +313,7 @@ const SidebarNav = props => {
                  <List component="nav" aria-label="main menu">
                    <ListItem
                      button
-                     onClick={opneNewResident}
+                     onClick={openNewResident}
                      >
                      <ListItemIcon classes={{ root: classes.menuIconStyle }}>
                        <ResidentIcon fontSize="small" style={{ width: 13, height: 13, fill:'none', stroke:'#52506E', strokeLinecap:'round', strokeLinejoin:'round', strokeWidth:2 }}/>
@@ -329,7 +339,10 @@ const SidebarNav = props => {
                      <ListItemText primary="New Property" classes={{ primary: classes.menuTextStyle }}/>
                    </ListItem>
                    <Divider />
-                   <ListItem button>
+                   <ListItem
+                     button
+                     onClick={handleOpenServiceContract}
+                     >
                      <ListItemIcon classes={{ root: classes.menuIconStyle }}>
                        <NewServiceIcon fontSize="small" style={{ width: 18, height: 18, fill:'none', stroke:'#52506E', strokeLinecap:'round', strokeLinejoin:'round', strokeWidth:2 }}/>
                      </ListItemIcon>
@@ -387,7 +400,7 @@ const SidebarNav = props => {
         </List>
         <Button
           className={classes.logout}
-          variant="outline"
+          variant="outlined"
           onClick={handleLogout}
           >
           Log out

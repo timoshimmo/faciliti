@@ -269,7 +269,7 @@ const OrderSummaryArea = props => {
                         variant="h6"
                         gutterBottom
                         className={classes.cardTitle}>
-                          Pending
+                          Completed
                       </Typography>
                     </Grid>
                     <Grid item>

@@ -33,13 +33,20 @@ const schema = {
   },
   password: {
     presence: { allowEmpty: false, message: 'is required' },
-    length: {
-      minimum: 3,
-      maximum: 15,
-      message: 'must be at least 3 characters'
+    length:{
+      minimum: 6
     }
   }
 };
+
+/*
+
+format: {
+ pattern: /^(?=.*\d)(?=.*[a-zA-Z])[a-zA-Z0-9]{6,}$/,
+ message: 'must have at least 6 characters long with one lower case, one uppercase and a number'
+}
+
+*/
 
 const useStyles = makeStyles(theme => ({
 
@@ -218,7 +225,7 @@ buttonProgress: {
    marginLeft: -12,
  },
  helperRoot: {
-   height: 13
+   height: 17
  }
 }));
 
@@ -242,13 +249,13 @@ const SignIn = props => {
 
    useEffect(() => {
 
-     if (typeof localStorage !== 'undefined') {
+  /*   if (typeof localStorage !== 'undefined') {
        localStorage.removeItem('spfmtoken');
        localStorage.removeItem('provider');
        localStorage.removeItem('tenantId');
        localStorage.removeItem('userId');
        localStorage.removeItem('userDetails');
-     }
+     }*/
 
       const errors = validate(formState.values, schema);
       setFormState(formState => ({
@@ -286,6 +293,8 @@ const SignIn = props => {
   }*/
 
   const handleLogin = () => {
+
+
     if (!loading) {
       setLoading(true);
 
@@ -293,33 +302,42 @@ const SignIn = props => {
         username: formState.values.email,
         password: formState.values.password,
       };
-//http://132.145.58.252:8081/spaciofm/api/
-///api/
       axios.post('http://132.145.58.252:8081/spaciofm/api/authenticate', obj)
       .then(response => {
         //const res = response.data;
-      //  console.log(response.data);
-        localStorage.setItem('spfmtoken', response.data.token);
-        localStorage.setItem('provider', JSON.stringify(response.data.userDetails.crxDetails.providerName));
-        localStorage.setItem('tenantId', JSON.stringify(response.data.userDetails.crxDetails.segmentName));
-        localStorage.setItem('userId', JSON.stringify(response.data.userDetails.crxDetails.userId));
-        localStorage.setItem('userDetails', JSON.stringify(response.data.userDetails));
-
+        console.log(response.data);
         setLoading(false);
 
-        if(response.data.userDetails.crxDetails.accountCategories[0] === 25) {
-      //    console.log("USERDETAILS: " + JSON.stringify(response.data.userDetails));
-          history.push('/overview');
+        if(!response.data.userDetails.crxDetails.activated) {
+            setServerError("Your account is not validated. Click the link in your email to validate your account");
+            setOpenError(true);
         }
         else {
-        //  console.log("USERDETAILS: " + JSON.stringify(response.data.userDetails));
-          history.push('/home');
+            localStorage.setItem('spfmtoken', response.data.token);
+            localStorage.setItem('provider', JSON.stringify(response.data.userDetails.crxDetails.providerName));
+            localStorage.setItem('tenantId', JSON.stringify(response.data.userDetails.crxDetails.segmentName));
+            localStorage.setItem('userId', JSON.stringify(response.data.userDetails.crxDetails.userId));
+            localStorage.setItem('userDetails', JSON.stringify(response.data.userDetails));
+            localStorage.setItem('currentEstateXri', JSON.stringify(response.data.userDetails.crxDetails.currentEstateXri));
+
+            if(response.data.userDetails.crxDetails.accountCategories[0] === 25) {
+          //    console.log("USERDETAILS: " + JSON.stringify(response.data.userDetails));
+              history.push('/overview');
+            }
+            else {
+            //  console.log("USERDETAILS: " + JSON.stringify(response.data.userDetails));
+              history.push('/home');
+            }
+
         }
+
+
 
       })
       .catch(function (error) {
-      //  console.log(error.response.status);
-      //  console.log(error.response.data.error);
+        setLoading(false);
+        console.log(error.response.status);
+        console.log(error.response.data.error);
         setLoading(false);
         setServerError("Invalid login credentials");
         setOpenError(true);

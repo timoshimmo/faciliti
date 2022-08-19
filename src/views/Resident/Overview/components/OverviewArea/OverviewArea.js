@@ -5,6 +5,7 @@ import {
   Typography,
   Card,
   CardActionArea,
+  CardContent,
   SvgIcon
 } from '@material-ui/core';
 
@@ -12,7 +13,7 @@ import {
 function BuildingIcon(props) {
   return (
     <SvgIcon {...props} width="31" height="25" viewBox="0 0 31 25">
-      <path d="M6.17857 9.36364V18.7727M12.3929 9.36364V18.7727M18.6071 9.36364V18.7727M24.8214 9.36364V18.7727M3.07143 18.7727H27.9286M1 24H30M2.03566 9.36364H28.9642L15.4999 1L2.03566 9.36364Z" stroke="#1B75BC" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M6.17857 9.36364V18.7727M12.3929 9.36364V18.7727M18.6071 9.36364V18.7727M24.8214 9.36364V18.7727M3.07143 18.7727H27.9286M1 24H30M2.03566 9.36364H28.9642L15.4999 1L2.03566 9.36364Z" stroke="#1B75BC" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
     </SvgIcon>
   );
 }
@@ -20,7 +21,7 @@ function BuildingIcon(props) {
 function MaintenanceIcon(props) {
   return (
     <SvgIcon {...props} width="22" height="22" viewBox="0 0 22 22">
-      <path fill-rule="evenodd" clip-rule="evenodd" d="M22 15.5563V6.44365L15.5563 0H6.44365L0 6.44365V15.5563L6.44365 22H15.5563L22 15.5563ZM7.27208 2H14.7279L20 7.27208V14.7279L14.7279 20H7.27208L2 14.7279V7.27208L7.27208 2ZM11.0003 16.9983C11.5528 16.9983 12.0007 16.5506 12.0007 15.9983C12.0007 15.4461 11.5528 14.9983 11.0003 14.9983C10.4479 14.9983 10 15.4461 10 15.9983C10 16.5506 10.4479 16.9983 11.0003 16.9983ZM12.0036 4.99835H10.003V12.9983H12.0036V4.99835Z" fill="#BC421B"/>
+      <path fillRule="evenodd" clipRule="evenodd" d="M22 15.5563V6.44365L15.5563 0H6.44365L0 6.44365V15.5563L6.44365 22H15.5563L22 15.5563ZM7.27208 2H14.7279L20 7.27208V14.7279L14.7279 20H7.27208L2 14.7279V7.27208L7.27208 2ZM11.0003 16.9983C11.5528 16.9983 12.0007 16.5506 12.0007 15.9983C12.0007 15.4461 11.5528 14.9983 11.0003 14.9983C10.4479 14.9983 10 15.4461 10 15.9983C10 16.5506 10.4479 16.9983 11.0003 16.9983ZM12.0036 4.99835H10.003V12.9983H12.0036V4.99835Z" fill="#BC421B"/>
     </SvgIcon>
   );
 }
@@ -36,17 +37,14 @@ function PaymentsIcon(props) {
 function VisitorsIcon(props) {
   return (
     <SvgIcon {...props} width="30" height="29" viewBox="0 0 30 29">
-      <path d="M24.5218 5.21612V2.53603M24.5218 5.21612L21.9729 4.38793M24.5218 5.21612L22.9465 7.38436M24.5218 5.21612L26.0971 7.38436M24.5218 5.21612L27.0707 4.38793M1.87354 26.6556C3.19155 24.3743 5.08672 22.4799 7.36864 21.1629C9.65057 19.8459 12.2389 19.1526 14.8736 19.1526C17.5083 19.1526 20.0966 19.846 22.3785 21.1631C24.6604 22.4801 26.5556 24.3745 27.8735 26.6559M22.7297 14.0215C22.0881 15.4816 21.0519 16.7338 19.7376 17.6373C18.4233 18.5408 16.883 19.0597 15.2899 19.1357C13.6968 19.2117 12.1141 18.8418 10.7198 18.0676C9.3254 17.2934 8.17466 16.1455 7.39694 14.7531C6.61921 13.3607 6.24533 11.7789 6.31733 10.1857C6.38934 8.59241 6.90438 7.05083 7.80454 5.73425C8.7047 4.41767 9.95429 3.3783 11.4128 2.73302C12.8713 2.08773 14.4809 1.8621 16.0607 2.08151" stroke="#4D4D4D" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M24.5218 5.21612V2.53603M24.5218 5.21612L21.9729 4.38793M24.5218 5.21612L22.9465 7.38436M24.5218 5.21612L26.0971 7.38436M24.5218 5.21612L27.0707 4.38793M1.87354 26.6556C3.19155 24.3743 5.08672 22.4799 7.36864 21.1629C9.65057 19.8459 12.2389 19.1526 14.8736 19.1526C17.5083 19.1526 20.0966 19.846 22.3785 21.1631C24.6604 22.4801 26.5556 24.3745 27.8735 26.6559M22.7297 14.0215C22.0881 15.4816 21.0519 16.7338 19.7376 17.6373C18.4233 18.5408 16.883 19.0597 15.2899 19.1357C13.6968 19.2117 12.1141 18.8418 10.7198 18.0676C9.3254 17.2934 8.17466 16.1455 7.39694 14.7531C6.61921 13.3607 6.24533 11.7789 6.31733 10.1857C6.38934 8.59241 6.90438 7.05083 7.80454 5.73425C8.7047 4.41767 9.95429 3.3783 11.4128 2.73302C12.8713 2.08773 14.4809 1.8621 16.0607 2.08151" stroke="#4D4D4D" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"/>
    </SvgIcon>
   );
 }
 
 const useStyles = makeStyles(theme => ({
   gridAction: {
-    paddingTop: 20,
-    paddingBottom: 20,
-    paddingLeft: 25,
-    paddingRight: 25
+    padding: 0,
  },
   actionButton: {
     display: 'flex',
@@ -105,6 +103,7 @@ const useStyles = makeStyles(theme => ({
     lineHeight: 1.3,
     color: theme.palette.primary.main,
   },
+
 }));
 
 
@@ -134,7 +133,7 @@ const OverviewArea = props => {
               disabletouchripple="true"
               style={{ height: '100%'}}
             >
-              <cardContent>
+              <CardContent className={classes.cardContent}>
                 <Grid container direction="row" alignItems="center" className={classes.gridAction}>
                     <Grid
                       item
@@ -160,7 +159,7 @@ const OverviewArea = props => {
                       </Typography>
                     </Grid>
                 </Grid>
-              </cardContent>
+              </CardContent>
             </CardActionArea>
         </Card>
       </Grid>
@@ -175,7 +174,7 @@ const OverviewArea = props => {
               disabletouchripple="true"
               style={{ height: '100%'}}
             >
-              <cardContent>
+              <CardContent>
                 <Grid container direction="row" alignItems="center" className={classes.gridAction}>
                     <Grid
                       item
@@ -201,7 +200,7 @@ const OverviewArea = props => {
                       </Typography>
                     </Grid>
                 </Grid>
-              </cardContent>
+              </CardContent>
             </CardActionArea>
         </Card>
       </Grid>
@@ -215,7 +214,7 @@ const OverviewArea = props => {
               disabletouchripple="true"
               style={{ height: '100%'}}
             >
-              <cardContent>
+              <CardContent>
                 <Grid container direction="row" alignItems="center" className={classes.gridAction}>
                     <Grid
                       item
@@ -241,7 +240,7 @@ const OverviewArea = props => {
                       </Typography>
                     </Grid>
                 </Grid>
-              </cardContent>
+              </CardContent>
             </CardActionArea>
         </Card>
       </Grid>
@@ -255,7 +254,7 @@ const OverviewArea = props => {
               disabletouchripple="true"
               style={{ height: '100%'}}
             >
-              <cardContent>
+              <CardContent>
                 <Grid container direction="row" alignItems="center" className={classes.gridAction}>
                     <Grid
                       item
@@ -281,7 +280,7 @@ const OverviewArea = props => {
                       </Typography>
                     </Grid>
                 </Grid>
-              </cardContent>
+              </CardContent>
             </CardActionArea>
         </Card>
       </Grid>

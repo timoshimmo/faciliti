@@ -426,7 +426,10 @@ const Company = () => {
   //    console.log("COMPANY DATA: " + JSON.stringify(companyData));
       formState.values.businessName = companyData.companyName;
       formState.values.businessEmail = companyData.companyEmail;
+      formState.values.businessAddress = companyData.officeAddress;
+      setPlace(companyData.place);
       setValue(companyData.estate);
+    //  console.log(JSON.stringify(companyData.place));
     }
     handleEstates();
     //andleEstates();
@@ -501,6 +504,7 @@ const Company = () => {
           companyName: formState.values.businessName,
           companyEmail: formState.values.businessEmail,
           officeAddress: place.formatted_address,
+          place: place,
           estate: value,
           newEstate: newEstateStatus
       };
@@ -673,7 +677,7 @@ const Company = () => {
                               id="businessAddress-input"
                               className={classes.textFieldAddress}
                               placeholder="Enter business address"
-
+                              defaultValue={formState.values.businessAddress}
                               onPlaceSelected={(place) => {
                                 setPlace(place);
                               }}

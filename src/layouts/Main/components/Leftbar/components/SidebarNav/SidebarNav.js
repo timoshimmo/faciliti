@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/styles';
 import { List, ListItem, Button } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
+import { useModalAction } from '../../../../../../views/modal/modal-context.tsx';
 
 
 const useStyles = makeStyles(theme => ({
@@ -116,6 +117,12 @@ const SidebarNav = props => {
   let history = useHistory();
   const loc = useLocation();
 
+  const { openModal } = useModalAction();
+
+  const handleOpenModal = () => {
+    return openModal('RESIDENT_ORDER', null);
+  }
+
   const handleLogout = () => {
     if (typeof localStorage !== 'undefined') {
       localStorage.removeItem('spfmtoken');
@@ -144,7 +151,7 @@ const SidebarNav = props => {
           variant="contained"
           color="primary"
           startIcon={<AddIcon fontSize="small" style={{ marginLeft: 20, marginRight: '10%' }} />}
-          onClick={onDialogOpen}
+          onClick={handleOpenModal}
           >
           New Order
         </Button>
@@ -193,7 +200,7 @@ const SidebarNav = props => {
         </List>
         <Button
           className={classes.logout}
-          variant="outline"
+          variant="outlined"
           onClick={handleLogout}
           >
           Log out

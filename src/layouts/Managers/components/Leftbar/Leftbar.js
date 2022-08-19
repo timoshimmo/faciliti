@@ -208,11 +208,6 @@ const Leftbar = props => {
       icon: <WorkOrdersIcon fontSize="small" style={{ width: 18, height: 18, fill:'none', stroke:'#EFF1F3', strokeLinecap:'round', strokeLinejoin:'round', strokeWidth:2 }} />
     },
     {
-      title: 'Estate',
-      href: '/estates',
-      icon: <EstatesIcon fontSize="small" style={{ width: 18, height: 18, fill:'none', stroke:'#EFF1F3', strokeLinecap:'round', strokeLinejoin:'round', strokeWidth:2 }} />
-    },
-    {
       title: 'Meetings',
       href: '/meetings',
       icon: <MeetingsIcon fontSize="small" style={{ width: 18, height: 18, fill:'none', stroke:'#EFF1F3', strokeLinecap:'round', strokeLinejoin:'round', strokeWidth:2 }} />
@@ -227,6 +222,12 @@ const Leftbar = props => {
     open={open}
     variant={variant}
   >
+
+  {
+    title: 'Estate',
+    href: '/estates',
+    icon: <EstatesIcon fontSize="small" style={{ width: 18, height: 18, fill:'none', stroke:'#EFF1F3', strokeLinecap:'round', strokeLinejoin:'round', strokeWidth:2 }} />
+  },
   */
 
   return (

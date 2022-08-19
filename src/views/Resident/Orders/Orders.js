@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { withStyles, makeStyles } from '@material-ui/styles';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
@@ -30,6 +30,10 @@ import {
 import SearchIcon from '@material-ui/icons/Search';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ExpandLessIcon from '@material-ui/icons/ExpandLess';
+import AXIOS from '../../../util/webservices';
+import moment from 'moment';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import { useModalAction } from '../../modal/modal-context.tsx';
 
 function createData(datecreated, title, description, datedue, tags, status) {
   return {
@@ -112,7 +116,7 @@ function CalendarIcon(props) {
       <path d="M7 12V10H5V12H7Z" fill="#8692A6"/>
       <path d="M15 14V16H13V14H15Z" fill="#8692A6"/>
       <path d="M9 16H11V14H9V16Z" fill="#8692A6"/>
-      <path fill-rule="evenodd" clip-rule="evenodd" d="M6 1H14V0H16V1H18C19.1046 1 20 1.89543 20 3V18C20 19.1046 19.1046 20 18 20H2C0.89543 20 0 19.1046 0 18V3C0 1.89543 0.89543 1 2 1H4V0H6V1ZM14 4H16V3H18V6H2V3H4V4H6V3H14V4ZM2 8H18V18H2V8Z" fill="#8692A6"/>
+      <path fillRule="evenodd" clipRule="evenodd" d="M6 1H14V0H16V1H18C19.1046 1 20 1.89543 20 3V18C20 19.1046 19.1046 20 18 20H2C0.89543 20 0 19.1046 0 18V3C0 1.89543 0.89543 1 2 1H4V0H6V1ZM14 4H16V3H18V6H2V3H4V4H6V3H14V4ZM2 8H18V18H2V8Z" fill="#8692A6"/>
     </SvgIcon>
   );
 }
@@ -120,7 +124,7 @@ function CalendarIcon(props) {
 function EditIcon(props) {
   return (
     <SvgIcon {...props} width="20" height="21" viewBox="0 0 20 21">
-    <path fill-rule="evenodd" clip-rule="evenodd" d="M14.4374 0C15.0921 0 15.7197 0.26142 16.1781 0.723423L19.279 3.82432C19.7407 4.286 20.0001 4.91217 20.0001 5.56508C20.0001 6.21799 19.7407 6.84416 19.279 7.30584L7.95751 18.6238C7.25902 19.4295 6.2689 19.9245 5.1346 20.0023H0L0.00324765 14.7873C0.0884382 13.7328 0.578667 12.7523 1.3265 12.0934L12.6954 0.724628C13.1564 0.26083 13.7834 0 14.4374 0ZM5.06398 18.0048C5.59821 17.967 6.09549 17.7184 6.49479 17.2616L14.0567 9.69972L10.3023 5.94519L2.6961 13.5496C2.29095 13.9079 2.04031 14.4092 2 14.8678V18.0029L5.06398 18.0048ZM11.7167 4.53115L15.4709 8.2855L17.8648 5.89162C17.9514 5.80502 18.0001 5.68756 18.0001 5.56508C18.0001 5.4426 17.9514 5.32514 17.8648 5.23854L14.7611 2.13486C14.6755 2.04855 14.5589 2 14.4374 2C14.3158 2 14.1992 2.04855 14.1136 2.13486L11.7167 4.53115Z" fill="#C7C7C7"/>
+    <path fillRule="evenodd" clipRule="evenodd" d="M14.4374 0C15.0921 0 15.7197 0.26142 16.1781 0.723423L19.279 3.82432C19.7407 4.286 20.0001 4.91217 20.0001 5.56508C20.0001 6.21799 19.7407 6.84416 19.279 7.30584L7.95751 18.6238C7.25902 19.4295 6.2689 19.9245 5.1346 20.0023H0L0.00324765 14.7873C0.0884382 13.7328 0.578667 12.7523 1.3265 12.0934L12.6954 0.724628C13.1564 0.26083 13.7834 0 14.4374 0ZM5.06398 18.0048C5.59821 17.967 6.09549 17.7184 6.49479 17.2616L14.0567 9.69972L10.3023 5.94519L2.6961 13.5496C2.29095 13.9079 2.04031 14.4092 2 14.8678V18.0029L5.06398 18.0048ZM11.7167 4.53115L15.4709 8.2855L17.8648 5.89162C17.9514 5.80502 18.0001 5.68756 18.0001 5.56508C18.0001 5.4426 17.9514 5.32514 17.8648 5.23854L14.7611 2.13486C14.6755 2.04855 14.5589 2 14.4374 2C14.3158 2 14.1992 2.04855 14.1136 2.13486L11.7167 4.53115Z" fill="#C7C7C7"/>
     </SvgIcon>
   );
 }
@@ -129,7 +133,7 @@ function DeleteIcon(props) {
   return (
     <SvgIcon {...props} width="24" height="24" viewBox="0 0 24 24">
     <circle cx="12" cy="12" r="12" fill="#FF0000"/>
-    <path fill-rule="evenodd" clip-rule="evenodd" d="M12.0849 11.1515L15.9033 7.3331L16.7518 8.18162L12.9334 12L16.7518 15.8184L15.9033 16.6669L12.0849 12.8485L8.26651 16.6669L7.41799 15.8184L11.2364 12L7.41799 8.18162L8.26651 7.3331L12.0849 11.1515Z" fill="white" stroke="white"/>
+    <path fillRule="evenodd" clipRule="evenodd" d="M12.0849 11.1515L15.9033 7.3331L16.7518 8.18162L12.9334 12L16.7518 15.8184L15.9033 16.6669L12.0849 12.8485L8.26651 16.6669L7.41799 15.8184L11.2364 12L7.41799 8.18162L8.26651 7.3331L12.0849 11.1515Z" fill="white" stroke="white"/>
     </SvgIcon>
   );
 }
@@ -409,7 +413,7 @@ const EnhancedTableToolbar = (props) => {
         <Grid
         item
         lg={9}>
-        <Grid container spacing={1} justify="flex-end">
+        <Grid container spacing={1} justifyContent="flex-end">
           <Grid
           item
           lg={3}
@@ -551,8 +555,8 @@ const EnhancedTableToolbar = (props) => {
 EnhancedTableToolbar.propTypes = {
   onOpenMenu: PropTypes.bool.isRequired,
   onHandleMenuClose: PropTypes.func.isRequired,
-  anchorEl: PropTypes.bool.isRequired,
-  checkid: PropTypes.string.isRequired,
+  anchorEl: PropTypes.bool,
+  checkid: PropTypes.string,
   onMenuClick: PropTypes.func.isRequired,
   onHandleFilter: PropTypes.func.isRequired,
 };
@@ -583,17 +587,28 @@ const useStyles = makeStyles(theme => ({
     borderRadius: 4,
     backgroundColor: ' rgba(134, 146, 166, 0.15)',
     padding: 7
-  }
+  },
+  buttonProgress: {
+     color: theme.palette.primary.main,
+     marginTop: 10,
+     marginBottom: 10,
+     marginLeft: '50%',
+     zIndex: 10
+   }
 }));
 
 const Orders = props => {
 
     const classes = useStyles();
 
+    const { openModal } = useModalAction();
+
     const [order, setOrder] = useState('asc');
     const [orderBy, setOrderBy] = useState('calories');
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(5);
+    const [loading, setLoading] = useState(false);
+    const [orderLogs, setOrderLogs] = useState([]);
 
     const [checkState, setCheckState] = useState({
      all: false,
@@ -604,6 +619,31 @@ const Orders = props => {
     const [anchorEl, setAnchorEl] = useState(null);
     const openPostMenu = Boolean(anchorEl);
     const checkid = openPostMenu ? 'simple-popover' : undefined;
+
+    useEffect(() => {
+      handleGetAll();
+   }, []);
+
+    const handleGetAll = () => {
+
+        if(!loading) {
+          setLoading(true);
+
+
+          AXIOS.get(`resorders/?index=${page}&range=${rowsPerPage}`)
+            .then(response => {
+              setLoading(false);
+              const res = response.data.response;
+        //      console.log("RES ORDER:" + JSON.stringify(res));
+              setOrderLogs(res);
+            })
+            .catch(function (error) {
+              setLoading(false);
+              console.log(error.response);
+              console.log(error.message);
+            })
+        }
+    }
 
 
     const handleRequestSort = (event, property) => {
@@ -617,7 +657,7 @@ const Orders = props => {
    };
 
    const handleChangeRowsPerPage = (event) => {
-     setRowsPerPage(parseInt(event.target.value, 5));
+     setRowsPerPage(parseInt(event.target.value));
      setPage(0);
    };
 
@@ -637,8 +677,9 @@ const Orders = props => {
 
   }
 
-  const handleRowClick = (event, name) => {
-
+  const handleRowClick = (event, row) => {
+    //  console.log("ROW: " + JSON.stringify(row));
+      return openModal('RESIDENT_ORDER', row);
   }
 
    const emptyRows =
@@ -667,6 +708,7 @@ const Orders = props => {
               onHandleFilter={handleFilter}/>
               <Paper style={{ width: '100%', mb: 2 }}>
                 <TableContainer>
+                  {loading && <CircularProgress size={25} className={classes.buttonProgress} /> }
                   <Table className={classes.table} aria-label="orders table">
                     <EnhancedTableHead
                       order={order}
@@ -674,7 +716,7 @@ const Orders = props => {
                       onRequestSort={handleRequestSort}
                       rowCount={rows.length}/>
                       <TableBody>
-                      {stableSort(rows, getComparator(order, orderBy))
+                      {stableSort(orderLogs, getComparator(order, orderBy))
                         .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                         .map((row, index) => {
 
@@ -683,15 +725,14 @@ const Orders = props => {
                           return (
                             <TableRow
                               hover
-                              onClick={(event) => handleRowClick(event, row.name)}
                               tabIndex={-1}
-                              key={row.title}
+                              key={row.key.uuid}
                             >
                               <StyledTableCell
                                 component="th"
                                 id={labelId}
                               >
-                                {row.datecreated}
+                                {moment(row.createdAt).format('DD/MM/YYYY')}
                               </StyledTableCell>
                               <StyledTableCell style={{ maxWidth: 80, whiteSpace: 'nowrap' }}>
                                 <Box
@@ -699,9 +740,9 @@ const Orders = props => {
                                    my={1}
                                    textOverflow="ellipsis"
                                    overflow="hidden"
-                                   bgcolor="#ffffff"
+                                   bgcolor="transparent"
                                  >
-                                  {row.title}
+                                  {row.name}
                                 </Box>
                               </StyledTableCell>
                               <StyledTableCell style={{ maxWidth: 120, whiteSpace: 'nowrap' }}>
@@ -710,18 +751,21 @@ const Orders = props => {
                                    my={1}
                                    textOverflow="ellipsis"
                                    overflow="hidden"
-                                   bgcolor="#ffffff"
+                                   bgcolor="transparent"
                                  >
                                   {row.description}
                                 </Box>
                               </StyledTableCell>
-                              <StyledTableCell>{row.datedue}</StyledTableCell>
-                              <StyledTableCell>{row.tags}</StyledTableCell>
+                              <StyledTableCell>{moment(row.dueBy).format('DD/MM/YYYY')}</StyledTableCell>
+                              <StyledTableCell>{row.numberOfTaggedContact}</StyledTableCell>
                               <StyledTableCell>
-                                { row.status <= 0 ? 'Pending' : 'Closed' }
+                                { row.status === 'Opened' ? 'Open' : 'Closed' }
                               </StyledTableCell>
                               <StyledTableCell align="center">
-                                <IconButton className={classes.icnBtnStyle}>
+                                <IconButton
+                                  className={classes.icnBtnStyle}
+                                  onClick={(event) => handleRowClick(event, row)}
+                                  >
                                   <EditIcon style={{  width: 12,height: 12, fill:'none', }} />
                                 </IconButton>
                               </StyledTableCell>
@@ -749,7 +793,7 @@ const Orders = props => {
                 <TablePagination
                    rowsPerPageOptions={[5, 10, 25]}
                    component="div"
-                   count={rows.length}
+                   count={orderLogs.length}
                    rowsPerPage={rowsPerPage}
                    page={page}
                    onPageChange={handleChangePage}

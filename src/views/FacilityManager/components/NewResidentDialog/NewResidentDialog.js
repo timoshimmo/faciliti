@@ -31,6 +31,7 @@ import axios from 'axios';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import AXIOS from '../../../../util/webservices';
 
+
 //import { ChipComponent, TaggedPeopleComponent, CategoryDialog, TaggedPeopleDialog } from './components';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -252,6 +253,8 @@ const handleRegister = event => {
 
   event.preventDefault();
 
+  const tenantId = localStorage.getItem('tenantId');
+
   if (!loading) {
     setLoading(true);
 
@@ -264,37 +267,20 @@ const handleRegister = event => {
 
     }
     else {
-
-
       const obj = {
-        enabled : true,
-        createdAt : null,
-        modifiedAt : null,
-        uri : null,
-        errorMsg : null,
-        segmentName: 'INJREAM26606',
-        editedFields : null,
-        editedValues : null,
-        editedOperands : null,
+        segmentName: tenantId,
         emailAddress: formState.values.emailAddress,
-        groupsToBeAssigned : null,
-        isAdministrator : null,
         initialPassword : "123456",
         initialPasswordVerification : "123456",
-        timeZone : null,
         firstName: formState.values.firstName,
         lastName: formState.values.lastName,
         telephone: phoneNo.phone,
         role: 21,
-        emailAddressExist: true,
         estateXri: value,
-        principalId: formState.values.firstName,
-        accountCategories: [24],
-        accountClass : null,
-        companyDTO: null
+        accountCategories: [24]
       };
 
-      AXIOS.get('user-profiles/register-resident')
+      AXIOS.post('http://132.145.58.252:8081/spaciofm/api/user-profiles/onboard-resident', obj)
       .then(response => {
         setLoading(false);
         const res = response.data;

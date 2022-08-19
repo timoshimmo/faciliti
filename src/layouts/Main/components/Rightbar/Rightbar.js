@@ -7,17 +7,17 @@ import {
 } from '@material-ui/core';
 import { RightTopbar, LiveFeedComponent } from './components';
 
-function createLiveFeed(title, dateTime) {
-  return { title, dateTime};
+function createLiveFeed(id, title, dateTime) {
+  return { id, title, dateTime};
 }
 
 const liveFeeds = [
-  createLiveFeed('Fire Drill on 17th & 18th', '12/11/2021, 12:35 pm'),
-  createLiveFeed('4 new estate shuttle', '12/11/2021, 12:35 pm'),
-  createLiveFeed('Call Mr. Tok about the plumbing issue', '12/11/2021, 12:35 pm'),
-  createLiveFeed('4 new estate shuttle', '12/11/2021, 12:35 pm'),
-  createLiveFeed('Call Mr. Tobi about water supply', '12/11/2021, 12:35 pm'),
-  createLiveFeed('4 new estate shuttle', '12/11/2021, 12:35 pm'),
+  createLiveFeed(1, 'Fire Drill on 17th & 18th', '12/11/2021, 12:35 pm'),
+  createLiveFeed(2, '4 new estate shuttle', '12/11/2021, 12:35 pm'),
+  createLiveFeed(3, 'Call Mr. Tok about the plumbing issue', '12/11/2021, 12:35 pm'),
+  createLiveFeed(4, '4 new estate shuttle', '12/11/2021, 12:35 pm'),
+  createLiveFeed(5, 'Call Mr. Tobi about water supply', '12/11/2021, 12:35 pm'),
+  createLiveFeed(6, '4 new estate shuttle', '12/11/2021, 12:35 pm'),
 ];
 
 const useStyles = makeStyles(theme => ({
@@ -78,8 +78,8 @@ const Rightbar = props => {
   //  const [serverError, setServerError] = useState(null);
 
     const livefeedList = () => {
-        return liveFeeds.map(function(object, i) {
-            return <LiveFeedComponent obj={object} idx={i}  />;
+        return liveFeeds.map((object) => {
+            return <LiveFeedComponent obj={object}/>;
         })
     }
 

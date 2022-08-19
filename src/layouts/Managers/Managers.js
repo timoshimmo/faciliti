@@ -4,6 +4,8 @@ import { makeStyles } from '@material-ui/styles';
 import { Leftbar, Rightbar, Topbar } from './components';
 import { NewResidentDialog } from '../../views/FacilityManager/components';
 import { useHistory } from 'react-router-dom';
+import { ModalProvider } from '../../views/modal/modal-context.tsx';
+import ModalManager from '../../views/modal/modal-manager';
 //import { history } from '../../helpers';
 
 
@@ -132,6 +134,7 @@ const Managers = props => {
 
   return (
     <div className={classes.root}>
+      <ModalProvider>
        <div className={classes.leftDiv} >
           <Leftbar
             onClose={handleNewResidentDialogClose}
@@ -143,11 +146,13 @@ const Managers = props => {
           <main className={classes.content}>
             {children}
           </main>
+          <ModalManager />
           <NewResidentDialog
             onClose={handleNewResidentDialogClose}
             onOpen={openNewResidentDialog}
           />
         </div>
+      </ModalProvider>
     </div>
   );
 };

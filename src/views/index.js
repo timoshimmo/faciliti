@@ -15,3 +15,4 @@ export { default as Maintenance } from './Resident/Maintenance';
 export { default as FMBusiness } from './FacilityManager/Company';
 export { default as FMPersonal } from './FacilityManager/Register';
 export { default as Meetings } from './FacilityManager/Meetings';
+export { default as Profile } from './FacilityManager/Profile';

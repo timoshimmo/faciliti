@@ -41,12 +41,15 @@ const Visitors = props => {
     const [openDialog, setOpenDialog] = useState(false);
     const [visitorDetails, setVisitorDetails] = useState([]);
 
+    const [edit, setEdit] = useState(false);
+
     const handleDialogOpen = () => {
       setOpenDialog(true);
     };
 
     const handleDialogClose = () => {
       setOpenDialog(false);
+      setEdit(false);
     };
 
 
@@ -70,7 +73,7 @@ const Visitors = props => {
           <Grid
           item
           lg={12}>
-            <Overview handleDialogOpen={handleDialogOpen} />
+            <Overview handleDialogOpen={handleDialogOpen} setEdit={setEdit} />
           </Grid>
           <Grid
             item
@@ -86,13 +89,14 @@ const Visitors = props => {
             <Grid
               item
               lg={12}>
-                <Logs />
+                <Logs handleDialogOpen={handleDialogOpen} setVisitorDetails={setVisitorDetails} visitorDetails={visitorDetails} setEdit={setEdit}/>
               </Grid>
         </Grid>
         <NewVisitorDialog
           onClose={handleDialogClose}
           onOpen={openDialog}
           visitorDetails={visitorDetails}
+          edit={edit}
         />
       </div>
     );

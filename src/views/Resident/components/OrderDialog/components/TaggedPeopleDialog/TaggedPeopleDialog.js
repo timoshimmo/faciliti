@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import {
@@ -17,6 +17,8 @@ import {
 } from '@material-ui/core';
 import SearchIcon from '@material-ui/icons/Search';
 import { TaggedListComponent } from './components';
+import AXIOS from '../../../../../../util/webservices';
+import axios from 'axios';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -115,11 +117,16 @@ const TaggedPeopleDialog = props => {
 
   const classes = useStyles();
 
-  const { onOpen, onClose, peopleList, setAvatarList, avatarList } = props;
+  const { onOpen, onClose, setContactList, contactList, setAvatarList } = props;
 
   const [searchQuery, setSearchQuery] = useState(false);
   const [btnText, setBtnText] = useState('Invite');
   const [liveTaggedList, setLiveTaggedList] = useState([]);
+  const [peopleList, setPeopleList] = useState([]);
+
+  useEffect(() => {
+    handlePeopleist();
+ }, [setPeopleList]);
 
   const handleChange = event => {
     event.persist();
@@ -127,7 +134,7 @@ const TaggedPeopleDialog = props => {
   };
 
   const handleInvite = () => {
-    setAvatarList(avatarList => [...avatarList, liveTaggedList]);
+    setAvatarList(liveTaggedList);
     onClose()
   }
 
@@ -135,10 +142,41 @@ const TaggedPeopleDialog = props => {
     setBtnText(fullText);
   }
 
+  const handlePeopleist = () => {
+  //  event.persist();
+  //  setSearchQuery(event.target.value);
+
+    let token = localStorage.getItem('spfmtoken');
+      const config = {
+        headers:{
+          'Authorization': `Bearer ${token}`,
+          'provider': 'CRX',
+          'tenant-id' : 'INJREAM26606',
+          'user-id' : 'JAGG66'
+        }
+    };
+
+    AXIOS.get('http://132.145.58.252:8081/spaciofm/api/contacts?index=0&range=10')
+    .then(response => {
+      const res = response.data;
+  //    if(res.errorCode !== null) {
+      //  console.log("CONTACTS: " + JSON.stringify(res.response));
+        setPeopleList(res.response);
+    //  }
+
+    })
+    .catch(function (error) {
+      console.log(error.response);
+      console.log(error.message);
+    })
+
+  };
+
 
   const taggedPeopleListItems = () => {
       return peopleList.map((people, i) => {
-          return <TaggedListComponent obj={people} handleSetText={handleSetText} setLiveTaggedList={setLiveTaggedList} liveTaggedList={liveTaggedList} />;
+          return <TaggedListComponent obj={people} handleSetText={handleSetText}
+            setLiveTaggedList={setLiveTaggedList} liveTaggedList={liveTaggedList} setContactList={setContactList} contactList={contactList} />;
       })
   }
 
