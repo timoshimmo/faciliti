@@ -12,10 +12,12 @@ instance.interceptors.request.use(
     let tenantId = localStorage.getItem('tenantId');
     let userId = localStorage.getItem('userId');
     let currentEstateXri = localStorage.getItem('currentEstateXri');
+    let tenantSegment = localStorage.getItem('tenantSegment');
     //console.log(token);
     //'JAGG66'
 
     /*
+    currentEstateXri
     config.headers = {
       'Authorization': `Bearer ${token}`,
       'provider': 'CRX',
@@ -26,9 +28,8 @@ instance.interceptors.request.use(
     config.headers = {
       'Authorization': `Bearer ${token}`,
       'provider': 'CRX',
-      'tenant-id' : tenantId,
-      'user-id' : userId,
-      'currentEstateXri': currentEstateXri,
+      'tenant-id' : tenantSegment,
+      'user-id' : userId
     }
 
 
@@ -43,6 +44,22 @@ instance.interceptors.request.use(
   },
   error => {
     Promise.reject(error)
+});
+
+instance.interceptors.response.use((response) => {
+  //console.log("AXIOS RESPONSE: " + JSON.stringify(response));
+  return response
+}, async function (error) {
+  console.log("AXIOS ERROR: " + JSON.stringify(error));
+  const originalRequest = error.config;
+  if (error.response.status === 401 && !originalRequest._retry) {
+    console.log("AXIOS ERROR RESPONSE: " + JSON.stringify(error.response.status));
+    //originalRequest._retry = true;
+    //const access_token = await refreshAccessToken();
+    //axios.defaults.headers.common['Authorization'] = 'Bearer ' + access_token;
+    //return axiosApiInstance(originalRequest);
+  }
+  return Promise.reject(error);
 });
 
 export default instance;

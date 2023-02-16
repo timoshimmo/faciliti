@@ -301,7 +301,7 @@ useEffect(() => {
   //console.log("EDIT: " + edit);
   if(row!= null && Object.keys(row).length > 0) {
 
-    console.log("LOGS 1: " + JSON.stringify(row.name));
+    //console.log("LOGS 1: " + JSON.stringify(row.name));
     setFormState(formState => ({
       ...formState,
       values: {
@@ -352,12 +352,12 @@ useEffect(() => {
       };
 
 
-      AXIOS.post('/meetings', obj)
+      AXIOS.post('/resorders', obj)
       .then(response => {
         const res = response.data;
         console.log(res);
         setLoading(false);
-        onClose();
+        closeModal();
       })
       .catch(function (error) {
         setLoading(false);
@@ -583,7 +583,7 @@ useEffect(() => {
                       classes={{ root: classes.buttonCreateStyle }}
                       startIcon={<AddIcon style={{ fontSize: 16, color: '#FFFFFF' }}/>}
                       onClick={handleSave}
-                      disabled={loading || !formState.values.orderTitle || !formState.values.description || !formState.values.dueDate
+                      disabled={loading || !formState.values.orderTitle || !formState.values.orderDescription || !formState.values.dueDate
                          || contactList.length < 1 || categoryList.length < 1}
                       >
                       Save & Create

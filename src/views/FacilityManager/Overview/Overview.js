@@ -1,10 +1,11 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { makeStyles } from '@material-ui/styles';
 import {
   Grid,
   Typography,
 } from '@material-ui/core';
-import { OverviewArea, MeetingUpdateArea } from './components'
+import { OverviewArea, MeetingUpdateArea, OrderSummaryArea } from './components'
+
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -28,9 +29,6 @@ const useStyles = makeStyles(theme => ({
     fontWeight: 600,
     marginTop: 30,
     marginBottom: 20
-  },
-  spacing: {
-    marginTop: 20
   }
 }));
 
@@ -42,7 +40,21 @@ const Overview = props => {
       <div className={classes.root}>
         <Grid
           className={classes.grid}
-          container>
+          container
+          direction="column">
+          <Grid
+            item
+            lg={12}>
+
+            <Typography
+              variant="h4"
+              gutterBottom
+              className={classes.areaTitle}
+            >
+              Overview
+            </Typography>
+
+          </Grid>
           <Grid
             item
             lg={12}>
@@ -50,9 +62,38 @@ const Overview = props => {
           </Grid>
           <Grid
             item
-            lg={12}
-            className={classes.spacing}>
+            lg={12}>
+
+            <Typography
+              variant="h4"
+              gutterBottom
+              className={classes.middleAreaTitle}
+            >
+              Meeting Updates
+            </Typography>
+
+          </Grid>
+          <Grid
+            item
+            lg={12}>
               <MeetingUpdateArea />
+          </Grid>
+          <Grid
+            item
+            lg={12}>
+
+            <Typography
+              variant="h4"
+              gutterBottom
+              className={classes.middleAreaTitle}
+            >
+              Order Summary
+            </Typography>
+          </Grid>
+          <Grid
+            item
+            lg={12}>
+              <OrderSummaryArea />
           </Grid>
         </Grid>
       </div>

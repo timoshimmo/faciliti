@@ -4,6 +4,9 @@ import { makeStyles } from '@material-ui/styles';
 import { Leftbar, Rightbar, Topbar } from './components';
 import { OrderDialog } from '../../views/Resident/components';
 import { ModalProvider } from '../../views/modal/modal-context.tsx';
+import { Provider } from "react-redux";
+import configureStore from "../../store";
+import SnackbarComponent from '../../components/SnackbarComponent';
 import ModalManager from '../../views/modal/modal-manager';
 import { useHistory } from 'react-router-dom';
 
@@ -73,6 +76,8 @@ const Main = props => {
   const classes = useStyles();
   let history = useHistory();
 
+  const store = configureStore();
+
   if (typeof localStorage !== 'undefined') {
     if(!localStorage.getItem('spfmtoken')) {
       //  console.log("LOCAL STORAGE TOKEN: ", localStorage.getItem('spfmtoken'));
@@ -101,23 +106,26 @@ const Main = props => {
   return (
     <div className={classes.root}>
       <ModalProvider>
-       <div className={classes.leftDiv} >
-          <Leftbar onDialogOpen={handleDialogOpen} />
-        </div>
-        <div className={classes.mainDiv}>
-            <Topbar />
-            <main className={classes.content}>
-              {children}
-            </main>
-            <ModalManager />
-            <OrderDialog
-              onClose={handleDialogClose}
-              onOpen={openDialog}
-            />
-        </div>
-        <div className={classes.rightDiv}>
-          <Rightbar />
-        </div>
+        <Provider store={store}>
+         <div className={classes.leftDiv} >
+            <Leftbar onDialogOpen={handleDialogOpen} />
+          </div>
+          <div className={classes.mainDiv}>
+              <Topbar />
+              <main className={classes.content}>
+                {children}
+              </main>
+              <ModalManager />
+              <OrderDialog
+                onClose={handleDialogClose}
+                onOpen={openDialog}
+              />
+          </div>
+          <div className={classes.rightDiv}>
+            <Rightbar />
+          </div>
+          <SnackbarComponent timeout={6000} />
+        </Provider>
       </ModalProvider>
     </div>
   );

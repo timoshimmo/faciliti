@@ -1,13 +1,110 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/styles';
-import { Leftbar, Rightbar, Topbar } from './components';
+import { Leftbar, Topbar } from './components';
 import { NewResidentDialog } from '../../views/FacilityManager/components';
 import { useHistory } from 'react-router-dom';
 import { ModalProvider } from '../../views/modal/modal-context.tsx';
 import ModalManager from '../../views/modal/modal-manager';
+import { Provider } from "react-redux";
+import configureStore from "../../store";
+import SnackbarComponent from '../../components/SnackbarComponent';
 //import { history } from '../../helpers';
 
+
+/*
+
+const variantIcon = {
+  success: CheckCircleIcon,
+  warning: WarningIcon,
+  error: ErrorIcon,
+  info: InfoIcon,
+};
+
+const styles1 = theme => ({
+  success: {
+    backgroundColor: green[600],
+  },
+  error: {
+    backgroundColor: theme.palette.error.dark,
+  },
+  info: {
+    backgroundColor: theme.palette.primary.dark,
+  },
+  warning: {
+    backgroundColor: amber[700],
+  },
+  icon: {
+    fontSize: 20,
+  },
+  iconVariant: {
+    opacity: 0.9,
+    marginRight: theme.spacing.unit,
+  },
+  message: {
+    display: 'flex',
+    alignItems: 'center',
+  },
+});
+
+function MySnackbarContent(props) {
+  const { classes, className, message, onClose, variant, ...other } = props;
+  const Icon = variantIcon[variant];
+
+  return (
+    <SnackbarContent
+      className={classNames(classes[variant], className)}
+      aria-describedby="client-snackbar"
+      message={
+        <span id="client-snackbar" className={classes.message}>
+          <Icon className={classNames(classes.icon, classes.iconVariant)} />
+          {message}
+        </span>
+      }
+      action={[
+        <IconButton
+          key="close"
+          aria-label="Close"
+          color="inherit"
+          className={classes.close}
+          onClick={onClose}
+        >
+          <CloseIcon className={classes.icon} />
+        </IconButton>,
+      ]}
+      {...other}
+    />
+  );
+}
+
+MySnackbarContent.propTypes = {
+  classes: PropTypes.object.isRequired,
+  className: PropTypes.string,
+  message: PropTypes.node,
+  onClose: PropTypes.func,
+  variant: PropTypes.oneOf(['success', 'warning', 'error', 'info']).isRequired,
+};
+
+const MySnackbarContentWrapper = withStyles(styles1)(MySnackbarContent);
+
+
+<Snackbar
+  anchorOrigin={{
+    vertical: 'bottom',
+    horizontal: 'center',
+  }}
+  open={openSnack}
+  autoHideDuration={6000}
+  onClose={handleCloseSnackBar}
+>
+  <MySnackbarContentWrapper
+    onClose={handleCloseSnackBar}
+    variant="success"
+    message="New resident successfully created!"
+  />
+</Snackbar>
+
+*/
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -72,7 +169,10 @@ const useStyles = makeStyles(theme => ({
     display: 'flex',
     height: '100%',
     width: '100%'
-  }
+  },
+  margin: {
+   margin: theme.spacing.unit,
+ },
 }));
 
 /*
@@ -85,9 +185,12 @@ const useStyles = makeStyles(theme => ({
 const Managers = props => {
   const { children } = props;
   const [openNewResidentDialog, setOpenNewResidentDialog] = useState(false);
+//  const [openSnack, setOpenSnack] = useState(false);
 
   const classes = useStyles();
   let history = useHistory();
+
+  const store = configureStore();
 
   if (typeof localStorage !== 'undefined') {
     if(!localStorage.getItem('spfmtoken')) {
@@ -131,27 +234,42 @@ const Managers = props => {
     setOpenNewResidentDialog(false);
   };
 
+/*  const handleCloseSnackBar = (event, reason) => {
+   if (reason === 'clickaway') {
+     return;
+   }
+
+   setOpenSnack(false);
+  }
+
+  const handleOpenSnackBar = () => {
+   setOpenSnack(true);
+  }*/
+
 
   return (
     <div className={classes.root}>
       <ModalProvider>
-       <div className={classes.leftDiv} >
-          <Leftbar
-            onClose={handleNewResidentDialogClose}
-            onOpen={handleNewResidentDialogOpen}
+        <Provider store={store}>
+         <div className={classes.leftDiv} >
+            <Leftbar
+              onClose={handleNewResidentDialogClose}
+              onOpen={handleNewResidentDialogOpen}
+              />
+          </div>
+          <div className={classes.mainDiv}>
+            <Topbar />
+            <main className={classes.content}>
+              {children}
+            </main>
+            <ModalManager />
+            <NewResidentDialog
+              onClose={handleNewResidentDialogClose}
+              onOpen={openNewResidentDialog}
             />
-        </div>
-        <div className={classes.mainDiv}>
-          <Topbar />
-          <main className={classes.content}>
-            {children}
-          </main>
-          <ModalManager />
-          <NewResidentDialog
-            onClose={handleNewResidentDialogClose}
-            onOpen={openNewResidentDialog}
-          />
-        </div>
+          </div>
+          <SnackbarComponent timeout={6000} />
+        </Provider>
       </ModalProvider>
     </div>
   );

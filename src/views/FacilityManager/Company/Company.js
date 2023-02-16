@@ -498,7 +498,7 @@ const Company = () => {
         setLoading(false);
       }
       else {
-        let estateValue;
+        //let estateValue;
 
         const obj = {
           companyName: formState.values.businessName,
@@ -673,7 +673,7 @@ const Company = () => {
                           </InputLabel>
                           <FormControl error={hasError('businessAddress')} className={classes.formComponent}>
                             <AutocompleteAddress
-                              apiKey={'AIzaSyDs_8LnDD8HGjgkPO5hLk08MTFOk6FJus8'}
+                              apiKey={'AIzaSyBP68mfPt4CblP3abb_n8f0ThEI8m-Rq3I'}
                               id="businessAddress-input"
                               className={classes.textFieldAddress}
                               placeholder="Enter business address"

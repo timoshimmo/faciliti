@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/styles';
 import {
   Grid,
@@ -9,7 +9,7 @@ import {
   SvgIcon
 } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
-
+import axios from 'axios';
 
 function RedArrowIcon(props) {
   return (
@@ -121,6 +121,53 @@ const Overview = props => {
 
   const { handleDialogOpen, setEdit } = props;
 
+  const [approved, setApproved] = useState(0);
+  const [denied, setDenied] = useState(0);
+
+  useEffect(() => {
+    handleGetMetrics();
+ }, []);
+
+  const handleGetMetrics = () => {
+
+    let token = localStorage.getItem('spfmtoken');
+    let tenantSegment = localStorage.getItem('tenantSegment');
+    let userId = localStorage.getItem('userId');
+
+     const requestOne = axios.get(`http://132.145.58.252:8081/spaciofm/api/visits/approved-visits-by-resident`, { headers: {
+       'Authorization': `Bearer ${token}`,
+       'provider': 'CRX',
+       'tenant-id' : tenantSegment,
+       'user-id' : userId
+     } });
+     const requestTwo = axios.get(`http://132.145.58.252:8081/spaciofm/api/visits/denied-visits-by-resident `, { headers: {
+       'Authorization': `Bearer ${token}`,
+       'provider': 'CRX',
+       'tenant-id' : tenantSegment,
+       'user-id' : userId
+     } });
+
+     axios.all([requestOne, requestTwo])
+       .then(axios.spread((...responses) => {
+         const responseOne = responses[0];
+         const responseTwo = responses[1];
+
+         //console.log("RESPONSE 1:", JSON.stringify(responseOne));
+         //console.log("RESPONSE 2:", JSON.stringify(responseTwo));
+        // console.log("RESPONSE 3:", JSON.stringify(responseThree));
+
+         const approvedVal = responseOne.data.response.length;
+         const deniedVal = responseTwo.data.response.length;
+
+         setApproved(approvedVal);
+         setDenied(deniedVal);
+       }))
+       .catch((error) => {
+         console.log(error.response);
+         console.log(error.message);
+       });
+}
+
   const handleCreateNew = () => {
     setEdit(false);
     handleDialogOpen();
@@ -149,7 +196,7 @@ const Overview = props => {
                     variant="body1"
                     color="primary"
                     className={classes.actionTitle}>
-                    Today
+                    Denied
                   </Typography>
                 </Grid>
                 <Grid
@@ -159,7 +206,7 @@ const Overview = props => {
                     variant="body1"
                     color="primary"
                     className={classes.valueStyle}>
-                    0
+                    {denied}
                   </Typography>
                 </Grid>
             </Grid>
@@ -187,7 +234,7 @@ const Overview = props => {
                     variant="body1"
                     color="primary"
                     className={classes.actionTitle}>
-                    Pending
+                    Approved
                   </Typography>
                 </Grid>
                 <Grid
@@ -197,7 +244,7 @@ const Overview = props => {
                     variant="body1"
                     color="primary"
                     className={classes.valueStyle}>
-                    0
+                    {approved}
                   </Typography>
                 </Grid>
             </Grid>

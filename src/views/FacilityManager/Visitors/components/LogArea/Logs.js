@@ -29,8 +29,6 @@ import {
   Checkbox
 } from '@material-ui/core';
 import SearchIcon from '@material-ui/icons/Search';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import ExpandLessIcon from '@material-ui/icons/ExpandLess';
 import AXIOS from '../../../../../util/webservices';
 import moment from 'moment';
 import CircularProgress from '@material-ui/core/CircularProgress';
@@ -141,18 +139,6 @@ function stableSort(array, comparator) {
   return stabilizedThis.map((el) => el[0]);
 }
 
-function DeleteIcon(props) {
-  return (
-    <SvgIcon {...props} width="16" height="17" viewBox="0 0 16 17">
-      <path d="M14.75 3.5L1 3.50001" stroke="#FF2828" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-      <path d="M6.00037 7.25V12.25" stroke="#FF2828" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-      <path d="M9.75037 7.25V12.25" stroke="#FF2828" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-      <path d="M13.4993 3.5V15.375C13.4993 15.5408 13.4334 15.6997 13.3162 15.8169C13.199 15.9342 13.04 16 12.8743 16H2.87427C2.70851 16 2.54954 15.9342 2.43233 15.8169C2.31512 15.6997 2.24927 15.5408 2.24927 15.375V3.5" stroke="#FF2828" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-      <path d="M11 3.5V2.25C11 1.91848 10.8683 1.60054 10.6339 1.36612C10.3995 1.1317 10.0815 1 9.75 1H6C5.66848 1 5.35054 1.1317 5.11612 1.36612C4.8817 1.60054 4.75 1.91848 4.75 2.25V3.5" stroke="#FF2828" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-    </SvgIcon>
-  );
-}
-
 function FilterIcon(props) {
   return (
     <SvgIcon {...props} width="26" height="24" viewBox="0 0 26 24">
@@ -200,7 +186,7 @@ const headCells = [
 ];
 
 function EnhancedTableHead(props) {
-  const { order, orderBy, rowCount, onRequestSort } = props;
+  const { order, orderBy, onRequestSort } = props;
   const createSortHandler = (property) => (event) => {
     onRequestSort(event, property);
   };
@@ -247,7 +233,6 @@ EnhancedTableHead.propTypes = {
   onRequestSort: PropTypes.func.isRequired,
   order: PropTypes.oneOf(['asc', 'desc']).isRequired,
   orderBy: PropTypes.string.isRequired,
-  rowCount: PropTypes.number.isRequired,
 };
 
 const EnhancedTableToolbar = (props) => {
@@ -423,7 +408,7 @@ const EnhancedTableToolbar = (props) => {
 
   }));
 
-  const { onOpenMenu, onHandleMenuClose, anchorEl, checkid, onMenuClick, checkState, onHandleCheckChange, onHandleFilter, onHandleDialogOpen } = props;
+  const { onOpenMenu, onHandleMenuClose, anchorEl, checkid, onMenuClick, checkState, onHandleCheckChange, onHandleFilter } = props;
   const styles = toolbarStyles();
 
   function StyledCheckbox(props) {
@@ -576,7 +561,6 @@ const EnhancedTableToolbar = (props) => {
                       <Button
                         onClick={onHandleMenuClose}
                         className={styles.filterCancelButton}
-                        onClick={onHandleMenuClose}
                         >
                         Cancel
                       </Button>
@@ -605,7 +589,6 @@ EnhancedTableToolbar.propTypes = {
   checkid: PropTypes.string.isRequired,
   onMenuClick: PropTypes.func.isRequired,
   onHandleFilter: PropTypes.func.isRequired,
-  onHandleDialogOpen: PropTypes.func
 };
 
 const useStyles = makeStyles(theme => ({
@@ -656,18 +639,9 @@ const Logs = props => {
 
   const { handleDialogOpen, setMeetingDetails, meetingDetails } = props;
 
-  let userData = {};
-  if (typeof localStorage !== 'undefined') {
-      const user = localStorage.getItem('userDetails');
-      if(user !== null) {
-        const data = JSON.parse(user);
-        userData = data;
-      }
-  }
-
   const [visitsLog, setVisitsLog] = useState([]);
   const [order, setOrder] = useState('asc');
-  const [orderBy, setOrderBy] = useState('calories');
+  const [orderBy, setOrderBy] = useState('dueBy');
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [loading, setLoading] = useState(false);
@@ -692,7 +666,7 @@ const Logs = props => {
     AXIOS.get('visits?index=0&range=5')
       .then(response => {
         const res = response.data;
-       console.log("ALL VISITS:" + JSON.stringify(res));
+      // console.log("ALL VISITS:" + JSON.stringify(res));
         setLoading(false);
         setVisitsLog(res.response);
       })
@@ -738,7 +712,7 @@ const handleMenuClose = () => {
 };
 
 const handleFilter = () => {
-
+  console.log("FILTER DATA!");
 }
 
  const emptyRows =
@@ -755,8 +729,7 @@ const handleFilter = () => {
           onMenuClick={handleMenuClick}
           checkState={checkState}
           onHandleCheckChange={handleCheckChange}
-          onHandleFilter={handleFilter}
-          onHandleDialogOpen={handleDialogOpen}/>
+          onHandleFilter={handleFilter}/>
         <div>
           {loading && <CircularProgress size={25} className={classes.buttonProgress} /> }
           <TableContainer>
@@ -764,8 +737,7 @@ const handleFilter = () => {
               <EnhancedTableHead
                 order={order}
                 orderBy={orderBy}
-                onRequestSort={handleRequestSort}
-                rowCount={visitsLog.length}/>
+                onRequestSort={handleRequestSort}/>
               <TableBody>
                 {stableSort(visitsLog, getComparator(order, orderBy))
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)

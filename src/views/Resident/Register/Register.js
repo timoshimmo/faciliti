@@ -37,14 +37,6 @@ function BackButtonIcon(props) {
   );
 }
 
-function flagIcon(props) {
-  return (
-    <SvgIcon {...props} width="24" height="18" viewBox="0 0 24 18">
-      <path fill-rule="evenodd" clip-rule="evenodd" d="M15.9975 0H24V18H15.9975V0ZM0 0H7.99875V18H0V0Z" fill="#008753"/>
-    </SvgIcon>
-  );
-}
-
 
 const schema = {
   fullName: {
@@ -84,21 +76,18 @@ const schema = {
    }
   },
   confirmPassword: {
-  presence: { allowEmpty: false, message: 'is required' },
-  format: {
-     pattern: /^(?=.*\d)(?=.*[a-zA-Z])[a-zA-Z0-9]{6,}$/,
-     message: 'must have at least 6 characters long with one lower case, one uppercase and a number'
-   },
-  equality: "password"
-},
-estateFacility: {
-  presence: { allowEmpty: false, message: 'is required' }
-},
+    presence: { allowEmpty: false, message: 'is required' },
+    equality: "password"
+  },
+  estateFacility: {
+    presence: { allowEmpty: false, message: 'is required' }
+  },
 policy: {
     presence: { allowEmpty: false, message: 'is required' },
     checked: true
   }
 };
+
 
 const estateList = [
   {
@@ -349,6 +338,7 @@ const Register = () => {
    const [phoneNo, setPhoneNo] = useState('');
    const [estates, setEstates] = useState([]);
 
+
    const handleBack = () => {
      history.goBack();
    };
@@ -430,62 +420,60 @@ const Register = () => {
   }
 */
   const handleSignUp = event => {
+
     event.preventDefault();
 
-  if (!loading) {
-    setLoading(true);
+    if (!loading) {
+      setLoading(true);
 
-    if(formState.values.fullName === '' || phoneNo.phone === '' || formState.values.email === '' ||
-      formState.values.password === '' || value === null) {
+      if(formState.values.fullName === '' || phoneNo.phone === '' || formState.values.email === '' ||
+        formState.values.password === '' || value === null) {
 
-        setServerError("All fields are required");
-        setOpen(true);
-        setLoading(false);
+          setServerError("All fields are required");
+          setOpen(true);
+          setLoading(false);
 
-    }
-    else {
-      const nameArr = formState.values.fullName.split(" ");
-      let firstName = nameArr[0];
-      let lastName = nameArr[1];
-      let principalid = firstName + getReference();
+      }
+      else {
+        const cleanName = formState.values.fullName.trim();
+        const nameArr = cleanName.split(" ");
+        let firstName = nameArr[0];
+        let lastName = nameArr[nameArr.length - 1];
+        let principalid = firstName + getReference();
 
-      const obj = {
-        enabled: true,
-        segmentName: "SPACIOS41826",
-        emailAddress: formState.values.email,
-        firstName: firstName,
-        lastName: lastName,
-        telephone: phoneNo.phone,
-        role: 23,
-        emailAddressExist: true,
-        estateXri: value.uri,
-        principalId: principalid,
-        accountCategories: [24],
-        initialPassword: formState.values.password,
-        initialPasswordVerification: formState.values.password,
-        companyDTO : null,
-        key : {
-          uuid : null
-        },
-      };
+        console.log("HERE!");
 
-      //http://132.145.58.252:8081/spaciofm/api/
-      axios.post('http://132.145.58.252:8081/spaciofm/api/user-profiles/onboard-resident', obj)
-      .then(response => {
-        //const res = response.data;
-        console.log(response);
-        setLoading(false);
-        history.push('/signup/completed');
-      })
-      .catch(function (error) {
-        console.log(error);
-        setLoading(false);
-        setServerError(error);
-        const resError = error.response ? error.response.data.message : "Something went wrong please try again";
-        setOpen(true);
+        const obj = {
+          segmentName: "SPACIOS41826",
+          emailAddress: formState.values.email,
+          firstName: firstName,
+          lastName: lastName,
+          telephone: phoneNo.phone,
+          role: 23,
+          estateXri: value,
+          accountCategories: [24],
+          initialPassword: formState.values.password,
+          initialPasswordVerification: formState.values.password,
+        };
 
-      })
-    }
+        //http://132.145.58.252:8081/spaciofm/api/
+        axios.post('http://132.145.58.252:8081/spaciofm/api/user-profiles/onboard-resident', obj)
+        .then(response => {
+          //const res = response.data;
+          console.log(response);
+          setLoading(false);
+          //history.push('/signup/completed');
+        })
+        .catch(function (error) {
+          console.log(error.response.status);
+          console.log(error.response.data);
+          setLoading(false);
+          const resError = error.response ? error.response.data.message : "Something went wrong please try again";
+          setServerError(resError);
+          setOpen(true);
+
+        })
+      }
   }
 
 }
@@ -541,7 +529,6 @@ const getReference = () => {
              lg={7}
              className={classes.gridItem}
            >
-
            </Grid>
            <Grid
              item
@@ -720,7 +707,7 @@ const getReference = () => {
                                     {  hasError('email') ? formState.errors.email[0] : null }
                                   </FormHelperText>
                               </FormControl>
-                              <InputLabel shrink htmlFor="email">
+                              <InputLabel shrink htmlFor="password">
                                 Create Password*
                               </InputLabel>
                               <FormControl error={hasError('password')} className={classes.formComponent}>
@@ -786,7 +773,7 @@ const getReference = () => {
                               </FormHelperText>
                           </FormControl>
 
-                          <InputLabel shrink htmlFor="email">
+                          <InputLabel shrink htmlFor="estateFacility">
                             Primary Estate/Facility
                           </InputLabel>
                           <FormControl error={hasError('estateFacility')} className={classes.formComponent}>
@@ -842,7 +829,8 @@ const getReference = () => {
                           type="button"
                           variant="contained"
                           disabled={loading || !formState.values.fullName || !phoneNo.phone ||
-                            !formState.values.email || !formState.values.password || !formState.values.policy || value === null}
+                            !formState.values.email || !formState.values.password || !formState.values.policy || value === null ||
+                          formState.values.password !== formState.values.confirmPassword}
                           onClick={handleSignUp}
                         >
                           Register Account
@@ -854,7 +842,7 @@ const getReference = () => {
              </div>
            </Grid>
          </Grid>
-       </div>
+      </div>
    );
 
 };

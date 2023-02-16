@@ -508,7 +508,6 @@ const EnhancedTableToolbar = (props) => {
                       <Button
                         onClick={onHandleMenuClose}
                         className={styles.filterCancelButton}
-                        onClick={onHandleMenuClose}
                         >
                         Cancel
                       </Button>

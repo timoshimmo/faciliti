@@ -217,7 +217,7 @@ const Logs = props => {
 
   const handleGetAll = () => {
 
-    AXIOS.get('visits?index=0&range=5')
+    AXIOS.get('visits/get-by-resident?index=0&range=5')
       .then(response => {
         const res = response.data;
         setVisitsLog(res.response);

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect }  from 'react';
 import { makeStyles } from '@material-ui/styles';
 import {
   Grid,
@@ -11,6 +11,11 @@ import {
   SvgIcon
 } from '@material-ui/core';
 import { Link as RouterLink, withRouter } from 'react-router-dom';
+import CurrencyFormat from 'react-currency-format';
+import moment from 'moment';
+import { useModalAction } from '../../../../modal/modal-context.tsx';
+
+//import AXIOS from '../../../../util/webservices';
 
 function BuildingIcon(props) {
   return (
@@ -32,7 +37,7 @@ function DownloadIcon(props) {
   return (
     <SvgIcon {...props} width="23" height="22" viewBox="0 0 23 22">
       <path d="M16.9065 11.7071L15.4923 10.2929L12.9567 12.8284L12.9567 5.34315L10.9567 5.34315V12.8284L8.42121 10.2929L7.00699 11.7071L11.9567 16.6569L16.9065 11.7071Z" fill="#1B75BC"/>
-      <path fill-rule="evenodd" clip-rule="evenodd" d="M19.7349 18.7782C15.4391 23.0739 8.47433 23.0739 4.17857 18.7782C-0.117202 14.4824 -0.117202 7.51759 4.17857 3.22183C8.47433 -1.07394 15.4391 -1.07394 19.7349 3.22183C24.0307 7.51759 24.0307 14.4824 19.7349 18.7782ZM18.3207 17.364C21.8354 13.8492 21.8354 8.15076 18.3207 4.63604C14.806 1.12132 9.1075 1.12132 5.59278 4.63604C2.07806 8.15076 2.07806 13.8492 5.59278 17.364C9.1075 20.8787 14.806 20.8787 18.3207 17.364Z" fill="#1B75BC"/>
+      <path fillRule="evenodd" clipRule="evenodd" d="M19.7349 18.7782C15.4391 23.0739 8.47433 23.0739 4.17857 18.7782C-0.117202 14.4824 -0.117202 7.51759 4.17857 3.22183C8.47433 -1.07394 15.4391 -1.07394 19.7349 3.22183C24.0307 7.51759 24.0307 14.4824 19.7349 18.7782ZM18.3207 17.364C21.8354 13.8492 21.8354 8.15076 18.3207 4.63604C14.806 1.12132 9.1075 1.12132 5.59278 4.63604C2.07806 8.15076 2.07806 13.8492 5.59278 17.364C9.1075 20.8787 14.806 20.8787 18.3207 17.364Z" fill="#1B75BC"/>
     </SvgIcon>
   );
 }
@@ -40,7 +45,7 @@ function DownloadIcon(props) {
 function RightArrowIcon(props) {
   return (
     <SvgIcon {...props} width="20" height="18" viewBox="0 0 20 18">
-    <path fill-rule="evenodd" clip-rule="evenodd" d="M15.4217 10H0.835938V8.00001H15.4217L9.12883 1.70712L10.543 0.292908L19.2502 9.00001L10.543 17.7071L9.12883 16.2929L15.4217 10Z" fill="white"/>
+    <path fillRule="evenodd" clipRule="evenodd" d="M15.4217 10H0.835938V8.00001H15.4217L9.12883 1.70712L10.543 0.292908L19.2502 9.00001L10.543 17.7071L9.12883 16.2929L15.4217 10Z" fill="white"/>
     </SvgIcon>
   );
 }
@@ -167,10 +172,93 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
+/*
+{
+  contract.length > 0 ?
+  contract.chargeData.map((values) => {
+    const {amount, amountOutstanding, paymentStatus, endDate} = values;
+
+    console.log("OUTSTANDING: ", values);
+    return (
+      <>
+        <Typography
+          variant="h4"
+          gutterBottom
+          className={classes.nextPaymentPriceStyle}>
+            <CurrencyFormat value={amountOutstanding} displayType={'text'} thousandSeparator={true} prefix={'₦'} />
+        </Typography>
+        <Typography
+          variant="body2"
+          gutterBottom
+          className={classes.nextPaymentDateStyle}>
+          {moment(endDate).format('MMMM DD, YYYY')}
+        </Typography>
+      </>
+    );
+  })
+  :
+  (
+    <>
+      <Typography
+      variant="h4"
+      gutterBottom
+      className={classes.nextPaymentPriceStyle}>
+        <CurrencyFormat value={0} displayType={'text'} thousandSeparator={true} prefix={'₦'} />
+    </Typography>
+    <Typography
+      variant="body2"
+      gutterBottom
+      className={classes.nextPaymentDateStyle}>
+
+    </Typography>
+  </>
+)
+}
+
+{
+  contract.chargeData.map((values) => {
+    const {amount, amountOutstanding, paymentStatus, endDate} = values;
+
+    return (
+      <>
+
+      </>
+    );
+  })
+
+}
+*/
+
 
 const Billing = props => {
 
   const classes = useStyles();
+
+  const { contract } = props;
+
+
+  const [subscription, setSubscription] = useState(0);
+  const [nextCharge, setNextCharge] = useState(0);
+  const [nextDue, setNextDue] = useState('');
+
+  const { openModal } = useModalAction();
+  //console.log("BILLING: ", Object.keys(contract).length);
+
+  useEffect(() => {
+    if(Object.keys(contract).length > 0) {
+      //console.log("BILLING: ", contract.chargeData[0].amountOutstanding);
+      setSubscription(contract.charge);
+      setNextCharge(contract.chargeData[0].amountOutstanding);
+      setNextDue(contract.chargeData[0].endDate);
+    }
+
+    //setNextCharge()
+ }, [contract]);
+
+
+ const handleOpenMakePayment = () => {
+   return openModal('MAKE_PAYMENT');
+ }
 
   return (
 
@@ -195,7 +283,7 @@ const Billing = props => {
                     variant="h4"
                     gutterBottom
                     className={classes.subscriptionPriceStyle}>
-                    $40
+                      <CurrencyFormat value={subscription} displayType={'text'} thousandSeparator={true} prefix={'₦'} />
                   </Typography>
 
                   <Typography
@@ -269,20 +357,20 @@ const Billing = props => {
                   className={classes.nextPaymentTitleStyle}>
                   Next payment
                 </Typography>
-
                 <Typography
                   variant="h4"
                   gutterBottom
                   className={classes.nextPaymentPriceStyle}>
-                  $90
+                    <CurrencyFormat value={nextCharge} displayType={'text'} thousandSeparator={true} prefix={'₦'} />
                 </Typography>
-
                 <Typography
                   variant="body2"
                   gutterBottom
                   className={classes.nextPaymentDateStyle}>
-                  July 2, 2021
+                  {moment(nextDue).format('MMMM DD, YYYY')}
                 </Typography>
+
+
               </Grid>
               <Grid
               item
@@ -306,6 +394,7 @@ const Billing = props => {
                     type="button"
                     variant="contained"
                     startIcon={<RightArrowIcon style={{ fill:'none' }}/>}
+                    onClick={handleOpenMakePayment}
                   >
                     Make Payment
                   </Button>

@@ -430,10 +430,10 @@ const NewMeetingDialog = props => {
       setUpdateLoading(true);
 
       const obj = {
-        description: formState.values.meetingTitle,
+        name: formState.values.meetingTitle,
       };
 
-
+      console.log()
       AXIOS.put(`meetings/${meetingDetails.key.uuid}`, obj)
       .then(response => {
         const res = response.data;

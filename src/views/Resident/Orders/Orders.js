@@ -522,7 +522,6 @@ const EnhancedTableToolbar = (props) => {
                       <Button
                         onClick={onHandleMenuClose}
                         className={styles.filterCancelButton}
-                        onClick={onHandleMenuClose}
                         >
                         Cancel
                       </Button>
@@ -624,17 +623,19 @@ const Orders = props => {
       handleGetAll();
    }, []);
 
+   //${rowsPerPage}
+
     const handleGetAll = () => {
 
         if(!loading) {
           setLoading(true);
 
 
-          AXIOS.get(`resorders/?index=${page}&range=${rowsPerPage}`)
+          AXIOS.get(`resorders/get-by-resident?index=${page}&range=5`)
             .then(response => {
               setLoading(false);
               const res = response.data.response;
-        //      console.log("RES ORDER:" + JSON.stringify(res));
+              console.log("RES ORDER:" + JSON.stringify(res));
               setOrderLogs(res);
             })
             .catch(function (error) {

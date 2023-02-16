@@ -29,9 +29,10 @@ const useStyles = makeStyles(theme => ({
 }));
 
 
-const Modal = ({ open, onClose, children }: any) => {
+const Modal = ({ open, onClose, children }) => {
 
   const classes = useStyles();
+
 
   return (
     <Dialog

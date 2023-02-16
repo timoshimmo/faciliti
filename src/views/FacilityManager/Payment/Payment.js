@@ -1,10 +1,9 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/styles';
 import {
-  Grid,
-  Typography,
+  Grid
 } from '@material-ui/core';
-import { OverviewArea } from './components'
+import { OverviewArea, TransactionsArea } from './components'
 
 
 const useStyles = makeStyles(theme => ({
@@ -48,6 +47,11 @@ const Payment = props => {
             item
             lg={12}>
               <OverviewArea />
+          </Grid>
+          <Grid
+            item
+            lg={12}>
+              <TransactionsArea />
           </Grid>
         </Grid>
       </div>

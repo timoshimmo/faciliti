@@ -94,10 +94,6 @@ const schema = {
   },
   confirmPassword: {
   presence: { allowEmpty: false, message: 'is required' },
-  format: {
-   pattern: /^(?=.*\d)(?=.*[a-zA-Z])[a-zA-Z0-9]{6,}$/,
-   message: 'must have at least 6 characters, one lower case, one uppercase and a number'
- },
   equality: "password"
 },
 estateFacility: {
@@ -393,6 +389,31 @@ const Register = () => {
     setShowConfirmPassword(!showConfirmPassword);
   };
 
+  /*
+  const obj = {
+    segmentName: "SPACIOS41826",
+    emailAddress: formState.values.email,
+    firstName: formState.values.firstName,
+    lastName: formState.values.lastName,
+    telephone: phoneNo.phone,
+    role: 22,
+    emailAddressExist: true,
+    newEstate: companyData.newEstate,
+    newEstateName: eName,
+    estateXri: eXri,
+    principalId: "twang15",
+    accountCategories: [25],
+    initialPassword: formState.values.password,
+    initialPasswordVerification: formState.values.password,
+    companyDTO: {
+      companyName : companyData.companyName,
+      companyEmail : companyData.companyEmail,
+      officeAddress : companyData.officeAddress
+    }
+  };
+
+  */
+
 /*  const handleRedirect = () => {
     history.push('/signup/completed');
   }
@@ -420,7 +441,7 @@ const Register = () => {
           const data = localStorage.getItem('company_details');
           if(data !== null) {
             companyData = JSON.parse(data);
-            console.log("Data: " + companyData);
+            console.log("Data: " + JSON.stringify(companyData));
             let eXri = null;
             let eName = null;
             let rndPid = formState.values.firstName + getReference();
@@ -442,19 +463,19 @@ const Register = () => {
               firstName: formState.values.firstName,
               lastName: formState.values.lastName,
               telephone: phoneNo.phone,
+              isAdministrator: true,
               role: 22,
-              emailAddressExist: true,
               newEstate: companyData.newEstate,
               newEstateName: eName,
               estateXri: eXri,
-              principalId: "twang15",
               accountCategories: [25],
               initialPassword: formState.values.password,
               initialPasswordVerification: formState.values.password,
               companyDTO: {
                 companyName : companyData.companyName,
                 companyEmail : companyData.companyEmail,
-                officeAddress : companyData.officeAddress
+                officeAddress : companyData.officeAddress,
+                companyTelephone: phoneNo.phone
               }
             };
 
@@ -473,10 +494,11 @@ const Register = () => {
               history.push('/signup/completed');
             })
             .catch(function (error) {
-              console.log(error);
-              setLoading(false);
-              setServerError(error);
+              console.log(error.response.status);
+              console.log(error.response.data);
               const resError = error.response ? error.response.data.message : "Something went wrong please try again";
+              setLoading(false);
+              setServerError(resError);
               setOpen(true);
 
             })

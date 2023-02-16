@@ -15,6 +15,8 @@ import {
    FMPersonal as FMPersonalPage,
    CompleteSignup as CompleteSignupPage,
    SignIn as SignInPage,
+   ForgotPassword as ForgotPasswordPage,
+   ResetPassword as ResetPasswordPage,
    Overview as OverviewPage,
    FMOverview as FMOverviewPage,
    SelectUser as SelectUserPage,
@@ -22,6 +24,7 @@ import {
    PartialRegister as PartialRegisterPage,
    Payment as PaymentPage,
    FMPayment as FMPaymentPage,
+   FMServices as FMServicesPage,
    Orders as OrdersPage,
    Visitors as VisitorsPage,
    FMVisitors as FMVisitorsPage,
@@ -82,6 +85,20 @@ import {
             path="/signin"
           />
 
+          <RouteWithLayout
+            component={ResetPasswordPage}
+            exact
+            layout={MinimalLayout}
+            path="/reset:id"
+          />
+
+        <RouteWithLayout
+            component={ForgotPasswordPage}
+            exact
+            layout={MinimalLayout}
+            path="/forgot"
+          />
+
         <RouteWithLayout
             component={OverviewPage}
             exact
@@ -109,6 +126,13 @@ import {
               layout={ManagersLayout}
               path="/fm-payments"
             />
+
+            <RouteWithLayout
+                component={FMServicesPage}
+                exact
+                layout={ManagersLayout}
+                path="/fm-services"
+              />
 
             <RouteWithLayout
                 component={FMVisitorsPage}

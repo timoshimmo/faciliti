@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import {
   Typography,
@@ -7,22 +6,16 @@ import {
   Button,
   TextField,
   IconButton,
-  Slide,
-  Divider,
   FormControl,
   FormHelperText,
   InputAdornment,
   InputLabel,
-  OutlinedInput,
   Collapse,
-  SvgIcon,
   Select,
   MenuItem
 } from '@material-ui/core';
-import AvatarGroup from '@material-ui/lab/AvatarGroup';
 import AddIcon from '@material-ui/icons/Add';
 import validate from 'validate.js';
-import PhoneInput from 'react-phone-input-2';
 import CloseIcon from '@material-ui/icons/Close';
 import MuiAlert from '@material-ui/lab/Alert';
 import Autocomplete from '@material-ui/lab/Autocomplete';
@@ -30,12 +23,15 @@ import axios from 'axios';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import AXIOS from '../../../../../util/webservices';
 import moment from 'moment';
+import { useModalAction, useModalState } from '../../../../modal/modal-context.tsx';
+import { useDispatch } from "react-redux";
+import { toggleSnackbarOpen } from "../../../../../actions";
 
 //import { ChipComponent, TaggedPeopleComponent, CategoryDialog, TaggedPeopleDialog } from './components';
 
-const Transition = React.forwardRef(function Transition(props, ref) {
+/*const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
-});
+});*/
 
 
 const schema = {
@@ -46,6 +42,9 @@ const schema = {
     presence: { allowEmpty: false, message: 'is required' }
   },
   category: {
+    presence: { allowEmpty: false, message: 'is required' }
+  },
+  contacts: {
     presence: { allowEmpty: false, message: 'is required' }
   },
   tenure: {
@@ -66,23 +65,23 @@ const useStyles = makeStyles(theme => ({
 
   dialogtitleStyle: {
     margin: 0,
-    paddingLeft: theme.spacing(2),
-    paddingRight: theme.spacing(2),
-    paddingTop: theme.spacing(3),
-    paddingBottom: theme.spacing(3),
+    paddingLeft: 16,
+    paddingRight: 16,
+    paddingTop: 25,
+    paddingBottom: 25,
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: '#F3F8FF'
   },
   dialogContentStyle: {
-    paddingBottom: theme.spacing(1),
+    paddingBottom: 15,
   },
   formBody: {
     display: 'flex',
     flexDirection: 'column',
     position: 'relative',
-    padding: theme.spacing(4),
+    padding: 30,
   },
   TitleAreaBody: {
     marginTop: 30,
@@ -104,7 +103,7 @@ const useStyles = makeStyles(theme => ({
   },
   formComponent: {
   width: '100%',
-  marginBottom: theme.spacing(1),
+  marginBottom: 8,
   fontSize: 10
 },
 helper: {
@@ -160,6 +159,8 @@ addbtnStyle: {
   paddingTop: 12,
   paddingBottom: 12,
   marginTop: 5,
+  width: 40,
+  height: 45,
   fontFamily: [
     'Open Sans',
     '-apple-system',
@@ -173,6 +174,11 @@ addbtnStyle: {
     '"Segoe UI Emoji"',
     '"Segoe UI Symbol"',
   ].join(','),
+},
+
+addbtnArea: {
+  display: 'flex',
+  justifyContent: 'flex-end'
 },
 
 helperRoot: {
@@ -190,47 +196,54 @@ gridItem: {
 
 }));
 
+const serviceTypeList = [
+  { key: 1, label: 'Maintenance Service Charge' },
+  { key: 2, label: 'Estate Management Dues' },
+  { key: 3, label: 'Generator Plant Management' },
+  { key: 4, label: 'Security Levy' },
+  { key: 5, label: 'Gate Pass Sticker' },
+  { key: 6, label: 'Electricity' },
+  { key: 7, label: 'Internet' }
+  ];
+
+
 
 const ServiceContract = props => {
 
   const classes = useStyles();
 
-  const { onOpen, onClose } = props;
-
-  let userData = {};
-  if (typeof localStorage !== 'undefined') {
-      const user = localStorage.getItem('userDetails');
-      if(user !== null) {
-        const data = JSON.parse(user);
-        userData = data;
-      }
-  }
+  const { closeModal } = useModalAction();
+  const { data } = useModalState();
 
   const [loading, setLoading] = useState(false);
-  const [openDialog, setOpenDialog] = useState(false);
+  const [updateLoading, setUpdateLoading] = useState(false);
+  //const [openDialog, setOpenDialog] = useState(false);
 //  const [openPeopleDialog, setOpenPeopleDialog] = useState(false);
-  const [subMenus, setSubMenus] = useState([]);
-  const [phoneNo, setPhoneNo] = useState('');
   const [value, setValue] = useState(null);
   const [serviceTypeValue, setServiceTypeValue] = useState(null);
-  const [categoryValue, setCategoryValue] = useState('');
+//  const [categoryValue, setCategoryValue] = useState('');
+  const [contactValue, setContactValue] = useState('');
   const [openError, setOpenError] = useState(false);
   const [serverError, setServerError] = useState(null);
   const [estates, setEstates] = useState([]);
+  const [contacts, setContacts] = useState([]);
+//  const [openSnack, setOpenSnack] = useState(false);
   const [formState, setFormState] = useState({
      isValid: false,
      values: {},
      touched: {},
      errors: {}
    });
-   const [serviceTypeList, setServiceTypeList] = useState([
+
+   const dispatch = useDispatch();
+/*   const [serviceTypeList, setServiceTypeList] = useState([
      { key: 1, label: 'Estate Management Dues' },
      { key: 2, label: 'Generator Plant Management' },
      { key: 3, label: 'Security Levy' },
      { key: 4, label: 'Gate Pass Sticker' },
      { key: 5, label: 'Electricity' },
      { key: 5, label: 'Internet' }
-     ]);
+     ]); */
 
 useEffect(() => {
    const errors = validate(formState.values, schema);
@@ -242,9 +255,63 @@ useEffect(() => {
   // handleEstates();
 }, [formState.values]);
 
+/*
+serviceType: {
+  presence: { allowEmpty: false, message: 'is required' }
+},
+estateFacility: {
+  presence: { allowEmpty: false, message: 'is required' }
+},
+category: {
+  presence: { allowEmpty: false, message: 'is required' }
+},
+contacts: {
+  presence: { allowEmpty: false, message: 'is required' }
+},
+tenure: {
+  presence: { allowEmpty: false, message: 'is required' }
+},
+startDate: {
+  presence: { allowEmpty: false, message: 'is required' },
+  length: {
+    minimum: 3
+  }
+},
+charge: {
+  presence: { allowEmpty: false, message: 'is required' }
+},
+*/
+useEffect(() => {
+  if(data.editStatus) {
+    console.log("SELECTED CONTRACT: " + JSON.stringify(data.contractDetails));
+    //console.log("MEETING DETAILS LENGTH: " + JSON.stringify(meetingDetails));
+    setFormState(formState => ({
+      ...formState,
+      values: {
+        charge: data.contractDetails.charge,
+        startDate: moment(data.contractDetails.createdAt).format('yyyy-MM-DDThh:mm'),
+        tenure: data.contractDetails.frequency
+      }
+    }));
+    const sType = serviceTypeList.filter(type => {
+      return type.label === data.contractDetails.serviceType
+    });
+  /*  const sType = serviceTypeList.filter(type => {
+      return type.label === data.contractDetails.serviceType
+    });
+    const sType = serviceTypeList.filter(type => {
+      return type.label === data.contractDetails.serviceType
+    });*/
+    console.log("STYPE:", sType[0]);
+    setServiceTypeValue(sType[0]);
+  }
+
+}, [data.contractDetails]);
+
 
 useEffect(() => {
   handleEstates();
+  handleGetContacts();
 }, []);
 
 const handleChange = event => {
@@ -275,6 +342,38 @@ async function handleEstates() {
    })
 }
 
+const handleGetContacts = () => {
+//  event.persist();
+//  setSearchQuery(event.target.value);
+
+//  let token = localStorage.getItem('spfmtoken');
+//  let tenantSegment = localStorage.getItem('tenantSegment');
+//  let userId = localStorage.getItem('userId');
+/*  const config = {
+      headers:{
+        'Authorization': `Bearer ${token}`,
+        'provider': 'CRX',
+        'tenant-id' : tenantSegment,
+        'user-id' : userId
+      }
+  }; */
+
+  AXIOS.get('contacts?index=0&range=10')
+  .then(response => {
+    const res = response.data;
+//    if(res.errorCode !== null) {
+    //  console.log("CONTACTS: " + JSON.stringify(res.response));
+      setContacts(res.response);
+  //  }
+
+  })
+  .catch(function (error) {
+    console.log(error.response);
+    console.log(error.message);
+  })
+
+};
+
 const handleService = event => {
 
   event.preventDefault();
@@ -282,13 +381,15 @@ const handleService = event => {
 //  const tenantId = localStorage.getItem('tenantId');
   //const currentEstate = localStorage.getItem('currentEstateXri');
 
-  const userId = localStorage.getItem('userId');
+  //const userId = localStorage.getItem('userId');
+
+
 
   if (!loading) {
     setLoading(true);
 
     if(formState.values.charge === '' || formState.values.startDate === '' || formState.values.category === ''
-    || formState.values.tenure === '' || serviceTypeValue === null || categoryValue === null || value === null) {
+    || formState.values.tenure === '' || serviceTypeValue === null || value === null) {
 
         setServerError("All fields are required");
         setOpenError(true);
@@ -296,41 +397,132 @@ const handleService = event => {
 
     }
     else {
+
+      const serviceContractCreator = localStorage.getItem('serviceContractCreator');
+
       const obj = {
-          activeDate: moment(formState.values.startDate).format('yyyy-MM-DDThh:mm:ss A'),
+          activeDate: moment(formState.values.startDate).format('yyyy-MM-DDThh:mm:ss.SSS+00:00'),
           name: serviceTypeValue.label,
           description: serviceTypeValue.label,
-          groupXri: value.uri,
-          accountXri: userId,
+          serviceType: serviceTypeValue.label,
+          contractCreatorXri: serviceContractCreator,
+          accountXri: contactValue.uri,
+          frequency: 30,
           priority: 0,
           durationUnit: formState.values.tenure
       };
-  //    data: "{\"activeDate\":\"2022-09-05T02:43:00 PM\",\"name\":\"Estate Management Dues\",\"description\":\"Estate Management Dues\",\"groupXri\":{\"uri\":\"xri://@openmdx*org.opencrx.kernel.account1/provider/CRX/segment/SPACIOS41826/account/L482PW5MO27E48MCTM1LGLCLS\",\"name\":\"INJREAL Medium Housing Estate\"},\"accountXri\":\"\\\"twang15\\\"\",\"priority\":0,\"durationUnit\":30}"
 
-      AXIOS.post('/contracts', obj)
+      console.log("CONTRACT: ", obj);
+  //data: "{\"activeDate\":\"2022-09-05T02:43:00 PM\",\"name\":\"Estate Management Dues\",\"description\":\"Estate Management Dues\",\"groupXri\":{\"uri\":\"xri://@openmdx*org.opencrx.kernel.account1/provider/CRX/segment/SPACIOS41826/account/L482PW5MO27E48MCTM1LGLCLS\",\"name\":\"INJREAL Medium Housing Estate\"},\"accountXri\":\"\\\"twang15\\\"\",\"priority\":0,\"durationUnit\":30}"
+      AXIOS.post('contracts/', obj)
       .then(response => {
-        setLoading(false);
         const res = response.data;
-        console.log(res);
+      //  console.log(JSON.stringify(res.response));
+        const xri = res.response;
+        const uuid = xri.substring(xri.lastIndexOf('/') + 1);
+        const endDate = moment(formState.values.startDate, "yyyy-MM-DDThh:mm:ss.SSS+00:00").add(formState.values.tenure, 'days').format('yyyy-MM-DDThh:mm:ss.SSS+00:00');
+      //  console.log("UUID: ", uuid);
+      //  console.log("END: ", endDate);
+        const amt = parseInt(formState.values.charge);
+      //  console.log("AMT: ", amt);
+
+        const obj2 = {
+            startDate: moment(formState.values.startDate).format('yyyy-MM-DDThh:mm:ss.SSS+00:00'),
+            endDate: endDate,
+            paymentStatus: "0",
+            durationFrequency: "0",
+            amount: amt,
+            durationUnit: formState.values.tenure
+        };
+
+        AXIOS.post(`contracts/${uuid}/charges`, obj2)
+        .then(response => {
+            const result = response.data;
+            console.log(JSON.stringify(result));
+            setLoading(false);
+            handleOpenSnackBar();
+            closeModal();
+
+        })
+        .catch(function (err) {
+          setLoading(false);
+          console.log(err.response);
+          console.log(err.message);
+          setServerError("There was a problem creating service charge. Pls try again");
+          setOpenError(true);
+        })
+
+      //  handleOpenSnackBar();
+      //  closeModal();
+      //console.log("CONTRACT CREATED:" + res);
       })
       .catch(function (error) {
         setLoading(false);
         console.log(error.response);
         console.log(error.message);
+        setServerError("There was a problem creating service order. Pls try again");
+        setOpenError(true);
       })
 
     }
  }
 }
 
+const handleUpdate = event => {
 
-  const handleDialogOpen = () => {
+  event.preventDefault();
+
+  if (!updateLoading) {
+      setLoading(true);
+
+      const serviceContractCreator = localStorage.getItem('serviceContractCreator');
+
+      const obj = {
+          activeDate: moment(formState.values.startDate).format('yyyy-MM-DDThh:mm:ss.SSS+00:00'),
+          name: serviceTypeValue.label,
+          description: serviceTypeValue.label,
+          serviceType: serviceTypeValue.label,
+          contractCreatorXri: serviceContractCreator,
+          accountXri: contactValue.uri,
+          frequency: 30,
+          priority: 0,
+          durationUnit: formState.values.tenure
+      };
+
+      AXIOS.put('contracts/', obj)
+      .then(response => {
+        const res = response.data;
+        setUpdateLoading(false);
+        handleOpenSnackBar();
+        closeModal();
+      })
+      .catch(function (err) {
+        setUpdateLoading(false);
+        console.log(err.response);
+        console.log(err.message);
+        setServerError("There was a problem creating service charge. Pls try again");
+        setOpenError(true);
+      });
+
+  }
+
+}
+
+
+/*  const handleDialogOpen = () => {
     setOpenDialog(true);
   };
 
   const handleDialogClose = () => {
     setOpenDialog(false);
   };
+
+  */
+
+
+ const handleOpenSnackBar = () => {
+   dispatch(toggleSnackbarOpen("Service Contract successfully created!"));
+  }
 
   const hasError = field =>
     formState.touched[field] && formState.errors[field] ? true : false;
@@ -492,7 +684,8 @@ const handleService = event => {
                         </Grid>
                         <Grid
                         item
-                        lg={2}>
+                        lg={2}
+                        className={classes.addbtnArea}>
                           <Button
                             className={classes.addbtnStyle}
                             color="primary"
@@ -504,6 +697,37 @@ const handleService = event => {
                             </Button>
                         </Grid>
                      </Grid>
+                     <InputLabel shrink htmlFor="contacts">
+                        Resident
+                      </InputLabel>
+                     <FormControl error={hasError('contacts')} className={classes.formComponent}>
+                       <Autocomplete
+                           id="resident-input"
+                           name="contacts"
+                           className={classes.textField}
+                           value={contactValue}
+                           onChange={(event, newValue) => {
+                             setContactValue(newValue);
+                           }}
+                           options={contacts}
+                           getOptionLabel={(option) => {
+                             // Regular option
+                             return option.fullName;
+                           }}
+                           aria-describedby="contacts-error"
+                           renderInput={(params) => <TextField {...params} placeholder="-Please select-"
+                               InputProps={{
+                                 ...params.InputProps,
+                                 disableUnderline: true,
+                                 type: 'search',
+                                 style: {fontSize: 12, paddingLeft: 20}
+                               }}
+                           />}
+                         />
+                       <FormHelperText id="contacts-error" classes={{ root: classes.helperRoot, error: classes.helper }}>
+                         {  hasError('contacts') ? formState.errors.contacts[0] : null }
+                       </FormHelperText>
+                   </FormControl>
 
                     <InputLabel shrink htmlFor="tenure">
                         Choose Tenure
@@ -517,7 +741,6 @@ const handleService = event => {
                            <Select
                                value={formState.values.tenure}
                                onChange={handleChange}
-                               displayEmpty
                                fullWidth
                                inputProps={{
                                    name:"tenure",
@@ -590,20 +813,37 @@ const handleService = event => {
                     </FormControl>
              </form>
              <div>
-               <Button
-                 className={classes.buttonStyle}
-                 color="primary"
-                 fullWidth
-                 startIcon={<AddIcon fontSize="small" style={{ marginRight: '10%' }} />}
-                 size="small"
-                 type="button"
-                 onClick={handleService}
-                 variant="contained"
-                 disabled={loading || !formState.values.charge || !formState.values.startDate || !formState.values.category
-                   || !formState.values.tenure || categoryValue === null || value === null || serviceTypeValue === null}>
-                 Add New Service
-                 {loading && <CircularProgress size={18} className={classes.buttonProgress} />}
-               </Button>
+               {data.editStatus ?
+                 (<Button
+                   className={classes.buttonStyle}
+                   color="primary"
+                   fullWidth
+                   size="small"
+                   type="button"
+                   onClick={handleUpdate}
+                   variant="contained"
+                   disabled={loading || !formState.values.charge || !formState.values.startDate || !formState.values.category
+                     || !formState.values.tenure || value === null || serviceTypeValue === null}>
+                  Update
+                   {updateLoading && <CircularProgress size={18} className={classes.buttonProgress} />}
+                 </Button>)
+                   :
+                   (<Button
+                     className={classes.buttonStyle}
+                     color="primary"
+                     fullWidth
+                     startIcon={<AddIcon fontSize="small" style={{ marginRight: '10%' }} />}
+                     size="small"
+                     type="button"
+                     onClick={handleService}
+                     variant="contained"
+                     disabled={loading || !formState.values.charge || !formState.values.startDate || !formState.values.category
+                       || !formState.values.tenure || value === null || serviceTypeValue === null}>
+                     Add New Service
+                     {loading && <CircularProgress size={18} className={classes.buttonProgress} />}
+                   </Button>)
+               }
+
              </div>
          </div>
     </div>

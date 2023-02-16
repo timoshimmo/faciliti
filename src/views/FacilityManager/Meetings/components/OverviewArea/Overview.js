@@ -1,14 +1,15 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/styles';
 import {
   Grid,
   Typography,
   Card,
-  CardActionArea,
   CardContent,
   SvgIcon
 } from '@material-ui/core';
-import AddIcon from '@material-ui/icons/Add';
+//import AddIcon from '@material-ui/icons/Add';
+//import AXIOS from '../../../../../util/webservices';
+import axios from 'axios';
 
 
 function RedArrowIcon(props) {
@@ -139,6 +140,62 @@ const Overview = props => {
 
   const classes = useStyles();
 
+  const [pending, setPending] = useState(0);
+  const [completed, setCompleted] = useState(0);
+  const [allMeetings, setAllMeetings] = useState(0);
+
+  useEffect(() => {
+    handleGetMetrics();
+ }, []);
+
+ const handleGetMetrics = () => {
+
+   let token = localStorage.getItem('spfmtoken');
+   let tenantSegment = localStorage.getItem('tenantSegment');
+   let userId = localStorage.getItem('userId');
+
+   const requestOne = axios.get(`http://132.145.58.252:8081/spaciofm/api/meetings/pending-meetings`, { headers: {
+     'Authorization': `Bearer ${token}`,
+     'provider': 'CRX',
+     'tenant-id' : tenantSegment,
+     'user-id' : userId
+   } });
+
+    const requestTwo = axios.get(`http://132.145.58.252:8081/spaciofm/api/meetings/completed-meetings`, { headers: {
+      'Authorization': `Bearer ${token}`,
+      'provider': 'CRX',
+      'tenant-id' : tenantSegment,
+      'user-id' : userId
+    } });
+
+  /*  const requestThree = axios.get(`http://132.145.58.252:8081/spaciofm/api/meetings`, { headers: {
+      'Authorization': `Bearer ${token}`,
+      'provider': 'CRX',
+      'tenant-id' : tenantSegment,
+      'user-id' : userId
+    } });*/
+
+   axios.all([requestOne, requestTwo])
+     .then(axios.spread((...responses) => {
+       const responseOne = responses[0];
+       const responseTwo = responses[1];
+       //const responseThree = responses[2];
+
+       //console.log("RESPONSE 3:", JSON.stringify(responseOne.data.response.length));
+       const pendingVal = responseOne.data.response.length;
+       const completedVal = responseTwo.data.response.length;
+       //const allVal = responseThree.data.response.length;
+       setPending(pendingVal);
+       setCompleted(completedVal);
+      // setAllMeetings(allVal);
+     }))
+     .catch(function (error) {
+       console.log(error.response);
+       console.log(error.message);
+     });
+
+ }
+
   return (
     <Grid container direction="row" spacing={1}>
       <Grid
@@ -205,7 +262,7 @@ const Overview = props => {
                   variant="body1"
                   color="primary"
                   className={classes.valueStyle}>
-                  0
+                  {pending}
                 </Typography>
               </Grid>
             </Grid>
@@ -240,7 +297,7 @@ const Overview = props => {
                   variant="body1"
                   color="primary"
                   className={classes.valueStyle}>
-                  0
+                  {completed}
                 </Typography>
               </Grid>
             </Grid>

@@ -119,11 +119,6 @@ const headCells = [
     label: 'MEETING TITLE',
   },
   {
-    id: 'id',
-    numeric: false,
-    label: 'MEETING ID',
-  },
-  {
     id: 'due',
     numeric: false,
     label: 'DUE DATE',
@@ -144,6 +139,14 @@ const headCells = [
     label: '',
   },
 ];
+
+/*
+{
+  id: 'id',
+  numeric: false,
+  label: 'MEETING ID',
+},
+*/
 
 function EnhancedTableHead(props) {
   const { order, orderBy, rowCount, onRequestSort } = props;
@@ -519,7 +522,6 @@ const EnhancedTableToolbar = (props) => {
                       <Button
                         onClick={onHandleMenuClose}
                         className={styles.filterCancelButton}
-                        onClick={onHandleMenuClose}
                         >
                         Cancel
                       </Button>
@@ -668,11 +670,11 @@ const Logs = props => {
           range : 10
         };*/
 
-        AXIOS.get(`meetings/?index=${page}&range=${rowsPerPage}`)
+        AXIOS.get(`meetings?index=0&range=5`)
           .then(response => {
             setLoading(false);
             const res = response.data.response;
-            console.log("ALL MEETINGS:" + JSON.stringify(res));
+            //console.log("ALL MEETINGS:" + JSON.stringify(res));
             setMeetings(res);
           })
           .catch(function (error) {
@@ -727,6 +729,12 @@ const handleFilter = () => {
 
 }
 
+/*
+<StyledTableCell>
+     {row.key.uuid}
+</StyledTableCell>
+*/
+
  const emptyRows =
   page > 0 ? Math.max(0, (1 + page) * rowsPerPage - meetings.length) : 0;
 
@@ -772,9 +780,6 @@ const handleFilter = () => {
                            >
                              {row.name}
                            </Box>
-                        </StyledTableCell>
-                        <StyledTableCell>
-                             {row.key.uuid}
                         </StyledTableCell>
                         <StyledTableCell>
                           {moment(row.dueBy).format('DD/MM/YYYY hh:mm:ss A')}

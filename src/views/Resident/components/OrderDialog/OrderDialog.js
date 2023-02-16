@@ -546,7 +546,7 @@ const OrderDialog = props => {
                     startIcon={<AddIcon style={{ fontSize: 16, color: '#FFFFFF' }}/>}
                     onClick={handleSave}
                     disabled={loading || !formState.values.orderTitle || !formState.values.description || !formState.values.dueDate
-                       || contactList.length < 1 || categoryList.length < 1}
+                     || categoryList.length < 1}
                     >
                     Save & Create
                     {loading && <CircularProgress size={18} className={classes.buttonProgress} />}

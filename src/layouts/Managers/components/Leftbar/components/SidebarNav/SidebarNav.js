@@ -284,7 +284,9 @@ const SidebarNav = props => {
   };
 
   const handleOpenServiceContract = () => {
-    return openModal('SERVICE_CONTRACT');
+    const editStatus = false;
+    const contractDetails = null;
+    return openModal('SERVICE_CONTRACT', { editStatus, contractDetails });
   }
 
  const open = Boolean(anchorEl);

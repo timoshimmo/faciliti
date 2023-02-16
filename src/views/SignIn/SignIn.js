@@ -27,6 +27,7 @@ import axios from 'axios';
 const schema = {
   email: {
     presence: { allowEmpty: false, message: 'is required' },
+    email: true,
     length: {
       maximum: 150
     }
@@ -202,7 +203,12 @@ forgotLink: {
 copyrightArea: {
   margin: 0,
   position: 'absolute',
-  bottom: 20,
+  bottom: 30,
+  display: 'flex',
+  justifyContent: 'center',
+  width: '100%',
+  left: 0,
+  right: 0
 },
 copyright: {
   fontSize: 11,
@@ -305,7 +311,7 @@ const SignIn = props => {
       axios.post('http://132.145.58.252:8081/spaciofm/api/authenticate', obj)
       .then(response => {
         //const res = response.data;
-        console.log(response.data);
+        //console.log("SIGN IN: " + JSON.stringify(response.data));
         setLoading(false);
 
         if(!response.data.userDetails.crxDetails.activated) {
@@ -314,9 +320,11 @@ const SignIn = props => {
         }
         else {
             localStorage.setItem('spfmtoken', response.data.token);
-            localStorage.setItem('provider', JSON.stringify(response.data.userDetails.crxDetails.providerName));
-            localStorage.setItem('tenantId', JSON.stringify(response.data.userDetails.crxDetails.segmentName));
-            localStorage.setItem('userId', JSON.stringify(response.data.userDetails.crxDetails.userId));
+          //  const tenantSegment =
+          //  localStorage.setItem('provider', JSON.stringify(response.data.userDetails.crxDetails.providerName));
+            localStorage.setItem('tenantId', response.data.userDetails.crxDetails.segmentName);
+            localStorage.setItem('tenantSegment', response.data.userDetails.crxDetails.tenantSegment);
+            localStorage.setItem('userId', response.data.userDetails.crxDetails.userId);
             localStorage.setItem('userDetails', JSON.stringify(response.data.userDetails));
             localStorage.setItem('currentEstateXri', JSON.stringify(response.data.userDetails.crxDetails.currentEstateXri));
 
@@ -330,8 +338,6 @@ const SignIn = props => {
             }
 
         }
-
-
 
       })
       .catch(function (error) {
@@ -546,7 +552,7 @@ const SignIn = props => {
                             size="large"
                             type="button"
                             variant="contained"
-                            disabled={loading || !formState.values.email || !formState.values.password}
+                            disabled={loading || !formState.values.email || !formState.values.password || hasError('password')}
                             onClick={handleLogin}
                           >
                             Sign In
@@ -561,7 +567,7 @@ const SignIn = props => {
                           >
                             <Link
                               component={RouterLink}
-                              to="/signin"
+                              to="/forgot"
                               variant="body2"
                               underline="none"
                               className={classes.secondaryLink}

@@ -3,24 +3,18 @@ import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import {
   Typography,
-  Grid,
   Button,
   TextField,
   Dialog,
   DialogActions,
   DialogContent,
-  DialogTitle,
   IconButton,
   Slide,
-  Divider,
   FormControl,
   FormHelperText,
-  InputAdornment,
   InputLabel,
   Collapse,
-  SvgIcon,
 } from '@material-ui/core';
-import AvatarGroup from '@material-ui/lab/AvatarGroup';
 import AddIcon from '@material-ui/icons/Add';
 import validate from 'validate.js';
 import PhoneInput from 'react-phone-input-2';
@@ -29,8 +23,7 @@ import MuiAlert from '@material-ui/lab/Alert';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import axios from 'axios';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import AXIOS from '../../../../util/webservices';
-
+//import AXIOS from '../../../../util/webservices';
 
 //import { ChipComponent, TaggedPeopleComponent, CategoryDialog, TaggedPeopleDialog } from './components';
 
@@ -80,9 +73,9 @@ const schema = {
     },
   },
 
-estateFacility: {
-  presence: { allowEmpty: false, message: 'is required' }
-},
+  estateFacility: {
+    presence: { allowEmpty: false, message: 'is required' }
+  },
 };
 
 const useStyles = makeStyles(theme => ({
@@ -98,14 +91,13 @@ const useStyles = makeStyles(theme => ({
     alignItems: 'center',
     backgroundColor: '#F3F8FF'
   },
-  dialogContentStyle: {
-    paddingBottom: theme.spacing(1),
-  },
   formBody: {
     display: 'flex',
     flexDirection: 'column',
     position: 'relative',
-    padding: 20
+    paddingTop: 20,
+    paddingLeft: 20,
+    paddingRight: 20
   },
   TitleAreaBody: {
     marginTop: 30,
@@ -123,7 +115,6 @@ const useStyles = makeStyles(theme => ({
   registerForm: {
     width: '100%',
     marginTop: 17,
-    marginBottom: 20
   },
   formComponent: {
   width: '100%',
@@ -182,19 +173,19 @@ const NewResidentDialog = props => {
 
   const { onOpen, onClose } = props;
 
-  let userData = {};
+  /*let userData = {};
   if (typeof localStorage !== 'undefined') {
       const user = localStorage.getItem('userDetails');
       if(user !== null) {
         const data = JSON.parse(user);
         userData = data;
       }
-  }
+  }*/
 
   const [loading, setLoading] = useState(false);
-  const [openDialog, setOpenDialog] = useState(false);
+//  const [openDialog, setOpenDialog] = useState(false);
 //  const [openPeopleDialog, setOpenPeopleDialog] = useState(false);
-  const [subMenus, setSubMenus] = useState([]);
+//  const [subMenus, setSubMenus] = useState([]);
   const [phoneNo, setPhoneNo] = useState('');
   const [value, setValue] = useState(null);
   const [openError, setOpenError] = useState(false);
@@ -241,19 +232,17 @@ async function handleEstates() {
    axios.get('http://132.145.58.252:8081/spaciofm/api/estates/?index=0&range=5')
    .then(response => {
      const res = response.data;
-     console.log(res);
+     //console.log(res);
      setEstates(res);
    })
    .catch(function (error) {
-     console.log(error);
+     console.log(error.response);
    })
 }
 
 const handleRegister = event => {
 
   event.preventDefault();
-
-  const tenantId = localStorage.getItem('tenantId');
 
   if (!loading) {
     setLoading(true);
@@ -267,24 +256,32 @@ const handleRegister = event => {
 
     }
     else {
+    //  const tenantId = localStorage.getItem('tenantSegment');
+      let principalid = formState.values.firstName + getReference();
+
       const obj = {
-        segmentName: tenantId,
+        segmentName: 'SPACIOS41826',
         emailAddress: formState.values.emailAddress,
         initialPassword : "123456",
         initialPasswordVerification : "123456",
         firstName: formState.values.firstName,
         lastName: formState.values.lastName,
         telephone: phoneNo.phone,
-        role: 21,
-        estateXri: value,
-        accountCategories: [24]
+        role: 23,
+        estateXri: value.uri,
+        accountCategories: [24],
+        enabled: true,
+        emailAddressExist: true,
+        principalId: principalid,
       };
 
-      AXIOS.post('http://132.145.58.252:8081/spaciofm/api/user-profiles/onboard-resident', obj)
+      axios.post('http://132.145.58.252:8081/spaciofm/api/user-profiles/onboard-resident', obj)
       .then(response => {
         setLoading(false);
-        const res = response.data;
-        console.log(res);
+      //  const res = response.data;
+        //console.log(res);
+        onClose();
+      //  handleOpenSnackBar();
       })
       .catch(function (error) {
         setLoading(false);
@@ -296,14 +293,24 @@ const handleRegister = event => {
  }
 }
 
+const getReference = () => {
+		  let text = "";
+		  let possible = "0123456789";
 
-  const handleDialogOpen = () => {
+		  for( let i=0; i < 3; i++ )
+			  text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+      return text;
+	 }
+
+
+/*  const handleDialogOpen = () => {
     setOpenDialog(true);
   };
 
   const handleDialogClose = () => {
     setOpenDialog(false);
-  };
+  };*/
 
   const hasError = field =>
     formState.touched[field] && formState.errors[field] ? true : false;
@@ -314,13 +321,15 @@ const handleRegister = event => {
       return categoryData.map((category, i) => {
           return <ChipComponent obj={category} idx={i} setCategoryData={setCategoryData} setCategoryList={setCategoryList} categoryList={categoryList} />;
       })
-  }*/
+  }
+
+    */
 
 
   return (
 
     <Dialog maxWidth="xs" onClose={onClose} aria-labelledby="menu-dialog" open={onOpen} TransitionComponent={Transition}>
-       <DialogContent className={classes.dialogContentStyle}>
+       <DialogContent>
          <div className={classes.formBody}>
             <div className={classes.TitleAreaBody}>
               <Typography
@@ -482,7 +491,7 @@ const handleRegister = event => {
                   </FormControl>
 
                   <InputLabel shrink htmlFor="estateAddress">
-                    Add Primary Facility/Estate
+                    Add House Address
                   </InputLabel>
                   <FormControl error={hasError('estateAddress')} className={classes.formComponent}>
                     <TextField
@@ -490,7 +499,7 @@ const handleRegister = event => {
                       className={classes.textField}
                       name="estateAddress"
                       type="text"
-                      placeholder="Enter estate address"
+                      placeholder="Enter house address"
                       onChange={handleChange}
                       disabled={loading}
                       InputProps={{
@@ -505,6 +514,9 @@ const handleRegister = event => {
                       {  hasError('estateAddress') ? formState.errors.estateAddress[0] : null }
                     </FormHelperText>
                   </FormControl>
+                  <InputLabel shrink htmlFor="estateAddress">
+                    Add Primary Facility/Estate
+                  </InputLabel>
                   <FormControl error={hasError('estateFacility')} className={classes.formComponent}>
                     <Autocomplete
                         id="estateFacility-input"
@@ -533,7 +545,6 @@ const handleRegister = event => {
                       {  hasError('estateFacility') ? formState.errors.estateFacility[0] : null }
                     </FormHelperText>
                 </FormControl>
-                <Divider />
 
              </form>
          </div>
@@ -549,7 +560,8 @@ const handleRegister = event => {
            onClick={handleRegister}
            variant="contained"
            disabled={loading || !formState.values.firstName || !formState.values.lastName || !phoneNo.phone ||
-             !formState.values.emailAddress || !formState.values.estateAddress || value === null}>
+             !formState.values.emailAddress || !formState.values.estateAddress || value === null}
+          >
            Add New User
            {loading && <CircularProgress size={18} className={classes.buttonProgress} />}
          </Button>

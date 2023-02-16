@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/styles';
 import { useHistory } from 'react-router-dom';
-import PropTypes from 'prop-types';
 import { Grid, Typography, Toolbar, IconButton, Button, FormControl, Select, MenuItem } from '@material-ui/core';
 import SvgIcon from '@material-ui/core/SvgIcon';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
@@ -111,7 +110,6 @@ formComponent: {
     //{userData.crxDetails.fullName}
 
     let userData = {};
-    let estate
     if (typeof localStorage !== 'undefined') {
         const user = localStorage.getItem('userDetails');
         if(user !== null) {
@@ -129,15 +127,16 @@ formComponent: {
      //const userid = localStorage.getItem('userId');
 
 
-     AXIOS.put(`http://132.145.58.252:8081/spaciofm/api/user-profiles/current-estate/?user-id=${userData.crxDetails.userId}&contact-id=${userData.crxDetails.contactXRI}&estate-id=${event.target.value}`)
+     AXIOS.put(`user-profiles/current-estate/?user-id=${userData.crxDetails.userId}&contact-id=${userData.crxDetails.contactXRI}&estate-id=${event.target.value}`)
      .then(response => {
        const res = response.data;
-       //console.log(res);
-       if(res.result && res.errors !== null) {
-         console.log("SUCCESS!!!");
+       //console.log("ESTATE UPDATE:" + JSON.stringify(res));
+       if(res.result && res.errors === null) {
+         //console.log("SUCCESS!!!");
+         localStorage.setItem('currentEstateXri', JSON.stringify(event.target.value));
+         setSelectedEstate(event.target.value);
        }
-       localStorage.setItem('currentEstateXri', JSON.stringify(event.target.value));
-       setSelectedEstate(event.target.value);
+
      })
      .catch(function (error) {
        console.log(error.message);
@@ -148,15 +147,13 @@ formComponent: {
 
    useEffect(() => {
      handleEstates();
-    }, []);
+   }, [selectedEstate, setActiveEstate, setSelectedEstate]);
 
     async function handleEstates() {
       //console.log("User Data: " + JSON.stringify(userData.crxDetails));
-       AXIOS.get(`http://132.145.58.252:8081/spaciofm/api/estates/?index=0&range=5`)
+       AXIOS.get(`estates/?index=0&range=5`)
        .then(response => {
-         const res = response.data;
-      //   console.log(res);
-        // console.log("CURRENT ESTATE: " + userData.crxDetails.currentEstateXri);
+          const res = response.data;
           const currEstateXri = localStorage.getItem('currentEstateXri');
           const estateXRI = JSON.parse(currEstateXri);
           setActiveEstate(res);
