@@ -169,6 +169,24 @@ const Leftbar = props => {
     href: '/home',
     icon: <HomeIcon fontSize="small" style={{ fill:'none', stroke:'#010e1c', strokeLinecap:'round', strokeLinejoin:'round', strokeWidth:2 }} />
   },
+
+  {
+      title: 'Demand Notice',
+      href: '/demand-notice',
+      icon: <DemandNoticeIcon fontSize="small" style={{ width: 18, height: 18, fill:'none', stroke:'#EFF1F3', strokeWidth:2 }} />
+    },
+
+     {
+      title: 'Users',
+      href: '/users',
+      icon: <UsersIcon fontSize="small" style={{ width: 18, height: 18, fill:'none', stroke:'#EFF1F3', strokeLinecap:'round', strokeLinejoin:'round', strokeWidth:2 }} />
+    },
+
+    {
+      title: 'Work Order',
+      href: '/work-order',
+      icon: <WorkOrdersIcon fontSize="small" style={{ width: 18, height: 18, fill:'none', stroke:'#EFF1F3', strokeLinecap:'round', strokeLinejoin:'round', strokeWidth:2 }} />
+    },
   */
 
   const pages = [
@@ -183,11 +201,6 @@ const Leftbar = props => {
       icon: <PaymentIcon fontSize="small" style={{ width: 18, height: 18, fill:'none', stroke:'#EFF1F3', strokeLinecap:'round', strokeLinejoin:'round', strokeWidth:2 }} />
     },
     {
-      title: 'Demand Notice',
-      href: '/demand-notice',
-      icon: <DemandNoticeIcon fontSize="small" style={{ width: 18, height: 18, fill:'none', stroke:'#EFF1F3', strokeWidth:2 }} />
-    },
-    {
       title: 'Services',
       href: '/fm-services',
       icon: <ServicesIcon fontSize="small" style={{ width: 18, height: 18, fill:'none', stroke:'#EFF1F3', strokeLinecap:'round', strokeLinejoin:'round', strokeWidth:2 }} />
@@ -196,16 +209,6 @@ const Leftbar = props => {
       title: 'Visitors',
       href: '/fm-visitors',
       icon: <VisitorsIcon  fontSize="small" style={{ width: 18, height: 18, fill:'none', stroke:'#EFF1F3', strokeLinecap:'round', strokeLinejoin:'round', strokeWidth:2 }} />
-    },
-    {
-      title: 'Users',
-      href: '/users',
-      icon: <UsersIcon fontSize="small" style={{ width: 18, height: 18, fill:'none', stroke:'#EFF1F3', strokeLinecap:'round', strokeLinejoin:'round', strokeWidth:2 }} />
-    },
-    {
-      title: 'Work Order',
-      href: '/work-order',
-      icon: <WorkOrdersIcon fontSize="small" style={{ width: 18, height: 18, fill:'none', stroke:'#EFF1F3', strokeLinecap:'round', strokeLinejoin:'round', strokeWidth:2 }} />
     },
     {
       title: 'Meetings',

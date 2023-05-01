@@ -9,7 +9,6 @@ import {
   SvgIcon
 } from '@material-ui/core';
 import AXIOS from '../../../../../util/webservices';
-import axios from 'axios';
 
 
 function BuildingIcon(props) {
@@ -124,7 +123,7 @@ const OverviewArea = props => {
 
   const [visitsCount, setVisitsCount] = useState(0);
   const [contractsCount, setContractsCount] = useState(0);
-  const [maintenanceCount, setMentenanceCount] = useState(0);
+  const [maintenanceCount, setMaintenanceCount] = useState(0);
 
   useEffect(() => {
     handleMetrics();
@@ -134,15 +133,17 @@ const OverviewArea = props => {
 
     let urls = [
       "visits/pending-visits",
-      "contracts/?index=0&range=5",
+      "contracts/?index=0&range=1000",
+      "resorders/?index=0&range=1000"
     ];
 
     const requests = urls.map((url) => AXIOS.get(url));
 
-    Promise.all(requests).then(([{data: visits}, {data: contracts}]) => {
+    Promise.all(requests).then(([{data: visits}, {data: contracts}, {data: resOrders}]) => {
       
         setVisitsCount(visits.response.length);
         setContractsCount(contracts.response.length);
+        setMaintenanceCount(resOrders.response.length);
       
   })
     .catch(function (error) {

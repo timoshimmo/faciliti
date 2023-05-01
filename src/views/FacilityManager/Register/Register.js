@@ -12,7 +12,6 @@ import {
   InputLabel,
   FormHelperText,
   TextField,
-  MenuItem,
   Checkbox,
   Collapse,
   IconButton,

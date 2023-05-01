@@ -168,136 +168,8 @@ const useStyles = makeStyles(theme => ({
 
 }));
 
-
-const OrderSummaryArea = props => {
-
-    const classes = useStyles();
-
-    return (
-        <Grid container direction="row" spacing={1}>
-          <Grid
-            item
-            lg={3}
-            xs={12}>
-
-              <Card className={classes.newOrderBody} elevation={1}>
-                <cardContent style={{ width: '100%' }}>
-                  <Grid container direction="column">
-                    <Grid item>
-                      <Typography
-                        variant="h6"
-                        gutterBottom
-                        className={classes.cardTitle}>
-                          New
-                      </Typography>
-                    </Grid>
-                    <Grid item>
-                      <Grid container direction="row" alignItems="center" className={classes.gridAction}>
-                        <Grid
-                          item
-                          lg={6}>
-                          <Typography
-                            variant="h3"
-                            className={classes.cardValue}>
-                              2
-                          </Typography>
-                        </Grid>
-                        <Grid
-                          item
-                          lg={6}
-                          className={classes.cardRightArea}>
-                            <div className={classes.orangeIconArea}>
-                                <NewOrderIcon fontSize="small" style={{ fill:'none' }} />
-                            </div>
-                        </Grid>
-                      </Grid>
-                    </Grid>
-                  </Grid>
-                </cardContent>
-              </Card>
-            </Grid>
-            <Grid
-              item
-              lg={3}
-              xs={12}>
-              <Card className={classes.pendingOrderBody} elevation={1}>
-                <cardContent style={{ width: '100%' }}>
-                  <Grid container direction="column">
-                    <Grid item>
-                      <Typography
-                        variant="h6"
-                        gutterBottom
-                        className={classes.cardTitle}>
-                          Pending
-                      </Typography>
-                    </Grid>
-                    <Grid item>
-                      <Grid container direction="row" alignItems="center" className={classes.gridAction}>
-                        <Grid
-                          item
-                          lg={6}>
-                          <Typography
-                            variant="h3"
-                            className={classes.cardValue}>
-                              6
-                          </Typography>
-                        </Grid>
-                        <Grid
-                          item
-                          lg={6}
-                          className={classes.cardRightArea}>
-                            <div className={classes.blueIconArea}>
-                                <PendingIcon fontSize="small" style={{ fill:'none' }} />
-                            </div>
-                        </Grid>
-                      </Grid>
-                    </Grid>
-                  </Grid>
-                </cardContent>
-              </Card>
-            </Grid>
-
-            <Grid
-              item
-              lg={3}
-              xs={12}>
-              <Card className={classes.closedOrderBody} elevation={1}>
-                <cardContent style={{ width: '100%' }}>
-                  <Grid container direction="column">
-                    <Grid item>
-                      <Typography
-                        variant="h6"
-                        gutterBottom
-                        className={classes.cardTitle}>
-                          Completed
-                      </Typography>
-                    </Grid>
-                    <Grid item>
-                      <Grid container direction="row" alignItems="center" className={classes.gridAction}>
-                        <Grid
-                          item
-                          lg={6}>
-                          <Typography
-                            variant="h3"
-                            className={classes.cardValue}>
-                              13
-                          </Typography>
-                        </Grid>
-                        <Grid
-                          item
-                          lg={6}
-                          className={classes.cardRightArea}>
-                            <div className={classes.greenIconArea}>
-                                <ClosedIcon fontSize="small" style={{ fill:'none' }} />
-                            </div>
-                        </Grid>
-                      </Grid>
-                    </Grid>
-                  </Grid>
-                </cardContent>
-              </Card>
-            </Grid>
-            <Grid
+/*
+ <Grid
               item
               lg={3}
               xs={12}>
@@ -340,6 +212,138 @@ const OrderSummaryArea = props => {
                               className={classes.cardDetailsValue}>
                                 Details
                             </Typography>
+                        </Grid>
+                      </Grid>
+                    </Grid>
+                  </Grid>
+                </cardContent>
+              </Card>
+            </Grid>
+
+*/
+
+
+const OrderSummaryArea = props => {
+
+    const classes = useStyles();
+
+    return (
+        <Grid container direction="row" spacing={1}>
+          <Grid
+            item
+            lg={4}
+            xs={12}>
+
+              <Card className={classes.newOrderBody} elevation={1}>
+                <cardContent style={{ width: '100%' }}>
+                  <Grid container direction="column">
+                    <Grid item>
+                      <Typography
+                        variant="h6"
+                        gutterBottom
+                        className={classes.cardTitle}>
+                          New
+                      </Typography>
+                    </Grid>
+                    <Grid item>
+                      <Grid container direction="row" alignItems="center" className={classes.gridAction}>
+                        <Grid
+                          item
+                          lg={6}>
+                          <Typography
+                            variant="h3"
+                            className={classes.cardValue}>
+                              2
+                          </Typography>
+                        </Grid>
+                        <Grid
+                          item
+                          lg={6}
+                          className={classes.cardRightArea}>
+                            <div className={classes.orangeIconArea}>
+                                <NewOrderIcon fontSize="small" style={{ fill:'none' }} />
+                            </div>
+                        </Grid>
+                      </Grid>
+                    </Grid>
+                  </Grid>
+                </cardContent>
+              </Card>
+            </Grid>
+            <Grid
+              item
+              lg={4}
+              xs={12}>
+              <Card className={classes.pendingOrderBody} elevation={1}>
+                <cardContent style={{ width: '100%' }}>
+                  <Grid container direction="column">
+                    <Grid item>
+                      <Typography
+                        variant="h6"
+                        gutterBottom
+                        className={classes.cardTitle}>
+                          Pending
+                      </Typography>
+                    </Grid>
+                    <Grid item>
+                      <Grid container direction="row" alignItems="center" className={classes.gridAction}>
+                        <Grid
+                          item
+                          lg={6}>
+                          <Typography
+                            variant="h3"
+                            className={classes.cardValue}>
+                              6
+                          </Typography>
+                        </Grid>
+                        <Grid
+                          item
+                          lg={6}
+                          className={classes.cardRightArea}>
+                            <div className={classes.blueIconArea}>
+                                <PendingIcon fontSize="small" style={{ fill:'none' }} />
+                            </div>
+                        </Grid>
+                      </Grid>
+                    </Grid>
+                  </Grid>
+                </cardContent>
+              </Card>
+            </Grid>
+
+            <Grid
+              item
+              lg={4}
+              xs={12}>
+              <Card className={classes.closedOrderBody} elevation={1}>
+                <cardContent style={{ width: '100%' }}>
+                  <Grid container direction="column">
+                    <Grid item>
+                      <Typography
+                        variant="h6"
+                        gutterBottom
+                        className={classes.cardTitle}>
+                          Completed
+                      </Typography>
+                    </Grid>
+                    <Grid item>
+                      <Grid container direction="row" alignItems="center" className={classes.gridAction}>
+                        <Grid
+                          item
+                          lg={6}>
+                          <Typography
+                            variant="h3"
+                            className={classes.cardValue}>
+                              13
+                          </Typography>
+                        </Grid>
+                        <Grid
+                          item
+                          lg={6}
+                          className={classes.cardRightArea}>
+                            <div className={classes.greenIconArea}>
+                                <ClosedIcon fontSize="small" style={{ fill:'none' }} />
+                            </div>
                         </Grid>
                       </Grid>
                     </Grid>

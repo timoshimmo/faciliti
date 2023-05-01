@@ -42,6 +42,7 @@ function createData(datecreated, title, description, datedue, supervisor, status
   };
 }
 
+/*
 const rows = [
   createData('12/09/2021', 'Tree & Light works', 'Vendor was on site on time at 3pm and fixed all issues', '12/09/2021', 'Segun Odegbami', 0),
   createData('12/09/2021', 'Drainage and sound', 'Vendor was on site on time at 3pm and fixed all issues', '12/09/2021', 'Lucy Hakeem', 1),
@@ -57,6 +58,10 @@ const rows = [
   createData('12/09/2021', 'Tree & Light works', 'Vendor was on site on time at 3pm and fixed all issues', '12/09/2021', 'State Govt.', 0),
   createData('12/09/2021', 'Drainage and sound', 'Vendor was on site on time at 3pm and fixed all issues', '12/09/2021', 'Francis Ejiofor.', 1),
 ];
+
+*/
+
+const rows = [];
 
 const StyledTableCell = withStyles((theme) => ({
   head: {

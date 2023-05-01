@@ -8,8 +8,7 @@ import {
   SvgIcon
 } from '@material-ui/core';
 //import AddIcon from '@material-ui/icons/Add';
-//import AXIOS from '../../../../../util/webservices';
-import axios from 'axios';
+import AXIOS from '../../../../../util/webservices';
 
 
 function RedArrowIcon(props) {
@@ -136,7 +135,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 
-const Overview = props => {
+const Overview = () => {
 
   const classes = useStyles();
 
@@ -145,10 +144,32 @@ const Overview = props => {
   const [allMeetings, setAllMeetings] = useState(0);
 
   useEffect(() => {
-    handleGetMetrics();
+    handleMetrics();
  }, []);
 
- const handleGetMetrics = () => {
+ const handleMetrics = () => {
+
+  let urls = [
+    "meetings/pending-meetings",
+    "meetings/completed-meetings",
+    "meetings/count"
+  ];
+
+  const requests = urls.map((url) => AXIOS.get(url));
+
+  Promise.all(requests).then(([{data: pending}, {data: completed}, {data: all}]) => {
+      setPending(pending.response.length);
+      setCompleted(completed.response.length);
+      setAllMeetings(all);
+    
+})
+  .catch(function (error) {
+    console.log(error.message);
+    console.log(error.response);
+  })
+};
+
+ /* const handleGetMetrics = () => {
 
    let token = localStorage.getItem('spfmtoken');
    let tenantSegment = localStorage.getItem('tenantSegment');
@@ -173,7 +194,7 @@ const Overview = props => {
       'provider': 'CRX',
       'tenant-id' : tenantSegment,
       'user-id' : userId
-    } });*/
+    } });
 
    axios.all([requestOne, requestTwo])
      .then(axios.spread((...responses) => {
@@ -194,7 +215,7 @@ const Overview = props => {
        console.log(error.message);
      });
 
- }
+ }*/
 
   return (
     <Grid container direction="row" spacing={1}>
@@ -227,7 +248,7 @@ const Overview = props => {
                     variant="body1"
                     color="primary"
                     className={classes.valueStyleWhite}>
-                    0
+                    {allMeetings}
                   </Typography>
                 </Grid>
             </Grid>

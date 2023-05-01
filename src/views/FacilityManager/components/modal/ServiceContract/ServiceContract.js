@@ -334,7 +334,6 @@ async function handleEstates() {
    axios.get('http://132.145.58.252:8081/spaciofm/api/estates/?index=0&range=5')
    .then(response => {
      const res = response.data;
-     console.log(res);
      setEstates(res);
    })
    .catch(function (error) {

@@ -1,11 +1,7 @@
 import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/styles';
 import {
-  Grid,
-  Typography,
-  Card,
-  CardContent,
-  CardActions,
+  Grid
 } from '@material-ui/core';
 import { Overview, Logs, NewMeetingDialog } from './components';
 
@@ -35,7 +31,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const Meetings = props => {
+const Meetings = () => {
 
     const classes = useStyles();
 

@@ -283,15 +283,14 @@ const ForgotPassword = props => {
 
       const mEmail = formState.values.email;
 
-      console.log("FORFOT EMAIL: " + mEmail);
+      //console.log("FORFOT EMAIL: " + mEmail);
 
       axios.post(`http://132.145.58.252:8081/spaciofm/api/user-profiles/send-reset-link/${mEmail}`)
       .then(response => {
         const res = JSON.stringify(response.data);
         console.log("FORGOT: " + res);
         setLoading(false);
-
-        //history.push('/overview');
+        history.push('/forgot/sent');
 
         
       })
@@ -346,7 +345,7 @@ const ForgotPassword = props => {
                       align="right"
                       className={classes.newhere}
                     >
-                      Access your account{' '}
+                      Access account{' '}
                       <Link
                         component={RouterLink}
                         to="/signin"

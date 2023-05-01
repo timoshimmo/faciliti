@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {PropsWithChildren} from 'react';
 
 type MODAL_VIEWS =
   | 'RESIDENT_ORDER'
@@ -11,6 +11,10 @@ interface State {
   data?: any;
   isOpen: boolean;
 }
+
+type ContextProps = {
+  children: React.ReactNode; // 👈️ define children prop
+};
 
 type Action =
   | { type: 'open'; view?: MODAL_VIEWS; payload?: any }
@@ -48,7 +52,7 @@ ModalStateContext.displayName = 'ModalStateContext';
 const ModalActionContext = React.createContext<React.Dispatch<Action> | undefined>(undefined);
 //ModalActionContext.displayName = 'ModalActionContext';
 
-export const ModalProvider: React.FC = ({ children }) => {
+export const ModalProvider: React.FC<PropsWithChildren<ContextProps>> = ({ children }) => {
   const [state, dispatch] = React.useReducer(modalReducer, initialState);
   return (
     <ModalStateContext.Provider value={state}>

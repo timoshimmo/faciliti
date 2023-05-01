@@ -7,7 +7,7 @@ import {
   CardContent,
   SvgIcon
 } from '@material-ui/core';
-import axios from 'axios';
+import AXIOS from '../../../../../util/webservices';
 
 
 function WhiteArrowIcon(props) {
@@ -187,12 +187,37 @@ const Overview = props => {
   const [pending, setPending] = useState(0);
   const [approved, setApproved] = useState(0);
   const [denied, setDenied] = useState(0);
+  const [all, setAll] = useState(0);
 
   useEffect(() => {
-    handleGetMetrics();
+    handleMetrics();
  }, []);
 
- const handleGetMetrics = () => {
+ const handleMetrics = () => {
+
+  let urls = [
+    "visits/pending-visits",
+    "visits/approved-visits",
+    "visits/denied-visits",
+    "visits/count"
+  ];
+
+  const requests = urls.map((url) => AXIOS.get(url));
+
+  Promise.all(requests).then(([{data: pending}, {data: approved}, {data: denied}, {data: all}]) => {
+      setPending(pending.response.length);
+      setApproved(approved.response.length);
+      setDenied(denied.response.length);
+      setAll(all);
+    
+})
+  .catch(function (error) {
+    console.log(error.message);
+    console.log(error.response);
+  })
+};
+
+/* const handleGetMetrics = () => {
 
    let token = localStorage.getItem('spfmtoken');
    let tenantSegment = localStorage.getItem('tenantSegment');
@@ -240,7 +265,7 @@ const Overview = props => {
        console.log(error.message);
      });
 
- }
+ } */
 
   return (
     <Grid container direction="row" spacing={1}>
@@ -273,7 +298,7 @@ const Overview = props => {
                     variant="body1"
                     color="primary"
                     className={classes.valueStyleWhite}>
-                    0
+                    {all}
                   </Typography>
                 </Grid>
             </Grid>

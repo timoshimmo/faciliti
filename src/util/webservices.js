@@ -8,10 +8,10 @@ const instance = axios.create({
 instance.interceptors.request.use(
   async config => {
     let token = localStorage.getItem('spfmtoken');
-    let provider = localStorage.getItem('provider');
-    let tenantId = localStorage.getItem('tenantId');
+   // let provider = localStorage.getItem('provider');
+   // let tenantId = localStorage.getItem('tenantId');
     let userId = localStorage.getItem('userId');
-    let currentEstateXri = localStorage.getItem('currentEstateXri');
+   // let currentEstateXri = localStorage.getItem('currentEstateXri');
     let tenantSegment = localStorage.getItem('tenantSegment');
     //console.log(token);
     //'JAGG66'
@@ -50,10 +50,10 @@ instance.interceptors.response.use((response) => {
   //console.log("AXIOS RESPONSE: " + JSON.stringify(response));
   return response
 }, async function (error) {
-  console.log("AXIOS ERROR: " + JSON.stringify(error));
+  //console.log("AXIOS ERROR: " + JSON.stringify(error));
   const originalRequest = error.config;
   if (error.response.status === 401 && !originalRequest._retry) {
-    console.log("AXIOS ERROR RESPONSE: " + JSON.stringify(error.response.status));
+    //console.log("AXIOS ERROR RESPONSE: " + JSON.stringify(error.response.status));
     //originalRequest._retry = true;
     //const access_token = await refreshAccessToken();
     //axios.defaults.headers.common['Authorization'] = 'Bearer ' + access_token;

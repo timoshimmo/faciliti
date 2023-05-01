@@ -142,10 +142,18 @@ function stableSort(array, comparator) {
 function FilterIcon(props) {
   return (
     <SvgIcon {...props} width="26" height="24" viewBox="0 0 26 24">
-      <path d="M2.2558 0.996094H23.1881C23.3769 0.996094 23.5617 1.05094 23.7199 1.15395C23.8781 1.25697 24.003 1.40373 24.0794 1.57639C24.1557 1.74905 24.1803 1.94018 24.1501 2.12655C24.1199 2.31292 24.0362 2.4865 23.9092 2.6262L15.8991 11.4374C15.736 11.6168 15.6456 11.8505 15.6456 12.0929V18.991C15.6456 19.1515 15.606 19.3094 15.5303 19.4509C15.4546 19.5923 15.3451 19.7129 15.2117 19.8019L11.3134 22.4007C11.1667 22.4986 10.9961 22.5547 10.8199 22.5633C10.6437 22.5718 10.4685 22.5323 10.313 22.4491C10.1575 22.3658 10.0275 22.242 9.93682 22.0906C9.84618 21.9393 9.7983 21.7662 9.7983 21.5898V12.0929C9.7983 11.8505 9.70794 11.6168 9.54486 11.4374L1.53469 2.6262C1.40769 2.4865 1.324 2.31292 1.2938 2.12655C1.2636 1.94018 1.28818 1.74905 1.36456 1.57639C1.44094 1.40373 1.56583 1.25697 1.72405 1.15395C1.88227 1.05094 2.067 0.996094 2.2558 0.996094V0.996094Z" stroke="#8692A6" stroke-width="1.94911" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M2.2558 0.996094H23.1881C23.3769 0.996094 23.5617 1.05094 23.7199 1.15395C23.8781 1.25697 24.003 1.40373 24.0794 1.57639C24.1557 1.74905 24.1803 1.94018 24.1501 2.12655C24.1199 2.31292 24.0362 2.4865 23.9092 2.6262L15.8991 11.4374C15.736 11.6168 15.6456 11.8505 15.6456 12.0929V18.991C15.6456 19.1515 15.606 19.3094 15.5303 19.4509C15.4546 19.5923 15.3451 19.7129 15.2117 19.8019L11.3134 22.4007C11.1667 22.4986 10.9961 22.5547 10.8199 22.5633C10.6437 22.5718 10.4685 22.5323 10.313 22.4491C10.1575 22.3658 10.0275 22.242 9.93682 22.0906C9.84618 21.9393 9.7983 21.7662 9.7983 21.5898V12.0929C9.7983 11.8505 9.70794 11.6168 9.54486 11.4374L1.53469 2.6262C1.40769 2.4865 1.324 2.31292 1.2938 2.12655C1.2636 1.94018 1.28818 1.74905 1.36456 1.57639C1.44094 1.40373 1.56583 1.25697 1.72405 1.15395C1.88227 1.05094 2.067 0.996094 2.2558 0.996094V0.996094Z" stroke="#8692A6" strokeWidth="1.94911" strokeLinecap="round" strokeLinejoin="round"/>
     </SvgIcon>
   );
 }
+
+/*
+  {
+    id: 'resident',
+    numeric: true,
+    label: 'RESIDENT',
+  },
+*/
 
 const headCells = [
   {
@@ -172,11 +180,6 @@ const headCells = [
     id: 'contact',
     numeric: true,
     label: 'CONTACT',
-  },
-  {
-    id: 'resident',
-    numeric: true,
-    label: 'RESIDENT',
   },
   {
     id: 'status',
@@ -448,18 +451,16 @@ const EnhancedTableToolbar = (props) => {
         <Grid
         item
         lg={7}>
-        <Grid container spacing={2} justify="flex-end" alignItems='center'>
+        <Grid container spacing={2} justifyContent="flex-end" alignItems='center'>
           <Grid
-          item
-          lg={1.3}>
+          item>
             <Button
               className={styles.exportLinkStyle}>
               Export CSV
             </Button>
         </Grid>
           <Grid
-          item
-          lg={5}>
+          item>
               <FormControl style={{
                 fontSize: 10,
                 width: '100%'
@@ -494,8 +495,7 @@ const EnhancedTableToolbar = (props) => {
               </FormControl>
             </Grid>
             <Grid
-            item
-            lg={1.2}>
+            item>
             <IconButton
               aria-describedby={checkid}
               onClick={onMenuClick}
@@ -585,8 +585,8 @@ const EnhancedTableToolbar = (props) => {
 EnhancedTableToolbar.propTypes = {
   onOpenMenu: PropTypes.bool.isRequired,
   onHandleMenuClose: PropTypes.func.isRequired,
-  anchorEl: PropTypes.bool.isRequired,
-  checkid: PropTypes.string.isRequired,
+  anchorEl: PropTypes.bool,
+  checkid: PropTypes.string,
   onMenuClick: PropTypes.func.isRequired,
   onHandleFilter: PropTypes.func.isRequired,
 };
@@ -663,10 +663,10 @@ const Logs = props => {
 
   const handleGetAll = () => {
 
-    AXIOS.get('visits?index=0&range=5')
+    AXIOS.get('visits?index=0&range=1000')
       .then(response => {
         const res = response.data;
-      // console.log("ALL VISITS:" + JSON.stringify(res));
+       //console.log("ALL VISITS:" + JSON.stringify(res));
         setLoading(false);
         setVisitsLog(res.response);
       })
@@ -714,6 +714,12 @@ const handleMenuClose = () => {
 const handleFilter = () => {
   console.log("FILTER DATA!");
 }
+
+/*
+<StyledTableCell align="center">
+                          {row.key.uuid}
+                        </StyledTableCell>
+*/
 
  const emptyRows =
   page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
@@ -766,7 +772,6 @@ const handleFilter = () => {
                         </StyledTableCell>
                         <StyledTableCell align="center" style={{ maxWidth: 80, whiteSpace: 'nowrap' }}>
                         <Box
-                           component="div"
                            my={1}
                            textOverflow="ellipsis"
                            overflow="hidden"
@@ -775,9 +780,7 @@ const handleFilter = () => {
                             {row.phoneNumber}
                           </Box>
                         </StyledTableCell>
-                        <StyledTableCell align="center">
-                          {row.key.uuid}
-                        </StyledTableCell>
+                        
                         <StyledTableCell align="center">
                           {row.status === "Scheduled" ?
                           <Chip

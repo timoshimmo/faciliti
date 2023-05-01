@@ -29,8 +29,6 @@ import {
   Checkbox
 } from '@material-ui/core';
 import SearchIcon from '@material-ui/icons/Search';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import ExpandLessIcon from '@material-ui/icons/ExpandLess';
 import AXIOS from '../../../../../util/webservices';
 import moment from 'moment';
 import CircularProgress from '@material-ui/core/CircularProgress';
@@ -395,7 +393,7 @@ const EnhancedTableToolbar = (props) => {
       <Grid container alignItems='center'>
         <Grid
         item
-        lg={6}
+        lg={4}
         className={styles.titleArea}>
         <Typography
             variant="h4"
@@ -411,8 +409,8 @@ const EnhancedTableToolbar = (props) => {
         </Grid>
         <Grid
         item
-        lg={6}>
-        <Grid container spacing={2} justifyContent="space-between" alignItems='center'>
+        lg={8}>
+        <Grid container spacing={2} justifyContent="flex-end" alignItems='center'>
           <Grid
           item>
             <Button
@@ -670,7 +668,7 @@ const Logs = props => {
           range : 10
         };*/
 
-        AXIOS.get(`meetings?index=0&range=5`)
+        AXIOS.get(`meetings?index=0&range=1000`)
           .then(response => {
             setLoading(false);
             const res = response.data.response;
@@ -772,7 +770,6 @@ const handleFilter = () => {
                         </StyledTableCell>
                         <StyledTableCell style={{ maxWidth: 100, whiteSpace: 'nowrap' }}>
                           <Box
-                             component="div"
                              my={2}
                              textOverflow="ellipsis"
                              overflow="hidden"
@@ -786,7 +783,6 @@ const handleFilter = () => {
                         </StyledTableCell>
                         <StyledTableCell align="center" style={{ maxWidth: 80, whiteSpace: 'nowrap' }}>
                         <Box
-                           component="div"
                            my={1}
                            textOverflow="ellipsis"
                            overflow="hidden"

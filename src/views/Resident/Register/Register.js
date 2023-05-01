@@ -12,7 +12,6 @@ import {
   InputLabel,
   FormHelperText,
   TextField,
-  MenuItem,
   Checkbox,
   Collapse,
   IconButton,
@@ -23,9 +22,7 @@ import MuiAlert from '@material-ui/lab/Alert';
 import validate from 'validate.js';
 import PhoneInput from 'react-phone-input-2';
 import 'react-phone-input-2/lib/material.css';
-import { EstateDialog } from '../components';
 import Autocomplete from '@material-ui/lab/Autocomplete';
-import AddIcon from '@material-ui/icons/Add';
 import axios from 'axios';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
@@ -277,6 +274,7 @@ signUpButton: {
   fontSize: 12,
   textTransform: 'none',
   marginTop: 15,
+  marginBottom: 25,
   paddingTop: 15,
   paddingBottom: 15,
   fontFamily: [
@@ -399,7 +397,7 @@ const Register = () => {
         axios.get('http://132.145.58.252:8081/spaciofm/api/estates/?index=0&range=5')
         .then(response => {
           const res = response.data;
-          console.log(res);
+          //console.log(res);
           setEstates(res);
         })
         .catch(function (error) {
@@ -441,7 +439,7 @@ const Register = () => {
         let lastName = nameArr[nameArr.length - 1];
         let principalid = firstName + getReference();
 
-        console.log("HERE!");
+        //console.log("HERE!");
 
         const obj = {
           segmentName: "SPACIOS41826",
@@ -450,11 +448,13 @@ const Register = () => {
           lastName: lastName,
           telephone: phoneNo.phone,
           role: 23,
-          estateXri: value,
+          estateXri: value.uri,
           accountCategories: [24],
           initialPassword: formState.values.password,
           initialPasswordVerification: formState.values.password,
         };
+
+        //console.log("OBJ: ", obj);
 
         //http://132.145.58.252:8081/spaciofm/api/
         axios.post('http://132.145.58.252:8081/spaciofm/api/user-profiles/onboard-resident', obj)
@@ -462,13 +462,13 @@ const Register = () => {
           //const res = response.data;
           console.log(response);
           setLoading(false);
-          //history.push('/signup/completed');
+          history.push('/signup/completed');
         })
         .catch(function (error) {
           console.log(error.response.status);
           console.log(error.response.data);
           setLoading(false);
-          const resError = error.response ? error.response.data.message : "Something went wrong please try again";
+          const resError = error.response ? error.response.data.errors[0] : "Something went wrong please try again";
           setServerError(resError);
           setOpen(true);
 
@@ -594,33 +594,6 @@ const getReference = () => {
                        className={classes.registerForm}
                        autoComplete="off"
                      >
-
-                           <Collapse in={open}>
-                               <MuiAlert
-                                 severity="error"
-                                 action={
-                                    <IconButton
-                                      aria-label="close"
-                                      color="inherit"
-                                      size="small"
-                                      onClick={() => {
-                                        setOpen(false);
-                                      }}
-                                    >
-                                      <CloseIcon fontSize="inherit" />
-                                    </IconButton>
-                                  }
-                                  className={classes.subtitleSpacing}
-                                 >
-                                 <Typography
-                                   color="textSecondary"
-                                   variant="body2"
-                                   style={{ fontSize: 12 }}
-                                 >
-                                     {serverError}
-                                 </Typography>
-                              </MuiAlert>
-                           </Collapse>
 
                            <InputLabel shrink htmlFor="fullName">
                               Your fullname*
@@ -836,6 +809,33 @@ const getReference = () => {
                           Register Account
                           {loading && <CircularProgress size={18} className={classes.buttonProgress} />}
                         </Button>
+
+                        <Collapse in={open}>
+                               <MuiAlert
+                                 severity="error"
+                                 action={
+                                    <IconButton
+                                      aria-label="close"
+                                      color="inherit"
+                                      size="small"
+                                      onClick={() => {
+                                        setOpen(false);
+                                      }}
+                                    >
+                                      <CloseIcon fontSize="inherit" />
+                                    </IconButton>
+                                  }
+                                  className={classes.subtitleSpacing}
+                                 >
+                                 <Typography
+                                   color="textSecondary"
+                                   variant="body2"
+                                   style={{ fontSize: 12 }}
+                                 >
+                                     {serverError}
+                                 </Typography>
+                              </MuiAlert>
+                           </Collapse>
                      </form>
                  </div>
                </Paper>

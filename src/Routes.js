@@ -14,6 +14,7 @@ import {
    FMBusiness as FMBusinessPage,
    FMPersonal as FMPersonalPage,
    CompleteSignup as CompleteSignupPage,
+   CompleteForgot as CompleteForgotPage,
    SignIn as SignInPage,
    ForgotPassword as ForgotPasswordPage,
    ResetPassword as ResetPasswordPage,
@@ -66,6 +67,15 @@ import {
             layout={MinimalLayout}
             path="/signup/completed"
           />
+
+          <RouteWithLayout
+            component={CompleteForgotPage}
+            exact
+            layout={MinimalLayout}
+            path="/forgot/sent"
+          />
+
+
         <RouteWithLayout
             component={FullRegisterPage}
             exact

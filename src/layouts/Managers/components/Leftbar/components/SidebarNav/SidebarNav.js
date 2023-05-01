@@ -23,7 +23,7 @@ import { useModalAction } from '../../../../../../views/modal/modal-context.tsx'
 
 const useStyles = makeStyles(theme => ({
   root: {
-    height: '85vh',
+    height: '80vh',
     position: 'relative',
     paddingTop: theme.spacing(2),
     paddingLeft: theme.spacing(2),
@@ -83,9 +83,6 @@ const useStyles = makeStyles(theme => ({
       stroke: '#FEC545 !important'
     }
   },
-  listroot: {
-    flexGrow: 1
-  },
   settingsTitleStyle: {
       fontSize: 14,
       fontWeight: 600,
@@ -104,6 +101,7 @@ const useStyles = makeStyles(theme => ({
   },
 
   logout: {
+    position: 'absolute',
     fontWeight: 400,
     fontSize: 13,
     textTransform: 'none',
@@ -116,8 +114,9 @@ const useStyles = makeStyles(theme => ({
     '&:hover': {
      backgroundColor: '#FFFFFF1A',
    },
-   width: '100%',
-   marginTop: 25
+   left: 10, 
+   right: 10,
+   bottom: 20
  },
  menuIconStyle: {
    minWidth: 30
@@ -202,6 +201,8 @@ function NewWorkOrderIcon(props) {
   );
 }
 
+
+
 function DemandNoticeIcon(props) {
   return (
     <SvgIcon {...props} width="32" height="32" viewBox="0 0 32 32">
@@ -247,7 +248,22 @@ const SidebarNav = props => {
   const [menuData, setMenuData] = useState([]);
 //  const [open, setOpen] = React.useState(false);
 
+
+
   const handleLogout = () => {
+
+    let tenantId = localStorage.getItem('tenantSegment');
+
+    AXIOS.put(`user-profiles/log-out/admin-${tenantId}`, {})
+      .then(response => {
+        const res = response.data;
+        console.log(res);
+      })
+      .catch(function (err) {
+        console.log(err.response);
+        console.log(err.message);
+        
+      });
     if (typeof localStorage !== 'undefined') {
       localStorage.removeItem('spfmtoken');
       localStorage.removeItem('provider');

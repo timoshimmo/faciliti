@@ -43,11 +43,11 @@ const Services = props => {
         <Grid
           className={classes.grid}
           container>
-          <Grid
+          {/*<Grid
             item
             lg={12}>
               <OverviewArea />
-          </Grid>
+    </Grid> */}
           <Grid
             item
             lg={12}>

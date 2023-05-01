@@ -298,7 +298,7 @@ const ResetPassword = props => {
       axios.post('http://132.145.58.252:8081/spaciofm/api/user-profiles/reset-password', obj)
       .then(response => {
         const res = JSON.stringify(response.data);
-        console.log("RESET: " + res);
+        //console.log("RESET: " + res);
         setLoading(false);
 
         //history.push('/overview');

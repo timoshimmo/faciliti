@@ -1,5 +1,6 @@
 export { default as Onboarding } from './Resident/Register';
 export { default as CompleteSignup } from './CompleteSignup';
+export { default as CompleteForgot } from './CompleteForgot';
 export { default as FullRegister } from './Resident/FullRegister';
 export { default as PartialRegister } from './Resident/PartialRegister';
 export { default as SignIn } from './SignIn';

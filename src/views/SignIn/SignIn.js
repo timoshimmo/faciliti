@@ -445,7 +445,7 @@ const SignIn = props => {
 
                       <Divider className={classes.dividerSignin} />
 
-                        <Collapse in={openError}>
+                      <Collapse in={openError}>
                                 <MuiAlert
                                   severity="error"
                                   action={
@@ -558,6 +558,8 @@ const SignIn = props => {
                             Sign In
                             {loading && <CircularProgress size={18} className={classes.buttonProgress} />}
                           </Button>
+
+                         
 
                           <Typography
                             variant="body2"
