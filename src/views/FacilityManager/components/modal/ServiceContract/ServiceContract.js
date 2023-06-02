@@ -411,7 +411,7 @@ const handleService = event => {
           durationUnit: formState.values.tenure
       };
 
-      console.log("CONTRACT: ", obj);
+      //console.log("CONTRACT: ", obj);
   //data: "{\"activeDate\":\"2022-09-05T02:43:00 PM\",\"name\":\"Estate Management Dues\",\"description\":\"Estate Management Dues\",\"groupXri\":{\"uri\":\"xri://@openmdx*org.opencrx.kernel.account1/provider/CRX/segment/SPACIOS41826/account/L482PW5MO27E48MCTM1LGLCLS\",\"name\":\"INJREAL Medium Housing Estate\"},\"accountXri\":\"\\\"twang15\\\"\",\"priority\":0,\"durationUnit\":30}"
       AXIOS.post('contracts/', obj)
       .then(response => {

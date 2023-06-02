@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/styles';
 import {
   Grid,
@@ -7,6 +7,7 @@ import {
   SvgIcon,
   LinearProgress
 } from '@material-ui/core';
+import AXIOS from '../../../../../util/webservices';
 
 function NewOrderIcon(props) {
   return (
@@ -168,64 +169,42 @@ const useStyles = makeStyles(theme => ({
 
 }));
 
-/*
- <Grid
-              item
-              lg={3}
-              xs={12}>
-              <Card className={classes.rateOrderBody} elevation={1}>
-                <cardContent style={{ width: '100%' }}>
-                  <Grid container direction="column">
-                    <Grid item>
-                      <Typography
-                        variant="h6"
-                        gutterBottom
-                        className={classes.cardTitleLastChild}>
-                          On-Time Completion Rate:
-                      </Typography>
-                    </Grid>
-                    <Grid item>
-                      <LinearProgress
-                      variant="determinate"
-                      color="primary"
-                      value={75}
-                      classes={{ colorPrimary: classes.linearProgressColors, bar: classes.linearProgressBar, root: classes.linearProgressStyle }}
-                      />
-                    </Grid>
-                    <Grid item>
-                      <Grid container direction="row" alignItems="center" className={classes.gridActionLastChild}>
-                        <Grid
-                          item
-                          lg={6}>
-                          <Typography
-                            variant="h3"
-                            className={classes.cardValueLastChild}>
-                              75%
-                          </Typography>
-                        </Grid>
-                        <Grid
-                          item
-                          lg={6}
-                          className={classes.cardRightAreaLastChild}>
-                            <Typography
-                              variant="body2"
-                              className={classes.cardDetailsValue}>
-                                Details
-                            </Typography>
-                        </Grid>
-                      </Grid>
-                    </Grid>
-                  </Grid>
-                </cardContent>
-              </Card>
-            </Grid>
-
-*/
-
 
 const OrderSummaryArea = props => {
 
     const classes = useStyles();
+
+    const [activeOrders, setActiveOrders] = useState(0);
+    const [pendingOrders, setPendingOrders] = useState(0);
+    const [completedOrders, setCompletedOrders] = useState(0);
+    //const [allOrders, setAllOrders] = useState(0);
+
+    useEffect(() => {
+      handleMetrics();
+   }, []);
+
+   const handleMetrics = (event) => {
+
+    let urls = [
+      "workorders/get-by-resident/?status=IN_PROGRESS",
+      "workorders/get-by-resident/?status=COMPLETED",
+      "workorders/get-by-resident/?status=ON_HOLD"
+    ];
+
+    const requests = urls.map((url) => AXIOS.get(url));
+
+    Promise.all(requests).then(([{data: active}, {data: completed}, {data: suspended}]) => {
+      
+      setActiveOrders(active.response.length);
+      setCompletedOrders(completed.response.length);
+      setPendingOrders(suspended.response.length);
+      
+  })
+    .catch(function (error) {
+      console.log(error.message);
+    })
+  };
+
 
     return (
         <Grid container direction="row" spacing={1}>
@@ -253,7 +232,7 @@ const OrderSummaryArea = props => {
                           <Typography
                             variant="h3"
                             className={classes.cardValue}>
-                              2
+                              {activeOrders}
                           </Typography>
                         </Grid>
                         <Grid
@@ -293,7 +272,7 @@ const OrderSummaryArea = props => {
                           <Typography
                             variant="h3"
                             className={classes.cardValue}>
-                              6
+                              {pendingOrders}
                           </Typography>
                         </Grid>
                         <Grid
@@ -334,7 +313,7 @@ const OrderSummaryArea = props => {
                           <Typography
                             variant="h3"
                             className={classes.cardValue}>
-                              13
+                              {completedOrders}
                           </Typography>
                         </Grid>
                         <Grid

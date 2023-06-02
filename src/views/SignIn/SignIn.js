@@ -321,7 +321,7 @@ const SignIn = props => {
         else {
             localStorage.setItem('spfmtoken', response.data.token);
           //  const tenantSegment =
-          //  localStorage.setItem('provider', JSON.stringify(response.data.userDetails.crxDetails.providerName));
+           // localStorage.setItem('provider', JSON.stringify(response.data.userDetails.crxDetails.providerName));
             localStorage.setItem('tenantId', response.data.userDetails.crxDetails.segmentName);
             localStorage.setItem('tenantSegment', response.data.userDetails.crxDetails.tenantSegment);
             localStorage.setItem('userId', response.data.userDetails.crxDetails.userId);
@@ -337,7 +337,7 @@ const SignIn = props => {
               history.push('/home');
             }
 
-        }
+        } 
 
       })
       .catch(function (error) {

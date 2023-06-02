@@ -94,7 +94,7 @@ tableArea: {
   width: '100%'
 },
  padding: {
-   padding: 25,
+   padding: 0,
  },
 
 }));
@@ -107,6 +107,7 @@ const TransactionsArea = props => {
 
 
   const handleChange = (event, newValue) => {
+    //console.log(event);
     setValue(newValue);
   };
 

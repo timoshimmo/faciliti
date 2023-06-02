@@ -668,7 +668,7 @@ const Logs = props => {
           range : 10
         };*/
 
-        AXIOS.get(`meetings?index=0&range=1000`)
+        AXIOS.get(`meetings?index=0&range=10`)
           .then(response => {
             setLoading(false);
             const res = response.data.response;

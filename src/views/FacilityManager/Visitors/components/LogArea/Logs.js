@@ -663,7 +663,7 @@ const Logs = props => {
 
   const handleGetAll = () => {
 
-    AXIOS.get('visits?index=0&range=1000')
+    AXIOS.get('visits?index=0&range=10')
       .then(response => {
         const res = response.data;
        //console.log("ALL VISITS:" + JSON.stringify(res));

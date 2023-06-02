@@ -246,7 +246,7 @@ const Billing = props => {
 
   useEffect(() => {
     if(Object.keys(contract).length > 0) {
-      //console.log("BILLING: ", contract.chargeData[0].amountOutstanding);
+      console.log("BILLING: ", contract.chargeData[0]);
       setSubscription(contract.charge);
       setNextCharge(contract.chargeData[0].amountOutstanding);
       setNextDue(contract.chargeData[0].endDate);
@@ -257,7 +257,7 @@ const Billing = props => {
 
 
  const handleOpenMakePayment = () => {
-   return openModal('MAKE_PAYMENT');
+   return openModal('MAKE_PAYMENT', { contract });
  }
 
   return (

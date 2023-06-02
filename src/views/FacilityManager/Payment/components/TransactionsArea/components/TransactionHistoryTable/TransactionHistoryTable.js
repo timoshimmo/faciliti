@@ -32,11 +32,12 @@ import SearchIcon from '@material-ui/icons/Search';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import moment from 'moment';
 import CurrencyFormat from 'react-currency-format';
+import AXIOS from '../../../../../../../util/webservices';
 
 const rows = [
     {
        "index": 0,
-       "date": "12/09/2022",
+       "date": "09/12/2022",
        "amount": 15000,
        "username": "Frank Olise",
        "userid": "Resident",
@@ -140,7 +141,7 @@ function stableSort(array, comparator) {
 function FilterIcon(props) {
   return (
     <SvgIcon {...props} width="22" height="21" viewBox="0 0 22 21">
-      <path d="M1.85183 1H20.1482C20.3132 1 20.4747 1.04794 20.613 1.13798C20.7513 1.22802 20.8604 1.3563 20.9272 1.50722C20.9939 1.65814 21.0154 1.8252 20.989 1.9881C20.9626 2.151 20.8895 2.30272 20.7785 2.42483L13.777 10.1264C13.6345 10.2832 13.5555 10.4875 13.5555 10.6994V16.7289C13.5555 16.8691 13.5209 17.0072 13.4547 17.1308C13.3885 17.2544 13.2928 17.3598 13.1762 17.4376L9.76885 19.7092C9.64057 19.7947 9.49147 19.8438 9.33747 19.8512C9.18347 19.8587 9.03034 19.8242 8.8944 19.7514C8.75846 19.6787 8.64482 19.5704 8.56559 19.4381C8.48636 19.3059 8.44451 19.1546 8.44451 19.0004V10.6994C8.44451 10.4875 8.36553 10.2832 8.22299 10.1264L1.22153 2.42483C1.11052 2.30272 1.03737 2.151 1.01097 1.9881C0.984571 1.8252 1.00606 1.65814 1.07282 1.50722C1.13958 1.3563 1.24874 1.22802 1.38704 1.13798C1.52533 1.04794 1.6868 1 1.85183 1V1Z" stroke="#1B75BC" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M1.85183 1H20.1482C20.3132 1 20.4747 1.04794 20.613 1.13798C20.7513 1.22802 20.8604 1.3563 20.9272 1.50722C20.9939 1.65814 21.0154 1.8252 20.989 1.9881C20.9626 2.151 20.8895 2.30272 20.7785 2.42483L13.777 10.1264C13.6345 10.2832 13.5555 10.4875 13.5555 10.6994V16.7289C13.5555 16.8691 13.5209 17.0072 13.4547 17.1308C13.3885 17.2544 13.2928 17.3598 13.1762 17.4376L9.76885 19.7092C9.64057 19.7947 9.49147 19.8438 9.33747 19.8512C9.18347 19.8587 9.03034 19.8242 8.8944 19.7514C8.75846 19.6787 8.64482 19.5704 8.56559 19.4381C8.48636 19.3059 8.44451 19.1546 8.44451 19.0004V10.6994C8.44451 10.4875 8.36553 10.2832 8.22299 10.1264L1.22153 2.42483C1.11052 2.30272 1.03737 2.151 1.01097 1.9881C0.984571 1.8252 1.00606 1.65814 1.07282 1.50722C1.13958 1.3563 1.24874 1.22802 1.38704 1.13798C1.52533 1.04794 1.6868 1 1.85183 1V1Z" stroke="#1B75BC" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
     </SvgIcon>
   );
 }
@@ -148,7 +149,7 @@ function FilterIcon(props) {
 function ExportIcon(props) {
   return (
     <SvgIcon {...props} width="22" height="21" viewBox="0 0 25 25">
-      <path d="M6.75 9.75138L12 15L17.25 9.75138M12 1V14.9963M23 15V22C23 22.2652 22.8946 22.5196 22.7071 22.7071C22.5196 22.8946 22.2652 23 22 23H2C1.73478 23 1.48043 22.8946 1.29289 22.7071C1.10536 22.5196 1 22.2652 1 22V15" stroke="#1B75BC" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M6.75 9.75138L12 15L17.25 9.75138M12 1V14.9963M23 15V22C23 22.2652 22.8946 22.5196 22.7071 22.7071C22.5196 22.8946 22.2652 23 22 23H2C1.73478 23 1.48043 22.8946 1.29289 22.7071C1.10536 22.5196 1 22.2652 1 22V15" stroke="#1B75BC" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
     </SvgIcon>
   );
 }
@@ -156,8 +157,8 @@ function ExportIcon(props) {
 function RightArrowIcon(props) {
   return (
     <SvgIcon {...props} width="22" height="21" viewBox="0 0 25 25">
-      <path d="M1 10.5H23" stroke="#8692A6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-      <path d="M14 1.5L23 10.5L14 19.5" stroke="#8692A6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M1 10.5H23" stroke="#8692A6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+      <path d="M14 1.5L23 10.5L14 19.5" stroke="#8692A6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
     </SvgIcon>
   );
 }
@@ -356,8 +357,8 @@ const EnhancedTableToolbar = (props) => {
     },
     checkIcon: {
       borderRadius: 3,
-      width: 16,
-      height: 16,
+      width: 13,
+      height: 13,
       boxShadow: 'inset 0 0 0 1px rgba(16,22,26,.2), inset 0 -1px 0 rgba(16,22,26,.1)',
       backgroundColor: '#f5f8fa',
       backgroundImage: 'linear-gradient(180deg,hsla(0,0%,100%,.8),hsla(0,0%,100%,0))',
@@ -382,8 +383,8 @@ const EnhancedTableToolbar = (props) => {
       backgroundImage: 'linear-gradient(180deg,hsla(0,0%,100%,.1),hsla(0,0%,100%,0))',
       '&:before': {
         display: 'block',
-        width: 16,
-        height: 16,
+        width: 13,
+        height: 13,
         backgroundImage:
         "url(\"data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath" +
         " fill-rule='evenodd' clip-rule='evenodd' d='M12 5c-.28 0-.53.11-.71.29L7 9.59l-2.29-2.3a1.003 " +
@@ -408,10 +409,11 @@ const EnhancedTableToolbar = (props) => {
     },
     exportLinkStyle: {
       textTransform: 'none',
-      fontSize: 13,
+      fontSize: 12,
+      width: '100%',
       color: '#8692A6',
       fontWeight: 400,
-      padding: '7px 25px',
+      padding: '7px 15px',
       backgroundColor: 'transparent',
       boxShadow: 'none',
       border: '1px #8692A6 solid',
@@ -421,7 +423,7 @@ const EnhancedTableToolbar = (props) => {
     },
     plainButtonStyle: {
       textTransform: 'none',
-      fontSize: 13,
+      fontSize: 11,
       color: '#8692A6',
       fontWeight: 400,
       padding: 0,
@@ -472,19 +474,19 @@ const EnhancedTableToolbar = (props) => {
               Transaction History
             </Typography>
 
-            <Button
+            {/*<Button
               className={styles.plainButtonStyle}
                endIcon={<RightArrowIcon style={{  fontSize: 16, fill:'none' }} />}>
               See All
-            </Button>
+            </Button>*/}
           </Grid>
           <Grid
           item
           lg={8}>
-          <Grid container spacing={2} justify="flex-end" alignItems='center'>
+          <Grid container spacing={1} justifyContent="flex-end" alignItems='center'>
             <Grid
             item
-            lg={6}>
+            lg={5}>
                 <FormControl style={{
                   fontSize: 10,
                   width: '100%'
@@ -512,7 +514,7 @@ const EnhancedTableToolbar = (props) => {
                       endAdornment: <InputAdornment position="start">
                       <SearchIcon style={{ fontSize: 16, color: '#1B75BC' }} />
                     </InputAdornment>,
-                      disableUnderline: "true",
+                      disableUnderline: true,
                       style: {fontSize: 12}
                     }}
                   />
@@ -520,13 +522,13 @@ const EnhancedTableToolbar = (props) => {
               </Grid>
               <Grid
               item
-              lg={1.5}>
+              lg={2}>
                 <Button
                   variant="outlined"
                   aria-describedby={checkid}
                   onClick={onMenuClick}
                   className={styles.exportLinkStyle}
-                  startIcon={<FilterIcon style={{  fontSize: 16, fill:'none', paddingRight: 10 }} />}
+                  startIcon={<FilterIcon style={{  fontSize: 14, fill:'none', paddingRight: 10 }} />}
                   >
                   Filter
                 </Button>
@@ -582,7 +584,7 @@ const EnhancedTableToolbar = (props) => {
                    </FormControl>
                     <Grid
                       container
-                      justify="space-evenly"
+                      justifyContent="space-evenly"
                       style={{ paddingTop: 10, paddingBottom: 10, borderRadius: 70 }}
                       >
                       <Button
@@ -604,13 +606,13 @@ const EnhancedTableToolbar = (props) => {
             </Grid>
               <Grid
               item
-              lg={1.5}>
+              lg={2}>
               <Button
                 variant="outlined"
                 aria-describedby={checkid}
                 onClick={onMenuClick}
                 className={styles.exportLinkStyle}
-                startIcon={<ExportIcon style={{ fontSize: 16, fill:'none', paddingRight: 10}} />}
+                startIcon={<ExportIcon style={{ fontSize: 14, fill:'none', paddingRight: 10}} />}
                 >
                 Export
               </Button>
@@ -624,12 +626,12 @@ const EnhancedTableToolbar = (props) => {
   };
 
   EnhancedTableToolbar.propTypes = {
-    onOpenMenu: PropTypes.bool.isRequired,
-    onHandleMenuClose: PropTypes.func.isRequired,
-    anchorEl: PropTypes.bool.isRequired,
-    checkid: PropTypes.string.isRequired,
-    onMenuClick: PropTypes.func.isRequired,
-    onHandleFilter: PropTypes.func.isRequired
+    onOpenMenu: PropTypes.bool,
+    onHandleMenuClose: PropTypes.func,
+    anchorEl: PropTypes.bool,
+    checkid: PropTypes.string,
+    onMenuClick: PropTypes.func,
+    onHandleFilter: PropTypes.func
   };
 
   const useStyles = makeStyles(theme => ({
@@ -684,6 +686,7 @@ const EnhancedTableToolbar = (props) => {
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(5);
     const [loading, setLoading] = useState(false);
+    const [transactions, setTransactions] = useState([]);
 
     const [checkState, setCheckState] = useState({
      all: false,
@@ -693,6 +696,10 @@ const EnhancedTableToolbar = (props) => {
 
    const openPostMenu = Boolean(anchorEl);
    const checkid = openPostMenu ? 'simple-popover' : undefined;
+
+  useEffect(() => {
+    handleAllTransactions();
+  }, []);
 
    const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -726,6 +733,26 @@ const EnhancedTableToolbar = (props) => {
    console.log("FILTER DATA!");
  }
 
+ 
+ const handleAllTransactions = () => {
+
+        let serviceContractsId = '';
+        let serviceChargeId = '';
+        
+        AXIOS.get(`contracts/${serviceContractsId}/charges/${serviceChargeId}/payments`)
+          .then(response => {
+            setLoading(false);
+            const res = response.data.response;
+            //console.log("ALL MEETINGS:" + JSON.stringify(res));
+            setTransactions(res);
+          })
+          .catch(function (error) {
+            setLoading(false);
+            console.log(error.response);
+            console.log(error.message);
+          })
+}
+
  const emptyRows =
   page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
 
@@ -751,7 +778,7 @@ const EnhancedTableToolbar = (props) => {
                   orderBy={orderBy}
                   onRequestSort={handleRequestSort}/>
                 <TableBody>
-                  {stableSort(rows, getComparator(order, orderBy))
+                  {stableSort(transactions, getComparator(order, orderBy))
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((row, index) => {
                       return (

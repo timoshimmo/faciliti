@@ -23,7 +23,7 @@ import axios from 'axios';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import AXIOS from '../../../../../util/webservices';
 import moment from 'moment';
-import { useModalAction } from '../../../../modal/modal-context.tsx';
+import { useModalAction, useModalState } from '../../../../modal/modal-context.tsx';
 import { useDispatch } from "react-redux";
 import { toggleSnackbarOpen } from "../../../../../actions";
 
@@ -121,10 +121,23 @@ textField: {
    padding: 0
  },
 },
-inputRoot: {
-  padding: 0,
+textFieldDate: {
+  backgroundColor: '#FFFFFF',
+  width: '98%',
+  border: '1px solid #8692A6',
+  borderRadius: 6,
+  transition: theme.transitions.create(['background-color']),
+  padding: '7px 5px',
   marginTop: 5,
-
+  '&$focused': {
+    border: '1px solid #1565D8',
+  },
+  '&:hover': {
+    border: '1px solid #1565D8',
+ },
+ '$root.MuiOutlinedInput-input &': {
+   padding: 0
+ },
 },
 buttonStyle: {
   fontSize: 12,
@@ -202,7 +215,7 @@ const MakePayment = props => {
   const classes = useStyles();
 
   const { closeModal } = useModalAction();
-
+  const { data } = useModalState();
 
   const [loading, setLoading] = useState(false);
   const [paymentMethod, setPaymentMethod] = useState(null);
@@ -246,24 +259,35 @@ const handleChange = event => {
 };
 
 
-const handleMakePayment = event => {
+const handleMakePayment = () => {
 
-  event.preventDefault();
+  //event.preventDefault();
 
   if (!loading) {
     setLoading(true);
 
     const obj = {
-        paymentDate: moment(formState.values.paymentDate).format('yyyy-MM-DDThh:mm:ss.SSS+00:00'),
+        paymentDate: moment(formState.values.paymentDate).format('DD/MM/yyyy'),
         paymentMethod: paymentMethod.label,
         reference: formState.values.reference,
         remarks: formState.values.remarks,
         amount: formState.values.amount,
     };
 
-    //  console.log("CONTRACT: ", obj);
+    let contractId = '';
+    let chargeId = '';
+
+    if(Object.keys(data.contract).length > 0) {
+      contractId = data.contract.key.uuid;
+      chargeId = data.contract.chargeData[0].key.uuid;
+    }
+    
+    //const linkStr = 
+
+    console.log("MAKE PAYMENT REQUEST: ", obj);
+
   //`contracts/${contractId}/charges/${chargeId}/payments`
-      AXIOS.post(`contracts/9EQU4GSOQHOTO0R8O8C0ULROJ/charges/RSCCJ0YIRYBJG0R8O8C0ULROJ/payments`, obj)
+      AXIOS.post(`contracts/${contractId}/charges/${chargeId}/payments`, obj)
       .then(response => {
         const res = response.data;
         console.log(JSON.stringify(res.response));
@@ -405,9 +429,10 @@ const handleMakePayment = event => {
                    <FormControl error={hasError('paymentDate')} className={classes.formComponent}>
                      <TextField
                          id="paymentdate-time"
-                         className={classes.textField}
+                         className={classes.textFieldDate}
                          name="paymentDate"
                          type="date"
+                         placeholder="Payment Date"
                          fullWidth
                          onChange={handleChange}
                          value={formState.values.paymentDate}
@@ -479,7 +504,7 @@ const handleMakePayment = event => {
                  startIcon={<LockOutlinedIcon fontSize="small" style={{ marginRight: '10%' }} />}
                  size="small"
                  type="button"
-                 onClick={handleMakePayment}
+                 onClick={()=>handleMakePayment()}
                  variant="contained"
                  disabled={loading || !formState.values.amount || !formState.values.paymentDate || !formState.values.reference
                    || !formState.values.remarks || paymentMethod === null}>

@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/styles';
 import {
   Grid,
   Typography,
 } from '@material-ui/core';
-import { OverviewArea, MeetingUpdateArea, OrderSummaryArea } from './components'
+import { OverviewArea, MeetingUpdateArea, OrderSummaryArea } from './components';
+import AXIOS from '../../../util/webservices';
 
 
 const useStyles = makeStyles(theme => ({
@@ -35,6 +36,30 @@ const useStyles = makeStyles(theme => ({
 const Overview = props => {
 
     const classes = useStyles();
+
+    useEffect(() => {
+      handleContractCreator();
+   }, []);
+
+   const handleContractCreator = () => {
+
+    let tenantSegment = localStorage.getItem('tenantSegment');
+
+    AXIOS.get(`http://132.145.58.252:8081/spaciofm/api/configurations/tenant-config?tenant-id=${tenantSegment}`)
+    .then(response => {
+      const result = response.data;
+      console.log("SERVICE CONTRACTOR: ", result['Service Contract Creator']);
+      console.log("CONTRACT TYPE ID: ", result['Maintenance Service Charge Type']);
+      localStorage.setItem('serviceContractCreator', result['Service Contract Creator']);
+      localStorage.setItem('maintenanceChargeType', result['Maintenance Service Charge Type']);
+
+    })
+    .catch(function (error) {
+      console.log(error.response);
+      console.log(error.message);
+    })
+
+   }
 
     return(
       <div className={classes.root}>

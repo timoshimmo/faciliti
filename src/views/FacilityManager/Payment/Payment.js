@@ -14,7 +14,9 @@ const useStyles = makeStyles(theme => ({
   },
   grid: {
     minHeight: '100%',
-    padding: 40
+    paddingBottom: 40,
+    paddingRight: 40,
+    paddingLeft: 40,
   },
   areaTitle: {
     fontSize: 18,
@@ -29,9 +31,6 @@ const useStyles = makeStyles(theme => ({
     marginTop: 30,
     marginBottom: 20
   },
-  spacing: {
-    marginTop: 20
-  }
 }));
 
 const Payment = props => {
@@ -43,11 +42,15 @@ const Payment = props => {
         <Grid
           className={classes.grid}
           container>
+            {/*
+            
           <Grid
             item
             lg={12}>
               <OverviewArea />
           </Grid>
+    */}
+          
           <Grid
             item
             lg={12}>

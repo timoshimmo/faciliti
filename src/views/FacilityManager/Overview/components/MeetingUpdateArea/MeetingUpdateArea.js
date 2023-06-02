@@ -198,8 +198,16 @@ const useStyles = makeStyles(theme => ({
      position: 'absolute',
      top: '60%',
      left: '50%',
-     marginTop: 10,
-     marginLeft: -12,
+     transform: 'translateX(-50%)',
+   },
+
+   tableBody: {
+      display: 'relative',
+   },
+
+   mainBody: {
+    display: 'relative',
+    minHeight: 100
    }
 
 }));
@@ -256,7 +264,7 @@ const MeetingUpdateArea = props => {
           range : 10
         };*/
 
-        AXIOS.get('http://132.145.58.252:8081/spaciofm/api/meetings/?index=0&range=5')
+        AXIOS.get('meetings/?index=0&range=5')
           .then(response => {
             setLoading(false);
             const res = response.data.response;
@@ -277,7 +285,7 @@ const MeetingUpdateArea = props => {
    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - meetings.length) : 0;
 
   return (
-    <div>
+    <div className="mainBody">
       <TableContainer>
         <Table className={classes.table} aria-label="customized table">
           <EnhancedTableHead
@@ -285,7 +293,7 @@ const MeetingUpdateArea = props => {
             orderBy={orderBy}
             onRequestSort={handleRequestSort}
             rowCount={meetings.length}/>
-          <TableBody>
+          <TableBody className="tableBody">
             {loading ?
               (<CircularProgress size={25} className={classes.buttonProgress} />)
               :
