@@ -204,8 +204,9 @@ gridItem: {
 }));
 
 const methodList = [
-  { key: 0, label: 'Offline' },
-  { key: 1, label: 'Online' }
+  { key: 0, label: 'Cash' },
+  { key: 1, label: 'Online' },
+  { key: 2, label: 'Cheque' }
   ];
 
 
@@ -268,7 +269,7 @@ const handleMakePayment = () => {
 
     const obj = {
         paymentDate: moment(formState.values.paymentDate).format('DD/MM/yyyy'),
-        paymentMethod: paymentMethod.label,
+        paymentMethod: paymentMethod.key,
         reference: formState.values.reference,
         remarks: formState.values.remarks,
         amount: formState.values.amount,
@@ -291,9 +292,9 @@ const handleMakePayment = () => {
       .then(response => {
         const res = response.data;
         console.log(JSON.stringify(res.response));
-    //    handleOpenSnackBar();
+        handleOpenSnackBar();
+        setLoading(false);
   //      closeModal();
-
       })
       .catch(function (error) {
         setLoading(false);

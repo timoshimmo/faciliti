@@ -51,7 +51,7 @@ const Payment = props => {
        AXIOS.get(`contracts/get-by-resident?index=0&range=100`)
          .then(response => {
              const res = response.data;
-             console.log("CONTRACTS:" + JSON.stringify(res));
+             //console.log("CONTRACTS:" + JSON.stringify(res));
              const mainContract = res.response[0];
              //setServices(res.response);
              //setLoading(false);
@@ -59,7 +59,7 @@ const Payment = props => {
                AXIOS.get(`contracts/${mainContract.key.uuid}/charges?index=0&range=100`)
                  .then(resp => {
                      const res1 = resp.data;
-                     console.log("CHARGES DATA:" + JSON.stringify(resp));
+                    // console.log("CHARGES DATA:" + JSON.stringify(resp));
                    //  console.log("CONTRACT KEY:" + JSON.stringify(contract));
                      const obj = res1.response;
                      const chargeData =

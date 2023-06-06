@@ -320,6 +320,9 @@ const SignIn = props => {
         }
         else {
             localStorage.setItem('spfmtoken', response.data.token);
+            //console.log(response.data.userDetails.crxDetails.segmentName);
+            //console.log(response.data.userDetails.crxDetails.tenantSegment);
+            
           //  const tenantSegment =
            // localStorage.setItem('provider', JSON.stringify(response.data.userDetails.crxDetails.providerName));
             localStorage.setItem('tenantId', response.data.userDetails.crxDetails.segmentName);
