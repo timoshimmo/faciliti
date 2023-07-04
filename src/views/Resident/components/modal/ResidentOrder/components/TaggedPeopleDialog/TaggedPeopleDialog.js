@@ -18,7 +18,6 @@ import {
 import SearchIcon from '@material-ui/icons/Search';
 import { TaggedListComponent } from './components';
 import AXIOS from '../../../../../../../util/webservices';
-import axios from 'axios';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -119,7 +118,7 @@ const TaggedPeopleDialog = props => {
 
   const { onOpen, onClose, setContactList, contactList, setAvatarList } = props;
 
-  const [searchQuery, setSearchQuery] = useState(false);
+  const [, setSearchQuery] = useState(false);
   const [btnText, setBtnText] = useState('Invite');
   const [liveTaggedList, setLiveTaggedList] = useState([]);
   const [peopleList, setPeopleList] = useState([]);
@@ -145,16 +144,6 @@ const TaggedPeopleDialog = props => {
   const handlePeopleist = () => {
   //  event.persist();
   //  setSearchQuery(event.target.value);
-
-    let token = localStorage.getItem('spfmtoken');
-      const config = {
-        headers:{
-          'Authorization': `Bearer ${token}`,
-          'provider': 'CRX',
-          'tenant-id' : 'INJREAM26606',
-          'user-id' : 'JAGG66'
-        }
-    };
 
     AXIOS.get('http://132.145.58.252:8081/spaciofm/api/contacts?index=0&range=10')
     .then(response => {

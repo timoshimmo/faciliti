@@ -130,24 +130,14 @@ const TaggedPeopleDialog = props => {
 
   const { onOpen, onClose, peopleList, setAvatarList, setContactList, contactList } = props;
 
-
-    let userData = {};
-    if (typeof localStorage !== 'undefined') {
-        const user = localStorage.getItem('userDetails');
-        if(user !== null) {
-          const data = JSON.parse(user);
-          userData = data;
-        }
-    }
-
-  const [searchQuery, setSearchQuery] = useState(false);
+  const [, setSearchQuery] = useState(false);
   const [btnText, setBtnText] = useState('Invite');
   const [liveTaggedList, setLiveTaggedList] = useState([]);
 
   const handleChange = event => {
     event.persist();
     setSearchQuery(event.target.value);
-    const obj = {
+    /*const obj = {
       segment : "INJREAM26606",
       userId : "JAGG66",
       index : 0,
@@ -164,6 +154,7 @@ const TaggedPeopleDialog = props => {
       console.log(error.response);
       console.log(error.message);
     })
+    */
 
   };
 

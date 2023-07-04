@@ -31,7 +31,9 @@ import {
    FMVisitors as FMVisitorsPage,
    Maintenance as MaintenancePage,
    Meetings as MeetingsPage,
-   Profile as ProfilePage
+   Profile as ProfilePage,
+   FMPaymentHistory as FMPaymentHistoryPage,
+   UserProfile as UserProfilePage
  } from './views';
 
  const Routes = () => {
@@ -130,8 +132,22 @@ import {
               path="/profile"
             />
 
+            <RouteWithLayout
+              component={UserProfilePage}
+              exact
+              layout={ManagersLayout}
+              path="/user-profile"
+            />
+
           <RouteWithLayout
               component={FMPaymentPage}
+              exact
+              layout={ManagersLayout}
+              path="/fm-contracts"
+            />
+
+            <RouteWithLayout
+              component={FMPaymentHistoryPage}
               exact
               layout={ManagersLayout}
               path="/fm-payments"

@@ -23,7 +23,7 @@ import MuiAlert from '@material-ui/lab/Alert';
 import Collapse from '@material-ui/core/Collapse';
 import CloseIcon from '@material-ui/icons/Close';
 import validate from 'validate.js';
-import { ChipComponent, TaggedPeopleComponent, TaggedPeopleDialog } from './components';
+import { TaggedPeopleComponent, TaggedPeopleDialog } from './components';
 import AXIOS from '../../../../../util/webservices';
 //import axios from 'axios';
 import CircularProgress from '@material-ui/core/CircularProgress';
@@ -33,6 +33,8 @@ const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
+
+/*
 function CalendarIcon(props) {
   return (
     <SvgIcon {...props} width="20" height="20" viewBox="0 0 20 20">
@@ -53,6 +55,8 @@ function AttachmentIcon(props) {
     </SvgIcon>
   );
 }
+
+*/
 
 const schema = {
 
@@ -310,9 +314,9 @@ const NewMeetingDialog = props => {
       }
   }
 
-  const [openDialog, setOpenDialog] = useState(false);
+//  const [openDialog, setOpenDialog] = useState(false);
   const [openPeopleDialog, setOpenPeopleDialog] = useState(false);
-  const [selectedDate, setSelectedDate] = useState('');
+ // const [selectedDate, setSelectedDate] = useState('');
   const [openError, setOpenError] = useState(false);
   const [serverError, setServerError] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -335,7 +339,7 @@ const NewMeetingDialog = props => {
 
  }, [formState.values]);
 
-  const [categoryData, setCategoryData] = useState([]);
+//  const [categoryData, setCategoryData] = useState([]);
 
   const [avatarList, setAvatarList] = useState([]);
 
@@ -381,9 +385,9 @@ const NewMeetingDialog = props => {
     }));
   };
 
-   const handleDateChange = (date) => {
+   /*const handleDateChange = (date) => {
      setSelectedDate(date);
-   };
+   };*/
 
   const handleSave = () => {
 
@@ -407,8 +411,8 @@ const NewMeetingDialog = props => {
 
       AXIOS.post('/meetings', obj)
       .then(response => {
-        const res = response.data;
-        console.log(res);
+        //const res = response.data;
+       // console.log(res);
         setLoading(false);
         onClose();
       })
@@ -424,8 +428,6 @@ const NewMeetingDialog = props => {
 
   const handleUpdate = () => {
 
-    //LPX097LY1NBAK4L6BTWV4YV3P
-
     if (!updateLoading) {
       setUpdateLoading(true);
 
@@ -437,7 +439,7 @@ const NewMeetingDialog = props => {
       AXIOS.put(`meetings/${meetingDetails.key.uuid}`, obj)
       .then(response => {
         const res = response.data;
-      //  console.log(res);
+        console.log(res);
         setUpdateLoading(false);
         onClose();
       })
@@ -451,7 +453,7 @@ const NewMeetingDialog = props => {
     }
   }
 
-
+/*
   const handleDialogOpen = () => {
     setOpenDialog(true);
   };
@@ -459,6 +461,8 @@ const NewMeetingDialog = props => {
   const handleDialogClose = () => {
     setOpenDialog(false);
   };
+
+  */
 
   const handlePeopleDialogOpen = () => {
     setOpenPeopleDialog(true);

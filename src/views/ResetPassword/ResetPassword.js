@@ -12,7 +12,6 @@ import {
   InputLabel,
   FormHelperText,
   TextField,
-  Checkbox,
   Paper,
   IconButton
 } from '@material-ui/core';
@@ -22,6 +21,8 @@ import Collapse from '@material-ui/core/Collapse';
 import CloseIcon from '@material-ui/icons/Close';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import axios from 'axios';
+import { useDispatch } from "react-redux";
+import { toggleSnackbarOpen } from "../../actions";
 //import { history } from '../../helpers';
 //email: true,
 const schema = {
@@ -235,12 +236,13 @@ buttonProgress: {
  }
 }));
 
-const ResetPassword = props => {
+const ResetPassword = () => {
 
   const classes = useStyles();
   let history = useHistory();
 
   const { id } = useParams();
+  const dispatch = useDispatch();
 
   const [openError, setOpenError] = useState(false);
   const [serverError, setServerError] = useState(null);
@@ -298,12 +300,10 @@ const ResetPassword = props => {
       axios.post('http://132.145.58.252:8081/spaciofm/api/user-profiles/reset-password', obj)
       .then(response => {
         const res = JSON.stringify(response.data);
-        //console.log("RESET: " + res);
+        console.log("RESET: " + res);
         setLoading(false);
-
-        //history.push('/overview');
-
-        
+        handleOpenSnackBar();
+        history.push('/signin');
       })
       .catch(function (error) {
         setLoading(false);
@@ -316,6 +316,10 @@ const ResetPassword = props => {
       });
     }
   }
+
+  const handleOpenSnackBar = () => {
+    dispatch(toggleSnackbarOpen("Reset successful!"));
+   }
 
   const handleClickShowPassword = () => {
     setShowPassword(!showPassword);

@@ -1,14 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles, makeStyles } from '@material-ui/styles';
 import {
-  Tabs,
-  Tab,
   Typography,
   Box
 } from '@material-ui/core';
-import { ServiceChargeTable, TransactionHistoryTable } from './components'
+import { TransactionHistoryTable } from './components';
+//import AXIOS from '../../../../../util/webservices';
 
+/*
 const AntTabs = withStyles({
   root: {
     borderBottom: '1px solid #C4C4C4',
@@ -19,6 +19,8 @@ const AntTabs = withStyles({
     paddingBottom: 2
   },
 })(Tabs);
+
+
 
 const AntTab = withStyles((theme) => ({
   root: {
@@ -53,6 +55,8 @@ const AntTab = withStyles((theme) => ({
   },
   selected: {},
 }))((props) => <Tab disableRipple {...props} />);
+
+*/
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -99,35 +103,78 @@ tableArea: {
 
 }));
 
-const TransactionsArea = props => {
+/*
+const handleGetAll = () => {
+
+    let promises = [];
+
+     AXIOS.get(`contracts/?index=0&range=100`)
+       .then(response => {
+           const res = response.data;
+           //console.log("CONTRACTS:" + JSON.stringify(res));
+           const mainContract = res.response;
+
+           mainContract.map(item => promises.push(AXIOS.get(`contracts/${item.key.uuid}/charges?index=0&range=100`)));
+
+           return Promise.all(promises);
+
+       })
+       .then((responseList) => {
+        console.log("CONTRACTS PROMISE:" + JSON.stringify(responseList));
+        //console.log(JSON.stringify(responseList));
+        
+      })
+      .catch(function (error) {
+          //setLoading(false);
+          console.log(error.response);
+          console.log(error.message);
+      })
+  }
+
+*/
+
+const TransactionsArea = () => {
 
   const classes = useStyles();
 
-  const [value, setValue] = React.useState(0);
+  //const [value, setValue] = React.useState(0);
+  const [services, setServices] = useState([]);
+  //const [contracts, setContracts] = useState({});
 
 
+  /*
   const handleChange = (event, newValue) => {
     //console.log(event);
     setValue(newValue);
   };
 
+  */
+
+  useEffect(() => {
+    //handleGetAll();
+ }, []);
+
+
   return (
     <div className={classes.root}>
-      <div className={classes.tabArea}>
+
+      <TransactionHistoryTable />
+      {/*<div className={classes.tabArea}>
        <AntTabs value={value} onChange={handleChange} aria-label="ant example">
-         <AntTab label="Transaction History" />
+         <AntTab label="Service Contracts" />
          <AntTab label="Service Charge" />
        </AntTabs>
        <Typography className={classes.padding} />
      </div>
      <div className={classes.tableArea}>
        <TabPanel value={value} index={0}>
-          <TransactionHistoryTable />
+
+        
        </TabPanel>
        <TabPanel value={value} index={1}>
           <ServiceChargeTable />
        </TabPanel>
-     </div>
+  </div> */}
     </div>
   );
 

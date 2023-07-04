@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles, makeStyles } from '@material-ui/styles';
+import { useHistory } from 'react-router-dom';
 import clsx from 'clsx';
 import {
   Grid,
@@ -14,16 +15,11 @@ import {
   TableRow,
   TablePagination,
   Paper,
-  Chip,
   SvgIcon,
-  IconButton,
   Toolbar,
   TextField,
   FormControl,
-  FormGroup,
-  FormControlLabel,
   InputAdornment,
-  Popover,
   Button,
   Checkbox,
   Box
@@ -33,59 +29,6 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import moment from 'moment';
 import CurrencyFormat from 'react-currency-format';
 import AXIOS from '../../../../../../../util/webservices';
-
-const rows = [
-    {
-       "index": 0,
-       "date": "09/12/2022",
-       "amount": 15000,
-       "username": "Frank Olise",
-       "userid": "Resident",
-       "description": "Monthly Subscription",
-       "status": 1,
-       "payMethod": "Bank Transfer"
-   },
-   {
-     "index": 1,
-     "date": "13/09/2022",
-     "amount": 28500,
-     "username": "Hauwa Beki",
-     "userid": "Resident",
-     "description": "Single Payment",
-     "status": 1,
-     "payMethod": "Bank Transfer"
-  },
-  {
-    "index": 2,
-    "date": "13/09/2022",
-    "amount": 30000,
-    "username": "Tunde Badmus",
-    "userid": "Resident-Exco",
-    "description": "Monthly Subscription",
-    "status": 0,
-    "payMethod": "Bank Transfer"
-  },
-  {
-    "index": 3,
-    "date": "13/09/2022",
-    "amount": 18000,
-    "username": "Festus Lar",
-    "userid": "Resident",
-    "description": "Monthly Subscription",
-    "status": 1,
-    "payMethod": "Cash"
-  },
-  {
-    "index": 4,
-    "date": "14/09/2022",
-    "amount": 14500,
-    "username": "Bella Osu",
-    "userid": "Resident-Exco",
-    "description": "Monthly Subscription",
-    "status": 1,
-    "payMethod": "Bank Transfer"
-  }
-];
 
 const StyledTableCell = withStyles((theme) => ({
   head: {
@@ -108,8 +51,7 @@ const StyledTableCell = withStyles((theme) => ({
 const StyledTableRow = withStyles((theme) => ({
   root: {
       backgroundColor: "#FFFFFF",
-      cursor: "pointer"
-  },
+ },
 }))(TableRow);
 
 function descendingComparator(a, b, orderBy) {
@@ -138,6 +80,7 @@ function stableSort(array, comparator) {
   return stabilizedThis.map((el) => el[0]);
 }
 
+/*
 function FilterIcon(props) {
   return (
     <SvgIcon {...props} width="22" height="21" viewBox="0 0 22 21">
@@ -154,6 +97,8 @@ function ExportIcon(props) {
   );
 }
 
+*/
+
 function RightArrowIcon(props) {
   return (
     <SvgIcon {...props} width="22" height="21" viewBox="0 0 25 25">
@@ -163,7 +108,7 @@ function RightArrowIcon(props) {
   );
 }
 
-const headCells = [
+/*const headCells = [
   {
     id: 'date',
     numeric: false,
@@ -199,6 +144,44 @@ const headCells = [
     numeric: true,
     label: 'PAYMENT METHOD',
   }
+];*/
+
+const headCells = [
+  {
+    id: 'createdAt',
+    numeric: false,
+    label: 'DATE CREATED',
+  },
+  {
+    id: 'serviceType',
+    numeric: false,
+    label: 'SERVICE TYPE',
+  },
+  {
+    id: 'serviceId',
+    numeric: false,
+    label: 'SERVICE ID',
+  },
+  {
+    id: 'numberOfResidents',
+    numeric: false,
+    label: 'No. of RESIDENTS',
+  },
+  {
+    id: 'charge',
+    numeric: false,
+    label: 'CHARGE',
+  },
+  {
+    id: 'frequency',
+    numeric: true,
+    label: 'FREQUENCY',
+  },
+  {
+    id: 'delete',
+    numeric: true,
+    label: '',
+  },
 ];
 
 function EnhancedTableHead(props) {
@@ -437,9 +420,10 @@ const EnhancedTableToolbar = (props) => {
 
   }));
 
-    const { onOpenMenu, onHandleMenuClose, anchorEl, checkid, onMenuClick, checkState, onHandleCheckChange, onHandleFilter } = props;
+    const { onHandleSearch } = props;
     const styles = toolbarStyles();
 
+    /*
     function StyledCheckbox(props) {
 
       return (
@@ -454,6 +438,7 @@ const EnhancedTableToolbar = (props) => {
         />
       );
     }
+    */
 
     return (
       <Toolbar className={styles.toolbar}>
@@ -471,7 +456,7 @@ const EnhancedTableToolbar = (props) => {
                 fontWeight: 600,
               }}
             >
-              Transaction History
+              Contracts List
             </Typography>
 
             {/*<Button
@@ -510,6 +495,7 @@ const EnhancedTableToolbar = (props) => {
                     name="searchOrder"
                     type="text"
                     placeholder="Search"
+                    onChange={onHandleSearch}
                     InputProps={{
                       endAdornment: <InputAdornment position="start">
                       <SearchIcon style={{ fontSize: 16, color: '#1B75BC' }} />
@@ -520,6 +506,7 @@ const EnhancedTableToolbar = (props) => {
                   />
                 </FormControl>
               </Grid>
+              {/*
               <Grid
               item
               lg={2}>
@@ -618,6 +605,7 @@ const EnhancedTableToolbar = (props) => {
               </Button>
 
               </Grid>
+              */}
             </Grid>
           </Grid>
         </Grid>
@@ -626,12 +614,7 @@ const EnhancedTableToolbar = (props) => {
   };
 
   EnhancedTableToolbar.propTypes = {
-    onOpenMenu: PropTypes.bool,
-    onHandleMenuClose: PropTypes.func,
-    anchorEl: PropTypes.bool,
-    checkid: PropTypes.string,
-    onMenuClick: PropTypes.func,
-    onHandleFilter: PropTypes.func
+    onHandleSearch: PropTypes.func
   };
 
   const useStyles = makeStyles(theme => ({
@@ -673,12 +656,25 @@ const EnhancedTableToolbar = (props) => {
       marginBottom: 10,
       marginLeft: '50%',
       zIndex: 10
-    }
+    },
+    plainButtonStyle: {
+      textTransform: 'none',
+      fontSize: 12,
+      color: theme.palette.primary.main,
+      fontWeight: 400,
+      padding: '7px 10px',
+      backgroundColor: 'transparent',
+      boxShadow: 'none',
+      "&:hover": {
+        backgroundColor: 'transparent',
+      },
+    },
   }));
 
   const TransactionHistoryTable = props => {
 
     const classes = useStyles();
+    let history = useHistory();
 
     const [anchorEl, setAnchorEl] = useState(null);
     const [order, setOrder] = useState('asc');
@@ -686,19 +682,27 @@ const EnhancedTableToolbar = (props) => {
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(5);
     const [loading, setLoading] = useState(false);
-    const [transactions, setTransactions] = useState([]);
+    //const [transactions, setTransactions] = useState([]);
+    const [services, setServices] = useState([]);
+    const [serviceList, setServiceList] = useState([]);
 
+    /*
     const [checkState, setCheckState] = useState({
      all: false,
      pending: false,
      closed: false,
    });
 
-   const openPostMenu = Boolean(anchorEl);
-   const checkid = openPostMenu ? 'simple-popover' : undefined;
+   */
+
+   //const openPostMenu = Boolean(anchorEl);
+   //const checkid = openPostMenu ? 'simple-popover' : undefined;
+
+   //console.log("CONTRACTS:", contract);
 
   useEffect(() => {
-    handleAllTransactions();
+    //handleAllTransactions();
+    handleGetAll();
   }, []);
 
    const handleRequestSort = (event, property) => {
@@ -716,6 +720,7 @@ const EnhancedTableToolbar = (props) => {
     setPage(0);
   };
 
+  /*
   const handleCheckChange =(event) => {
     setCheckState({...checkState, [event.target.name]: event.target.checked});
   }
@@ -728,47 +733,130 @@ const EnhancedTableToolbar = (props) => {
    setAnchorEl(null);
  };
 
+ */
 
+ const handleSearchChange = event => {
+  let newList = [];
+  let query = event.target.value;
+  //.log(serviceList);
+  newList = query ? serviceList.filter(service => service.serviceType.includes(query) || 
+  service.serviceId.includes(query)) : serviceList;
+  //console.log(newList);
+  setServices(newList);
+}
+
+/*
  const handleFilter = () => {
    console.log("FILTER DATA!");
  }
 
- 
- const handleAllTransactions = () => {
+ */
 
-        let serviceContractsId = '';
-        let serviceChargeId = '';
+ const handleGetAll = () => {
+
+  AXIOS.get('contracts/?index=0&range=100')
+    .then(response => {
+        const res = response.data;
+        //setServices(res.response);
+        //setLoading(false);
+        res.response.map((contract)=> {
+
+          AXIOS.get(`contracts/${contract.key.uuid}/charges?index=0&range=100`)
+            .then(resp => {
+                const res1 = resp.data;
+              //  console.log("CHARGES DATA:" + JSON.stringify(res1));
+              //  console.log("CONTRACT KEY:" + JSON.stringify(contract));
+                const obj = res1.response;
+                const chargeData =
+                  {
+                    segmentName: contract.segmentName,
+                    userId: contract.userId,
+                    createdAt: contract.createdAt,
+                    serviceType: contract.serviceType,
+                    serviceId: contract.serviceId,
+                    numberOfResidents: contract.numberOfResidents,
+                    charge: contract.charge,
+                    frequency: contract.frequency,
+                    category: contract.category,
+                    creator: contract.creator,
+                    key: contract.key,
+                    chargeData: obj
+                  };
+
+              //  console.log("MY Charges:" + JSON.stringify(chargeData));
+                //setCharges(res.response);
+                setServices(services => [...services, chargeData]);
+                setServiceList(serviceList => [...serviceList, chargeData])
+                setLoading(false);
+                //setServices(res.response);
+            })
+            .catch(function (error) {
+                setLoading(false);
+                console.log(error.response);
+                console.log(error.message);
+            })
+        })
+
+
+    })
+    .catch(function (error) {
+        setLoading(false);
+        console.log(error.response);
+        console.log(error.message);
+    })
+}
+
+const handleOpenPaymentsList = (contractId, chargeId) => {
+  history.push({
+    pathname: '/fm-payments',
+    state: {
+      contractId: contractId,
+      chargeId: chargeId
+    }
+  });
+}
+ 
+ /* const handleAllTransactions = () => {
+
+    console.log("CONTRACTS:", contract);
+
+    let contractId = '';
+    let chargeId = '';
+
+
+    if(contract !== undefined || typeof contract !== 'undefined') {
+
+      if(Object.keys(contract).length > 0) {
+        contractId = contract.key.uuid;
+        chargeId = contract.chargeData[0].key.uuid;
+      }
         
-        AXIOS.get(`contracts/${serviceContractsId}/charges/${serviceChargeId}/payments`)
+      console.log("CONTRACT ID:", contractId);
+      AXIOS.get(`contracts/${contractId}/charges/${chargeId}/payments`)
           .then(response => {
             setLoading(false);
             const res = response.data.response;
-            //console.log("ALL MEETINGS:" + JSON.stringify(res));
+            console.log("ALL MEETINGS:" + JSON.stringify(res));
             setTransactions(res);
           })
           .catch(function (error) {
             setLoading(false);
-            console.log(error.response);
+            console.log(error);
             console.log(error.message);
           })
-}
+    }
+ 
+}*/
 
  const emptyRows =
-  page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
+  page > 0 ? Math.max(0, (1 + page) * rowsPerPage - services.length) : 0;
 
 
     return (
       <Paper style={{ width: '100%' }}>
         <div className={classes.paperBody}>
           <EnhancedTableToolbar
-            onOpenMenu={openPostMenu}
-            onHandleMenuClose={handleMenuClose}
-            anchorEl={anchorEl}
-            checkid={checkid}
-            onMenuClick={handleMenuClick}
-            checkState={checkState}
-            onHandleCheckChange={handleCheckChange}
-            onHandleFilter={handleFilter}/>
+            onHandleSearch={handleSearchChange} />
           <div>
             {loading && <CircularProgress size={25} className={classes.buttonProgress} /> }
             <TableContainer>
@@ -778,18 +866,18 @@ const EnhancedTableToolbar = (props) => {
                   orderBy={orderBy}
                   onRequestSort={handleRequestSort}/>
                 <TableBody>
-                  {stableSort(transactions, getComparator(order, orderBy))
+                  {/* Add to StyledTabRow for click action
+                      onClick={()=>handleOpenServiceContract(row)}
+                  */}
+                  {stableSort(services, getComparator(order, orderBy))
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((row, index) => {
                       return (
-                        <StyledTableRow hover role="button" key={row.index}>
+                        <StyledTableRow key={row.index}>
                           <StyledTableCell component="th" scope="row">
-                              {moment(row.date).format('DD/MM/YYYY')}
+                              {moment(row.createdAt).format('DD/MM/YYYY')}
                           </StyledTableCell>
-                          <StyledTableCell align="center">
-                            <CurrencyFormat value={row.amount} displayType={'text'} thousandSeparator={true} prefix={'₦'} />
-                          </StyledTableCell>
-                          <StyledTableCell style={{ maxWidth: 100, whiteSpace: 'nowrap' }}>
+                          <StyledTableCell style={{ maxWidth: 120, whiteSpace: 'nowrap' }}>
                             <Box
                                component="div"
                                my={2}
@@ -797,7 +885,7 @@ const EnhancedTableToolbar = (props) => {
                                overflow="hidden"
                                bgcolor="transparent"
                              >
-                               {row.username}
+                               {row.serviceType}
                              </Box>
                           </StyledTableCell>
                           <StyledTableCell style={{ maxWidth: 80, whiteSpace: 'nowrap' }}>
@@ -808,37 +896,31 @@ const EnhancedTableToolbar = (props) => {
                                overflow="hidden"
                                bgcolor="transparent"
                              >
-                               {row.userid}
+                               {row.serviceId}
                              </Box>
                           </StyledTableCell>
-                          <StyledTableCell style={{ maxWidth: 120, whiteSpace: 'nowrap' }}>
-                          <Box
-                             component="div"
-                             my={1}
-                             textOverflow="ellipsis"
-                             overflow="hidden"
-                             bgcolor="transparent"
-                           >
-                              {row.description}
-                            </Box>
-                          </StyledTableCell>
                           <StyledTableCell align="center">
-                            {row.status > 0 ?
-                            <Chip
-                              label="Successful"
-                              variant="outlined"
-                              classes={{ root: classes.successfulStyles, label: classes.successfulLabelStyle }}
-                            />
-                            :
-                            <Chip
-                              label="OVerdue"
-                              variant="outlined"
-                              classes={{ root: classes.failedStyles, label: classes.failedLabelStyles  }}
-                            />
-                          }
+                              1
                           </StyledTableCell>
                           <StyledTableCell>
-                            {row.payMethod}
+                            {row.charge !== null ?
+                              (<CurrencyFormat value={row.charge} displayType={'text'} thousandSeparator={true} prefix={'₦'} />)
+                              :
+                              null
+                            }
+
+                          </StyledTableCell>
+                          <StyledTableCell align="center">
+                              {row.frequency}
+                          </StyledTableCell>
+                          <StyledTableCell align="end">
+                            <Button
+                              className={classes.plainButtonStyle}
+                              endIcon={<RightArrowIcon style={{  fontSize: 16, fill:'none' }} />}
+                              onClick={()=>handleOpenPaymentsList(row.key.uuid, row.chargeData[0].key.uuid)}>
+                              View Payment
+                            </Button>
+                           
                           </StyledTableCell>
                         </StyledTableRow>
                       );
@@ -859,7 +941,7 @@ const EnhancedTableToolbar = (props) => {
             <TablePagination
                rowsPerPageOptions={[5, 10, 25]}
                component="div"
-               count={rows.length}
+               count={services.length}
                rowsPerPage={rowsPerPage}
                page={page}
                onPageChange={handleChangePage}

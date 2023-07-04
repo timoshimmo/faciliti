@@ -3,9 +3,6 @@ import { makeStyles } from '@material-ui/styles';
 import {
   Grid,
   Typography,
-  Card,
-  CardContent,
-  CardActions,
 } from '@material-ui/core';
 import { Overview, Logs, NewVisitorDialog } from './components';
 

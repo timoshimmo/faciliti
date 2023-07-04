@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles, makeStyles } from '@material-ui/styles';
 import clsx from 'clsx';
@@ -16,23 +16,22 @@ import {
   Paper,
   Chip,
   SvgIcon,
-  IconButton,
   Toolbar,
   TextField,
   FormControl,
-  FormGroup,
-  FormControlLabel,
   InputAdornment,
-  Popover,
   Button,
   Checkbox,
   Box
 } from '@material-ui/core';
 import SearchIcon from '@material-ui/icons/Search';
-import CircularProgress from '@material-ui/core/CircularProgress';
+//import CircularProgress from '@material-ui/core/CircularProgress';
 import moment from 'moment';
 import CurrencyFormat from 'react-currency-format';
 
+const rows = [];
+
+/*
 const rows = [
     {
        "index": 0,
@@ -86,6 +85,8 @@ const rows = [
   }
 ];
 
+*/
+
 const StyledTableCell = withStyles((theme) => ({
   head: {
     backgroundColor: '#FAFAFA',
@@ -137,6 +138,7 @@ function stableSort(array, comparator) {
   return stabilizedThis.map((el) => el[0]);
 }
 
+/*
 function FilterIcon(props) {
   return (
     <SvgIcon {...props} width="22" height="21" viewBox="0 0 22 21">
@@ -152,6 +154,8 @@ function ExportIcon(props) {
     </SvgIcon>
   );
 }
+
+*/
 
 function RightArrowIcon(props) {
   return (
@@ -435,23 +439,8 @@ const EnhancedTableToolbar = (props) => {
 
   }));
 
-    const { onOpenMenu, onHandleMenuClose, anchorEl, checkid, onMenuClick, checkState, onHandleCheckChange, onHandleFilter } = props;
+    //const { onHandleFilter } = props;
     const styles = toolbarStyles();
-
-    function StyledCheckbox(props) {
-
-      return (
-        <Checkbox
-          className={styles.checkroot}
-          disableRipple
-          color="default"
-          checkedIcon={<span className={clsx(styles.checkIcon, styles.checkedIcon)} />}
-          icon={<span className={styles.checkIcon} />}
-          inputProps={{ 'aria-label': 'decorative checkbox' }}
-          {...props}
-        />
-      );
-    }
 
     return (
       <Toolbar className={styles.toolbar}>
@@ -481,7 +470,7 @@ const EnhancedTableToolbar = (props) => {
           <Grid
           item
           lg={8}>
-          <Grid container spacing={2} justify="flex-end" alignItems='center'>
+          <Grid container spacing={2} justifyContent="flex-end" alignItems='center'>
             <Grid
             item
             lg={6}>
@@ -518,6 +507,7 @@ const EnhancedTableToolbar = (props) => {
                   />
                 </FormControl>
               </Grid>
+              {/*
               <Grid
               item
               lg={1.5}>
@@ -616,20 +606,15 @@ const EnhancedTableToolbar = (props) => {
               </Button>
 
               </Grid>
+              
+              
+            
+                  */}
             </Grid>
           </Grid>
         </Grid>
       </Toolbar>
     );
-  };
-
-  EnhancedTableToolbar.propTypes = {
-    onOpenMenu: PropTypes.bool.isRequired,
-    onHandleMenuClose: PropTypes.func.isRequired,
-    anchorEl: PropTypes.bool.isRequired,
-    checkid: PropTypes.string.isRequired,
-    onMenuClick: PropTypes.func.isRequired,
-    onHandleFilter: PropTypes.func.isRequired
   };
 
   const useStyles = makeStyles(theme => ({
@@ -678,21 +663,12 @@ const EnhancedTableToolbar = (props) => {
 
     const classes = useStyles();
 
-    const [anchorEl, setAnchorEl] = useState(null);
+   // const [anchorEl, setAnchorEl] = useState(null);
     const [order, setOrder] = useState('asc');
     const [orderBy, setOrderBy] = useState('date');
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(5);
-    const [loading, setLoading] = useState(false);
-
-    const [checkState, setCheckState] = useState({
-     all: false,
-     pending: false,
-     closed: false,
-   });
-
-   const openPostMenu = Boolean(anchorEl);
-   const checkid = openPostMenu ? 'simple-popover' : undefined;
+ //   const [loading, setLoading] = useState(false);
 
    const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -709,23 +685,6 @@ const EnhancedTableToolbar = (props) => {
     setPage(0);
   };
 
-  const handleCheckChange =(event) => {
-    setCheckState({...checkState, [event.target.name]: event.target.checked});
-  }
-
-  const handleMenuClick = (event) => {
-   setAnchorEl(event.currentTarget);
- };
-
- const handleMenuClose = () => {
-   setAnchorEl(null);
- };
-
-
- const handleFilter = () => {
-   console.log("FILTER DATA!");
- }
-
  const emptyRows =
   page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
 
@@ -733,17 +692,8 @@ const EnhancedTableToolbar = (props) => {
     return (
       <Paper style={{ width: '100%' }}>
         <div className={classes.paperBody}>
-          <EnhancedTableToolbar
-            onOpenMenu={openPostMenu}
-            onHandleMenuClose={handleMenuClose}
-            anchorEl={anchorEl}
-            checkid={checkid}
-            onMenuClick={handleMenuClick}
-            checkState={checkState}
-            onHandleCheckChange={handleCheckChange}
-            onHandleFilter={handleFilter}/>
+          <EnhancedTableToolbar/>
           <div>
-            {loading && <CircularProgress size={25} className={classes.buttonProgress} /> }
             <TableContainer>
               <Table className={classes.table} aria-label="customized table">
                 <EnhancedTableHead

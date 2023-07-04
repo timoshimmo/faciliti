@@ -123,6 +123,7 @@ const Overview = props => {
 
   const [approved, setApproved] = useState(0);
   const [denied, setDenied] = useState(0);
+  const [history, setHistory] = useState(0);
 
   useEffect(() => {
     handleGetMetrics();
@@ -147,10 +148,18 @@ const Overview = props => {
        'user-id' : userId
      } });
 
-     axios.all([requestOne, requestTwo])
+     const requestThree = axios.get(`http://132.145.58.252:8081/spaciofm/api/visits/get-by-resident?index=0&range=100`, { headers: {
+       'Authorization': `Bearer ${token}`,
+       'provider': 'CRX',
+       'tenant-id' : tenantSegment,
+       'user-id' : userId
+     } });
+
+     axios.all([requestOne, requestTwo, requestThree])
        .then(axios.spread((...responses) => {
          const responseOne = responses[0];
          const responseTwo = responses[1];
+         const responseThree = responses[2];
 
          //console.log("RESPONSE 1:", JSON.stringify(responseOne));
          //console.log("RESPONSE 2:", JSON.stringify(responseTwo));
@@ -158,9 +167,11 @@ const Overview = props => {
 
          const approvedVal = responseOne.data.response.length;
          const deniedVal = responseTwo.data.response.length;
+         const historyVal = responseThree.data.response.length;
 
          setApproved(approvedVal);
          setDenied(deniedVal);
+         setHistory(historyVal);
        }))
        .catch((error) => {
          console.log(error.response);
@@ -282,7 +293,7 @@ const Overview = props => {
                     variant="body1"
                     color="primary"
                     className={classes.valueStyle}>
-                    0
+                    {history}
                   </Typography>
                 </Grid>
             </Grid>
@@ -316,7 +327,7 @@ const Overview = props => {
                         variant="body1"
                         color="primary"
                         className={classes.actionTitleWhite}>
-                        Schedule Visitor(s)
+                        Schedule
                       </Typography>
                     </Grid>
                 </Grid>

@@ -5,7 +5,6 @@ import {
   Typography,
   Card,
   SvgIcon,
-  LinearProgress
 } from '@material-ui/core';
 import AXIOS from '../../../../../util/webservices';
 
@@ -186,9 +185,9 @@ const OrderSummaryArea = props => {
    const handleMetrics = (event) => {
 
     let urls = [
-      "workorders/get-by-resident/?status=IN_PROGRESS",
-      "workorders/get-by-resident/?status=COMPLETED",
-      "workorders/get-by-resident/?status=ON_HOLD"
+      "resorders/get-by-resident/?status=IN_PROGRESS",
+      "resorders/get-by-resident/?status=COMPLETED",
+      "resorders/get-by-resident/?status=ON_HOLD"
     ];
 
     const requests = urls.map((url) => AXIOS.get(url));

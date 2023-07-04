@@ -8,13 +8,10 @@ import {
   DialogTitle,
   Slide,
   InputAdornment,
-  List,
-  IconButton,
-  Grid
+  List
 } from '@material-ui/core';
 import SearchIcon from '@material-ui/icons/Search';
 import { EstateListComponent } from './components';
-import CloseIcon from '@material-ui/icons/Close';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -71,7 +68,7 @@ const EstateDialog = props => {
     { key: 4, label: 'Beach Estate - Port Harcourt' },
     ]);
 
-  const [searchQuery, setSearchQuery] = useState(false);
+  const [, setSearchQuery] = useState(false);
 
   const handleChange = event => {
     event.persist();

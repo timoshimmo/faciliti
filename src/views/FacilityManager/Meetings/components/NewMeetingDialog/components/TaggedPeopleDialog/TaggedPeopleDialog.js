@@ -147,40 +147,16 @@ const TaggedPeopleDialog = props => {
         }
     }
 
-    const [searchQuery, setSearchQuery] = useState(false);
     const [btnText, setBtnText] = useState('Invite');
     const [liveTaggedList, setLiveTaggedList] = useState([]);
     const [peopleList, setPeopleList] = useState([]);
 
     useEffect(() => {
-      handleDummyAll();
+      handleAllContacts();
    }, [setPeopleList]);
 
 
   const handleAllContacts = () => {
-
-    AXIOS.get('/contacts/', {
-      params: {
-        index: 0,
-        range: 10
-      }
-    })
-    .then(response => {
-      const res = response.data;
-  //    console.log("ALL CONTACTS: ", res);
-      //setLoading(false);
-    })
-    .catch(function (error) {
-      //setLoading(false);
-      console.log(error.response);
-      console.log(error.message);
-    //  setServerError("There was a problem adding a meeting. Pls try again");
-    //  setOpenError(true);
-    })
-
-  }
-
-  const handleDummyAll = () => {
   //  event.persist();
   //  setSearchQuery(event.target.value);
 

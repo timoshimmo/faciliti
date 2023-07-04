@@ -8,6 +8,7 @@ import {
   CardContent,
   SvgIcon
 } from '@material-ui/core';
+import { useHistory } from 'react-router-dom';
 import AXIOS from '../../../../../util/webservices';
 
 
@@ -108,9 +109,10 @@ const useStyles = makeStyles(theme => ({
 }));
 
 
-const OverviewArea = props => {
+const OverviewArea = () => {
 
   const classes = useStyles();
+  let history = useHistory();
 
   let userData = {};
   if (typeof localStorage !== 'undefined') {
@@ -129,27 +131,45 @@ const OverviewArea = props => {
     handleMetrics();
  }, []);
 
-  const handleMetrics = (event) => {
+ //"resorders/?index=0&range=1000"
+
+  const handleMetrics = () => {
 
     let urls = [
       "visits/pending-visits",
       "contracts/?index=0&range=1000",
-      "resorders/?index=0&range=1000"
+      "meetings/pending-meetings"
     ];
 
     const requests = urls.map((url) => AXIOS.get(url));
 
-    Promise.all(requests).then(([{data: visits}, {data: contracts}, {data: resOrders}]) => {
+    Promise.all(requests).then(([{data: visits}, {data: contracts}, {data: meetings}]) => {
       
         setVisitsCount(visits.response.length);
         setContractsCount(contracts.response.length);
-        setMaintenanceCount(resOrders.response.length);
+        setMaintenanceCount(meetings.response.length);
       
   })
     .catch(function (error) {
       console.log(error.message);
     })
   };
+
+  const handleProfile = () => {
+    history.push('/profile');
+ }
+
+ const handleMeetings = () => {
+  history.push('/meetings');
+}
+
+const handleServiceContracts = () => {
+  history.push('/fm-services');
+}
+
+const handleVisits = () => {
+  history.push('/fm-visitors');
+}
 
   //console.log(userData);
 
@@ -165,6 +185,7 @@ const OverviewArea = props => {
               disableripple="true"
               disabletouchripple="true"
               style={{ height: '100%'}}
+              onClick={handleProfile}
             >
               <CardContent className={classes.cardContent}>
                 <Grid container direction="row" alignItems="center" className={classes.gridAction}>
@@ -206,6 +227,7 @@ const OverviewArea = props => {
               disableripple="true"
               disabletouchripple="true"
               style={{ height: '100%'}}
+              onClick={handleMeetings}
             >
               <CardContent>
                 <Grid container direction="row" alignItems="center" className={classes.gridAction}>
@@ -223,13 +245,13 @@ const OverviewArea = props => {
                         variant="body1"
                         color="primary"
                         className={classes.actionTitle}>
-                        Maintenance
+                        Meetings
                       </Typography>
                       <Typography
                         variant="body2"
                         color="secondary"
                         className={classes.actionSubtitle2}>
-                        {maintenanceCount} Due Today
+                        {maintenanceCount} pending
                       </Typography>
                     </Grid>
                 </Grid>
@@ -246,6 +268,7 @@ const OverviewArea = props => {
               disableripple="true"
               disabletouchripple="true"
               style={{ height: '100%'}}
+              onClick={handleServiceContracts}
             >
               <CardContent>
                 <Grid container direction="row" alignItems="center" className={classes.gridAction}>
@@ -286,6 +309,7 @@ const OverviewArea = props => {
               disableripple="true"
               disabletouchripple="true"
               style={{ height: '100%'}}
+              onClick={handleVisits}
             >
               <CardContent>
                 <Grid container direction="row" alignItems="center" className={classes.gridAction}>

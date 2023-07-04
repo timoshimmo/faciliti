@@ -19,7 +19,6 @@ import validate from 'validate.js';
 import CloseIcon from '@material-ui/icons/Close';
 import MuiAlert from '@material-ui/lab/Alert';
 import Autocomplete from '@material-ui/lab/Autocomplete';
-import axios from 'axios';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import AXIOS from '../../../../../util/webservices';
 import moment from 'moment';
@@ -262,8 +261,6 @@ const handleChange = event => {
 
 const handleMakePayment = () => {
 
-  //event.preventDefault();
-
   if (!loading) {
     setLoading(true);
 
@@ -285,8 +282,6 @@ const handleMakePayment = () => {
     
     //const linkStr = 
 
-    console.log("MAKE PAYMENT REQUEST: ", obj);
-
   //`contracts/${contractId}/charges/${chargeId}/payments`
       AXIOS.post(`contracts/${contractId}/charges/${chargeId}/payments`, obj)
       .then(response => {
@@ -294,7 +289,7 @@ const handleMakePayment = () => {
         console.log(JSON.stringify(res.response));
         handleOpenSnackBar();
         setLoading(false);
-  //      closeModal();
+        closeModal();
       })
       .catch(function (error) {
         setLoading(false);
@@ -307,33 +302,12 @@ const handleMakePayment = () => {
     }
 }
 
-
-/*  const handleDialogOpen = () => {
-    setOpenDialog(true);
-  };
-
-  const handleDialogClose = () => {
-    setOpenDialog(false);
-  };
-
-  */
-
-
  const handleOpenSnackBar = () => {
    dispatch(toggleSnackbarOpen("Payment successful!"));
   }
 
   const hasError = field =>
     formState.touched[field] && formState.errors[field] ? true : false;
-
-
-
-  /*const categoryItems = () => {
-      return categoryData.map((category, i) => {
-          return <ChipComponent obj={category} idx={i} setCategoryData={setCategoryData} setCategoryList={setCategoryList} categoryList={categoryList} />;
-      })
-  }*/
-
 
   return (
 

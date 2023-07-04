@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { makeStyles } from '@material-ui/styles';
 import {
-  Grid
+  Grid,
+  Typography,
 } from '@material-ui/core';
 import { Account, ChangePassword } from './components'
 
@@ -33,7 +34,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const Profile = props => {
+const UserProfile = () => {
 
     const classes = useStyles();
 
@@ -58,4 +59,4 @@ const Profile = props => {
     );
 }
 
-export default Profile;
+export default UserProfile;

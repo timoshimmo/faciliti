@@ -156,19 +156,6 @@ function createLogs( id, registered, visitor, persons, duedate, contact, status)
   return { id, registered, visitor, persons, duedate, contact, status };
 }
 
-const rows = [
-  createLogs( 1, '12/09/2021', 'Yusuf Audu', 1, '12/09/2021', '08099223344', 0),
-  createLogs( 2, '12/09/2021', 'Gbola Ahmed', 3, '12/09/2021', '08099223344', 0),
-  createLogs( 3, '12/09/2021', 'Cynthia Omoregie', 4, '12/09/2021', '08099223344', 0),
-  createLogs( 4, '12/09/2021', 'Obinna Nwosu', 2, '12/09/2021', '08099223344', 2),
-  createLogs( 5, '12/09/2021', 'Nyemike Onukwu', 1, '12/09/2021', '08099223344', 1),
-  createLogs( 6, '12/09/2021', 'Simi Buba', 3, '12/09/2021', '08099223344', 2),
-  createLogs( 7, '12/09/2021', 'Tobi Musa', 2, '12/09/2021', '08099223344', 2),
-  createLogs( 8, '12/09/2021', 'Tokmang Wang', 1, '12/09/2021', '08099223344', 2),
-  createLogs( 9, '12/09/2021', 'Afam Ojemeni', 2, '12/09/2021', '08099223344', 1),
-  createLogs( 10, '12/09/2021', 'Akugbe Otakpowehin', 5, '12/09/2021', '08099223344', 1),
-];
-
 const useStyles = makeStyles(theme => ({
 
   table: {

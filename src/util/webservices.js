@@ -13,7 +13,7 @@ instance.interceptors.request.use(
     let userId = localStorage.getItem('userId');
    // let currentEstateXri = localStorage.getItem('currentEstateXri');
     let tenantSegment = localStorage.getItem('tenantSegment');
-    const adminUser = `admin-${tenantSegment}`;
+    //const adminUser = `admin-${tenantSegment}`;
     //console.log(token);
     //'JAGG66'
 

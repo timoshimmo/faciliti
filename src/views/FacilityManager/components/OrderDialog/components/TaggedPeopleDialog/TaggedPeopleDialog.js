@@ -115,9 +115,9 @@ const TaggedPeopleDialog = props => {
 
   const classes = useStyles();
 
-  const { onOpen, onClose, peopleList, setAvatarList, avatarList } = props;
+  const { onOpen, onClose, peopleList, setAvatarList } = props;
 
-  const [searchQuery, setSearchQuery] = useState(false);
+  const [, setSearchQuery] = useState(false);
   const [btnText, setBtnText] = useState('Invite');
   const [liveTaggedList, setLiveTaggedList] = useState([]);
 

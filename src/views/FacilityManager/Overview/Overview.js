@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { makeStyles } from '@material-ui/styles';
 import {
   Grid,
@@ -48,8 +48,8 @@ const Overview = props => {
     AXIOS.get(`http://132.145.58.252:8081/spaciofm/api/configurations/tenant-config?tenant-id=${tenantSegment}`)
     .then(response => {
       const result = response.data;
-      console.log("SERVICE CONTRACTOR: ", result['Service Contract Creator']);
-      console.log("CONTRACT TYPE ID: ", result['Maintenance Service Charge Type']);
+      //console.log("SERVICE CONTRACTOR: ", result['Service Contract Creator']);
+     // console.log("CONTRACT TYPE ID: ", result['Maintenance Service Charge Type']);
       localStorage.setItem('serviceContractCreator', result['Service Contract Creator']);
       localStorage.setItem('maintenanceChargeType', result['Maintenance Service Charge Type']);
 

@@ -3,9 +3,6 @@ import { makeStyles } from '@material-ui/styles';
 import {
   Grid,
   Typography,
-  Card,
-  CardContent,
-  CardActions,
 } from '@material-ui/core';
 import { Billing, PaymentHistory } from './components';
 import AXIOS from '../../../util/webservices';
@@ -35,16 +32,17 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const Payment = props => {
+const Payment = () => {
 
     const classes = useStyles();
 
-    const [services, setServices] = useState([]);
-    const [loading, setLoading] = useState(false);
+    const [services, setServices] = useState({});
+    const [contracts, setContracts] = useState({});
+    //const [loading, setLoading] = useState(false);
 
     useEffect(() => {
       handleGetAll();
-   }, []);
+   }, [services, setServices, contracts]);
 
      const handleGetAll = () => {
 
@@ -53,14 +51,14 @@ const Payment = props => {
              const res = response.data;
              //console.log("CONTRACTS:" + JSON.stringify(res));
              const mainContract = res.response[0];
+             setContracts(mainContract);
              //setServices(res.response);
              //setLoading(false);
 
                AXIOS.get(`contracts/${mainContract.key.uuid}/charges?index=0&range=100`)
                  .then(resp => {
                      const res1 = resp.data;
-                    // console.log("CHARGES DATA:" + JSON.stringify(resp));
-                   //  console.log("CONTRACT KEY:" + JSON.stringify(contract));
+                    
                      const obj = res1.response;
                      const chargeData =
                        {
@@ -81,18 +79,18 @@ const Payment = props => {
                   //   console.log("MY Charges:" + JSON.stringify(chargeData));
                      //setCharges(res.response);
                      setServices(chargeData);
-                     setLoading(false);
+                     //setLoading(false);
                      //setServices(res.response);
                  })
                  .catch(function (error) {
-                     setLoading(false);
+                     //setLoading(false);
                      console.log(error.response);
                      console.log(error.message);
                  })
 
          })
          .catch(function (error) {
-             setLoading(false);
+             //setLoading(false);
              console.log(error.response);
              console.log(error.message);
          })
@@ -134,7 +132,15 @@ const Payment = props => {
             <Grid
               item
               lg={12}>
-                <PaymentHistory contract={services}/>
+                {Object.keys(services).length > 0 ? 
+                <div>
+                  <PaymentHistory contract={services}/>
+                </div>
+                  
+                  :
+                  null
+                }
+                
               </Grid>
         </Grid>
       </div>

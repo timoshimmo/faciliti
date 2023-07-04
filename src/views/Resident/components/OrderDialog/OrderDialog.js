@@ -253,7 +253,7 @@ const OrderDialog = props => {
 
   const [categoryData, setCategoryData] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState([]);
-  const [peopleList, setPeopleList] = useState([]);
+ // const [peopleList, setPeopleList] = useState([]);
   const [avatarList, setAvatarList] = useState([]);
   const [contactList, setContactList] = useState([]);
   const [loading, setLoading] = useState(false);

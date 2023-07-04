@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/styles';
+import { useHistory } from 'react-router-dom';
 import {
   Grid,
   Typography,
@@ -8,7 +9,8 @@ import {
   CardContent,
   SvgIcon
 } from '@material-ui/core';
-
+import AXIOS from '../../../../../util/webservices';
+import CurrencyFormat from 'react-currency-format';
 
 function BuildingIcon(props) {
   return (
@@ -107,9 +109,10 @@ const useStyles = makeStyles(theme => ({
 }));
 
 
-const OverviewArea = props => {
+const OverviewArea = () => {
 
   const classes = useStyles();
+  let history = useHistory();
 
   let userData = {};
   if (typeof localStorage !== 'undefined') {
@@ -118,6 +121,59 @@ const OverviewArea = props => {
         const data = JSON.parse(user);
         userData = data;
       }
+  }
+
+  const [visitsCount, setVisitsCount] = useState(0);
+  const [outstandingAmount, setOutstandingAmount] = useState(0);
+  const [maintenanceCount, setMaintenanceCount] = useState(0);
+
+  useEffect(() => {
+    handleMetrics();
+ }, []);
+
+  const handleMetrics = () => {
+
+
+    const contractId = localStorage.getItem('currentContract');
+
+    //console.log("CONTRACT ID: ", contractId);
+
+    let urls = [
+      `visits/pending-visits-by-resident`,
+      `contracts/${contractId}/charges?index=0&range=100`,
+      `resorders/get-by-resident?index=0&range=100`
+    ];
+
+    const requests = urls.map((url) => AXIOS.get(url));
+
+    Promise.all(requests).then(([{data: visits}, {data: charges}, {data: resOrders}]) => {
+      
+        setVisitsCount(visits.response.length);
+        setOutstandingAmount(charges.response[0].amountOutstanding);
+        setMaintenanceCount(resOrders.response.length);
+
+        //contract.chargeData[0].amountOutstanding
+      
+  })
+    .catch(function (error) {
+      console.log(error.message);
+    })
+  };
+
+  const handleProfile = () => {
+    history.push('/user-profile');
+ }
+
+  const handleMaintenance = () => {
+    history.push('/orders');
+  }
+  
+  const handleOutstanding = () => {
+    history.push('/payment');
+  }
+  
+  const handleVisits = () => {
+    history.push('/visitors');
   }
 
   return (
@@ -132,6 +188,7 @@ const OverviewArea = props => {
               disableripple="true"
               disabletouchripple="true"
               style={{ height: '100%'}}
+              onClick={handleProfile}
             >
               <CardContent className={classes.cardContent}>
                 <Grid container direction="row" alignItems="center" className={classes.gridAction}>
@@ -151,12 +208,16 @@ const OverviewArea = props => {
                         className={classes.actionTitle}>
                         {userData.crxDetails.fullName}
                       </Typography>
-                      <Typography
+                      {/*
+                         <Typography
                         variant="body2"
                         color="secondary"
                         className={classes.actionSubtitle}>
                         46 Badmus Craft Ave.
                       </Typography>
+                    
+                      */}
+                     
                     </Grid>
                 </Grid>
               </CardContent>
@@ -173,6 +234,7 @@ const OverviewArea = props => {
               disableripple="true"
               disabletouchripple="true"
               style={{ height: '100%'}}
+              onClick={handleMaintenance}
             >
               <CardContent>
                 <Grid container direction="row" alignItems="center" className={classes.gridAction}>
@@ -196,7 +258,7 @@ const OverviewArea = props => {
                         variant="body2"
                         color="secondary"
                         className={classes.actionSubtitle2}>
-                        4 Due Today
+                        {maintenanceCount} Due
                       </Typography>
                     </Grid>
                 </Grid>
@@ -213,6 +275,7 @@ const OverviewArea = props => {
               disableripple="true"
               disabletouchripple="true"
               style={{ height: '100%'}}
+              onClick={handleOutstanding}
             >
               <CardContent>
                 <Grid container direction="row" alignItems="center" className={classes.gridAction}>
@@ -230,13 +293,13 @@ const OverviewArea = props => {
                         variant="body1"
                         color="primary"
                         className={classes.actionTitle}>
-                        Payments
+                        Outstanding
                       </Typography>
                       <Typography
                         variant="body2"
                         color="secondary"
                         className={classes.actionSubtitle2}>
-                        2 Pending
+                          <CurrencyFormat value={outstandingAmount} displayType={'text'} thousandSeparator={true} prefix={'₦'} />
                       </Typography>
                     </Grid>
                 </Grid>
@@ -253,6 +316,7 @@ const OverviewArea = props => {
               disableripple="true"
               disabletouchripple="true"
               style={{ height: '100%'}}
+              onClick={handleVisits}
             >
               <CardContent>
                 <Grid container direction="row" alignItems="center" className={classes.gridAction}>
@@ -276,7 +340,7 @@ const OverviewArea = props => {
                         variant="body2"
                         color="secondary"
                         className={classes.actionSubtitle2}>
-                        3 Scheduled
+                        {visitsCount} Scheduled
                       </Typography>
                     </Grid>
                 </Grid>

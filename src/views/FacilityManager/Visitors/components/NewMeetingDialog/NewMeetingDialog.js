@@ -22,7 +22,7 @@ import MuiAlert from '@material-ui/lab/Alert';
 import Collapse from '@material-ui/core/Collapse';
 import CloseIcon from '@material-ui/icons/Close';
 import validate from 'validate.js';
-import { ChipComponent, TaggedPeopleComponent, CategoryDialog, TaggedPeopleDialog } from './components';
+import { TaggedPeopleComponent, TaggedPeopleDialog } from './components';
 import AXIOS from '../../../../../util/webservices';
 //import axios from 'axios';
 import CircularProgress from '@material-ui/core/CircularProgress';
@@ -32,6 +32,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
+/*
 function CalendarIcon(props) {
   return (
     <SvgIcon {...props} width="20" height="20" viewBox="0 0 20 20">
@@ -52,7 +53,7 @@ function AttachmentIcon(props) {
     </SvgIcon>
   );
 }
-
+*/
 const schema = {
 
   meetingTitle: {
@@ -291,9 +292,9 @@ const NewMeetingDialog = props => {
       }
   }
 
-  const [openDialog, setOpenDialog] = useState(false);
+ // const [openDialog, setOpenDialog] = useState(false);
   const [openPeopleDialog, setOpenPeopleDialog] = useState(false);
-  const [selectedDate, setSelectedDate] = useState('');
+ // const [selectedDate, setSelectedDate] = useState('');
   const [openError, setOpenError] = useState(false);
   const [serverError, setServerError] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -316,11 +317,11 @@ const NewMeetingDialog = props => {
 
  }, [formState.values]);
 
-  const [categoryData, setCategoryData] = useState([]);
+//  const [categoryData, setCategoryData] = useState([]);
 
   const [avatarList, setAvatarList] = useState([]);
 
-  const [peopleList, setPeopleList] = useState([
+  const peopleList = [
       { key: 0,
         xri: "xri://@openmdx*org.opencrx.kernel.account1/provider/CRX/segment/INJREAM26606/account/LPULYV3BULDKC22TCCMSW9ZD5",
         name: 'Mr Gbenga Lasisi',
@@ -333,7 +334,7 @@ const NewMeetingDialog = props => {
         email: "stellaejiofor@email.com",
         accountCategories: [24]
       },
-    ]);
+    ];
 
     const [contactList, setContactList] = useState([]);
 
@@ -346,7 +347,7 @@ const NewMeetingDialog = props => {
         setAvatarList(peopleList);
       }
 
-   }, [meetingDetails, selectedDate]);
+   }, [meetingDetails]);
 
   /*  const [contactList, setContactList] = useState([
       "xri://@openmdx*org.opencrx.kernel.account1/provider/CRX/segment/INJREAM26606/account/9HNUMHC5KFUUK22TCCMSW9ZD5",
@@ -365,9 +366,12 @@ const NewMeetingDialog = props => {
     }));
   };
 
+  /*
    const handleDateChange = (date) => {
      setSelectedDate(date);
    };
+
+   */
 
   const handleSave = () => {
 
@@ -404,7 +408,7 @@ const NewMeetingDialog = props => {
 
       AXIOS.post('http://132.145.58.252:8081/spaciofm/api/meetings/', obj)
       .then(response => {
-        const res = response.data;
+        //const res = response.data;
     //    console.log(res);
         setLoading(false);
         onClose();
@@ -437,7 +441,7 @@ const NewMeetingDialog = props => {
 
       AXIOS.put(`http://132.145.58.252:8081/spaciofm/api/meetings/${meetingDetails[0].key.uuid}`, obj)
       .then(response => {
-        const res = response.data;
+       // const res = response.data;
       //  console.log(res);
         setUpdateLoading(false);
         onClose();
@@ -452,7 +456,7 @@ const NewMeetingDialog = props => {
     }
   }
 
-
+/*
   const handleDialogOpen = () => {
     setOpenDialog(true);
   };
@@ -460,6 +464,8 @@ const NewMeetingDialog = props => {
   const handleDialogClose = () => {
     setOpenDialog(false);
   };
+
+  */
 
   const handlePeopleDialogOpen = () => {
     setOpenPeopleDialog(true);

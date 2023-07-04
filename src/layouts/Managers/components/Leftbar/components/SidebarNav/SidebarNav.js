@@ -1,4 +1,4 @@
-import React, { useEffect, useState, forwardRef } from 'react';
+import React, { useState, forwardRef } from 'react';
 import { NavLink as RouterLink, useLocation, useHistory } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/styles';
@@ -8,7 +8,6 @@ import {
   ListItemIcon,
   ListItemText,
   Button,
-  Typography,
   SvgIcon,
   Divider
 } from '@material-ui/core';
@@ -149,6 +148,7 @@ function ResidentIcon(props) {
   );
 }
 
+/*
 function NewUserIcon(props) {
   return (
     <SvgIcon {...props} width="32" height="32" viewBox="0 0 32 32">
@@ -178,6 +178,8 @@ function NewPropertyIcon(props) {
   );
 }
 
+*/
+
 function NewServiceIcon(props) {
   return (
     <SvgIcon {...props} width="32" height="32" viewBox="0 0 32 32">
@@ -188,6 +190,7 @@ function NewServiceIcon(props) {
   );
 }
 
+/*
 function NewWorkOrderIcon(props) {
   return (
     <SvgIcon {...props} width="32" height="32" viewBox="0 0 32 32">
@@ -214,6 +217,7 @@ function DemandNoticeIcon(props) {
   );
 }
 
+*/
 
 
 const CustomRouterLink = forwardRef((props, ref) => (
@@ -227,14 +231,14 @@ const CustomRouterLink = forwardRef((props, ref) => (
 
 
 const SidebarNav = props => {
-  const { pages, onOpen, onClose } = props;
+  const { pages, onOpen } = props;
 
   const classes = useStyles();
   let history = useHistory();
-  const loc = useLocation();
+ // const loc = useLocation();
 
   const { openModal } = useModalAction();
-
+/*
   let userData = {};
   if (typeof localStorage !== 'undefined') {
       const user = localStorage.getItem('userDetails');
@@ -243,9 +247,9 @@ const SidebarNav = props => {
         userData = data;
       }
   }
-
+*/
   const [anchorEl, setAnchorEl] = useState(null);
-  const [menuData, setMenuData] = useState([]);
+//const [menuData, setMenuData] = useState([]);
 //  const [open, setOpen] = React.useState(false);
 
 
@@ -281,6 +285,7 @@ const SidebarNav = props => {
 
    */
 
+   /*
    async function handleMenus() {
   //   console.log("User Data: " + JSON.stringify(userData.crxDetails));
       AXIOS.get(`http://132.145.58.252:8081/spaciofm/api/user-profiles/new-menu?id=twang15&segmentName=SPACIOS41826`)
@@ -294,6 +299,8 @@ const SidebarNav = props => {
         console.log(error.response.data.error)
       })
   }
+
+  */
 
   const handleOpenSubMenu = (event) => {
     setAnchorEl(anchorEl ? null : event.currentTarget);
@@ -338,6 +345,7 @@ const SidebarNav = props => {
                      </ListItemIcon>
                      <ListItemText primary="New Resident" classes={{ primary: classes.menuTextStyle }}/>
                    </ListItem>
+                   {/*
                    <ListItem button>
                      <ListItemIcon classes={{ root: classes.menuIconStyle }}>
                        <NewUserIcon fontSize="small" style={{ width: 18, height: 18, fill:'none', stroke:'#52506E', strokeLinecap:'round', strokeLinejoin:'round', strokeWidth:2 }}/>
@@ -356,6 +364,8 @@ const SidebarNav = props => {
                      </ListItemIcon>
                      <ListItemText primary="New Property" classes={{ primary: classes.menuTextStyle }}/>
                    </ListItem>
+           */}
+                   
                    <Divider />
                    <ListItem
                      button
@@ -366,6 +376,7 @@ const SidebarNav = props => {
                      </ListItemIcon>
                      <ListItemText primary="New Service" classes={{ primary: classes.menuTextStyle }}/>
                    </ListItem>
+                   {/*
                    <Divider />
                    <ListItem button>
                      <ListItemIcon classes={{ root: classes.menuIconStyle }}>
@@ -380,6 +391,7 @@ const SidebarNav = props => {
                      </ListItemIcon>
                      <ListItemText primary="Demand Notice" classes={{ primary: classes.menuTextStyle }}/>
                    </ListItem>
+          */}
                  </List>
                </Paper>
              </Fade>

@@ -1,12 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
+import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import {
-  Typography,
   Dialog,
-  DialogActions,
   DialogContent,
-  DialogTitle,
   Slide
 } from '@material-ui/core';
 const Transition = React.forwardRef(function Transition(props, ref) {

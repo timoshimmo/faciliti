@@ -6,14 +6,10 @@ import {
   Button,
   Typography,
   SvgIcon,
-  Divider,
-  InputAdornment,
   FormControl,
   InputLabel,
   FormHelperText,
   TextField,
-  MenuItem,
-  Checkbox,
   Collapse,
   IconButton,
   Paper
@@ -23,7 +19,6 @@ import CloseIcon from '@material-ui/icons/Close';
 import MuiAlert from '@material-ui/lab/Alert';
 import Autocomplete, { createFilterOptions } from '@material-ui/lab/Autocomplete';
 import validate from 'validate.js';
-import PhoneInput from 'react-phone-input-2';
 import 'react-phone-input-2/lib/material.css';
 //import AXIOS from '../../../util/webservices';
 //import { EstateDialog } from '../../../components';
@@ -38,6 +33,7 @@ function BackButtonIcon(props) {
   );
 }
 
+/*
 function flagIcon(props) {
   return (
     <SvgIcon {...props} width="24" height="18" viewBox="0 0 24 18">
@@ -45,7 +41,7 @@ function flagIcon(props) {
     </SvgIcon>
   );
 }
-
+*/
 
 const schema = {
   businessName: {
@@ -99,6 +95,7 @@ policy: {
   }
 };
 
+/*
 const NewButton = ({ children, ...other }) => (
   <Paper {...other}>
     {children}
@@ -114,6 +111,8 @@ const NewButton = ({ children, ...other }) => (
     </Button>
   </Paper>
 );
+
+*/
 
 const estateList = [
   {

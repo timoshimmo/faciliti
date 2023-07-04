@@ -33,7 +33,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-const Payment = props => {
+const Payment = () => {
 
     const classes = useStyles();
 

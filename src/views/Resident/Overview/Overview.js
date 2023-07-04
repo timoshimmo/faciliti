@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { makeStyles } from '@material-ui/styles';
 import {
   Grid,
   Typography,
 } from '@material-ui/core';
-import { OverviewArea, MeetingUpdateArea, OrderSummaryArea } from './components'
+import { OverviewArea, MeetingUpdateArea, OrderSummaryArea } from './components';
+import AXIOS from '../../../util/webservices';
 
 
 const useStyles = makeStyles(theme => ({
@@ -32,9 +33,27 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const Overview = props => {
+const Overview = () => {
 
     const classes = useStyles();
+
+    useEffect(() => {
+      handleGetAll();
+   }, []);
+
+    const handleGetAll = () => {
+
+      AXIOS.get(`contracts/get-by-resident?index=0&range=100`)
+        .then(response => {
+            const res = response.data;
+            const mainContract = res.response[0];
+            //console.log("OVERVIEW CONTRACTS:", mainContract)
+            localStorage.setItem('currentContract', mainContract.key.uuid);
+        })
+        .catch(function (error) {
+            console.log(error);
+        })
+    }
 
     return(
       <div className={classes.root}>

@@ -7,10 +7,14 @@ import {
 } from '@material-ui/core';
 import { RightTopbar, LiveFeedComponent } from './components';
 
+/*
 function createLiveFeed(id, title, dateTime) {
   return { id, title, dateTime};
 }
 
+*/
+
+/*
 const liveFeeds = [
   createLiveFeed(1, 'Fire Drill on 17th & 18th', '12/11/2021, 12:35 pm'),
   createLiveFeed(2, '4 new estate shuttle', '12/11/2021, 12:35 pm'),
@@ -20,10 +24,15 @@ const liveFeeds = [
   createLiveFeed(6, '4 new estate shuttle', '12/11/2021, 12:35 pm'),
 ];
 
+*/
+
+const liveFeeds = [];
+
 const useStyles = makeStyles(theme => ({
   root: {
     display: 'flex',
     maxHeight: '100vh',
+    height: '100%',
     flexDirection: 'column',
     alignItems: 'center',
     width: '100%',
@@ -33,6 +42,7 @@ const useStyles = makeStyles(theme => ({
   },
   rightContentArea: {
     height: '90%',
+    width: '100%',
     overflowY: 'scroll',
     boxSizing: 'content-box',
     marginRight: -30,
@@ -47,18 +57,35 @@ const useStyles = makeStyles(theme => ({
   },
   livefeed: {
     maxHeight: '100%',
+    height: '100%',
     paddingTop: theme.spacing(2),
   },
   liveFeedTitle: {
     fontWeight: 600,
     fontSize: 15,
     color: theme.palette.secondary.dark,
-    marginLeft: theme.spacing(2)
+    textAlign: 'center'
   },
   livefeedListView: {
     maxHeight: '100%',
     paddingBottom: theme.spacing(2),
     marginRight: -20
+  },
+  noFeedBody: {
+    marginTop: 'auto',
+    marginBottom: 'auto',
+    maxHeight: '100%',
+    height: '100%',
+    display: 'flex',
+    alignItems: 'center'
+  },
+  noFeedCaption: {
+    fontSize: 11,
+    lineHeight: 1.3,
+    color: theme.palette.primary.main,
+    textAlign: 'center',
+    width: '100%',
+    display: 'block'
   }
 }));
 
@@ -95,9 +122,21 @@ const Rightbar = props => {
             >
               Live Feed
             </Typography>
-            <List className={classes.livefeedListView}>
-              {livefeedList()}
-            </List>
+            {liveFeeds.length > 0 ?
+              <List className={classes.livefeedListView}>
+                {livefeedList()}
+              </List>
+              :
+              <div className={classes.noFeedBody}>
+                <Typography
+                  variant="body2"
+                  color="secondary"
+                  className={classes.noFeedCaption}>
+                  No Notification Feed Found
+                </Typography>
+              </div>
+          }
+            
           </div>
         </div>
       </div>

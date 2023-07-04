@@ -460,7 +460,7 @@ const Register = () => {
         axios.post('http://132.145.58.252:8081/spaciofm/api/user-profiles/onboard-resident', obj)
         .then(response => {
           //const res = response.data;
-          console.log(response);
+          //console.log(response);
           setLoading(false);
           history.push('/signup/completed');
         })
@@ -844,7 +844,6 @@ const getReference = () => {
          </Grid>
       </div>
    );
-
 };
 
 export default withRouter(Register);

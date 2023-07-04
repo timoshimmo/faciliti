@@ -102,7 +102,7 @@ const headCells = [
 ];
 
 function EnhancedTableHead(props) {
-  const { order, orderBy, rowCount, onRequestSort } = props;
+  const { order, orderBy, onRequestSort } = props;
   const createSortHandler = (property) => (event) => {
     onRequestSort(event, property);
   };
@@ -156,14 +156,6 @@ function createMeetingUpdate(date, event, assignee, priority, contact, status) {
   return { date, event, assignee, priority, contact, status };
 }
 
-const rows = [
-  createMeetingUpdate('12/09/2021', 'Street Lighting Poles', 'Mr. Nyemike Onukwu', 0, '09099048059', 0),
-  createMeetingUpdate('12/09/2021', 'Sidewalk drainage zone B', 'Mr. Tokmang Wang', 1, '08057527307', 1),
-  createMeetingUpdate('12/09/2021', 'Waste management for Block G', 'Mr. Tobi Musa', 2, '08011223317', 1),
-  createMeetingUpdate('12/09/2021', 'Water pipe repairs for Apt 4 Zone A', 'Mr. Afam Ojemeni', 0, '09081346172', 2),
-  createMeetingUpdate('12/09/2021', 'Sidewalk drainage zone F', 'Mr. Mubarak Nurideen', 2, '08090233942', 0),
-];
-
 const useStyles = makeStyles(theme => ({
 
   table: {
@@ -207,15 +199,6 @@ const useStyles = makeStyles(theme => ({
 const MeetingUpdateArea = props => {
 
   const classes = useStyles();
-
-  let userData = {};
-  if (typeof localStorage !== 'undefined') {
-      const user = localStorage.getItem('userDetails');
-      if(user !== null) {
-        const data = JSON.parse(user);
-        userData = data;
-      }
-  }
 
   const [order, setOrder] = useState('desc');
   const [orderBy, setOrderBy] = useState('due');
@@ -310,16 +293,15 @@ const MeetingUpdateArea = props => {
                                 {row.name}
                               </Box>
                           </StyledTableCell>
-                          <StyledTableCell style={{ maxWidth: 120, whiteSpace: 'nowrap' }}>
+                          <StyledTableCell style={{ maxWidth: 80, whiteSpace: 'nowrap' }}>
                             <Box
-                               component="div"
-                               my={2}
-                               textOverflow="ellipsis"
-                               overflow="hidden"
-                               bgcolor="#ffffff"
-                             >
-                              Exco
-                             </Box>
+                              my={1}
+                              textOverflow="ellipsis"
+                              overflow="hidden"
+                              bgcolor="transparent"
+                            >
+                                {row.meetingParties.length} attendee(s)
+                              </Box>
                           </StyledTableCell>
                           <StyledTableCell align="center">
                             <Typography
@@ -330,7 +312,6 @@ const MeetingUpdateArea = props => {
                               High
                             </Typography>
                           </StyledTableCell>
-                          <StyledTableCell align="center">08057527307</StyledTableCell>
                           <StyledTableCell align="center">
                             {row.status}
                           </StyledTableCell>
@@ -357,7 +338,7 @@ const MeetingUpdateArea = props => {
       <TablePagination
          rowsPerPageOptions={[5, 10, 25]}
          component="div"
-         count={rows.length}
+         count={meetings.length}
          rowsPerPage={rowsPerPage}
          page={page}
          onPageChange={handleChangePage}

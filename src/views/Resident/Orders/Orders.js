@@ -138,6 +138,15 @@ function DeleteIcon(props) {
   );
 }
 
+/*
+
+{
+    id: 'delete',
+    numeric: true,
+    label: '',
+  },
+*/
+
 const headCells = [
   {
     id: 'created',
@@ -174,11 +183,7 @@ const headCells = [
     numeric: true,
     label: '',
   },
-  {
-    id: 'delete',
-    numeric: true,
-    label: '',
-  },
+  
 ];
 
 function EnhancedTableHead(props) {
@@ -374,7 +379,7 @@ const EnhancedTableToolbar = (props) => {
 
   }));
 
-  const { onOpenMenu, onHandleMenuClose, anchorEl, checkid, onMenuClick, checkState, onHandleCheckChange, onHandleFilter } = props;
+  const { onOpenMenu, onHandleMenuClose, anchorEl, checkid, onMenuClick, checkState, onHandleCheckChange, onHandleFilter, onHandleSearchChange } = props;
   const styles = toolbarStyles();
 
   function StyledCheckbox(props) {
@@ -416,7 +421,7 @@ const EnhancedTableToolbar = (props) => {
         <Grid container spacing={1} justifyContent="flex-end">
           <Grid
           item
-          lg={3}
+          lg={9}
           className={styles.gridItemStyles}>
               <FormControl style={{
                 fontSize: 10,
@@ -442,6 +447,7 @@ const EnhancedTableToolbar = (props) => {
                   name="searchOrder"
                   type="text"
                   placeholder="Search"
+                  onChange={onHandleSearchChange}
                   InputProps={{
                     endAdornment: <InputAdornment position="start">
                     <SearchIcon style={{ fontSize: 14, color: '#8692A6' }} />
@@ -496,7 +502,7 @@ const EnhancedTableToolbar = (props) => {
                    <FormGroup aria-label="position" style={{ width: '100%' }}>
                       <FormControlLabel
                         value="pending"
-                        control={<StyledCheckbox name="pictures" onChange={onHandleCheckChange} checked={checkState.pending} disabled={checkState.all} />}
+                        control={<StyledCheckbox name="pending" onChange={onHandleCheckChange} checked={checkState.pending} disabled={checkState.all} />}
                         label="Pending"
                         labelPlacement="start"
                         classes={{ root: styles.frmControlLabelStyleRoot, label: styles.frmControlLabelStyleLabel }}
@@ -507,7 +513,7 @@ const EnhancedTableToolbar = (props) => {
                     <FormGroup aria-label="position" style={{ width: '100%' }}>
                        <FormControlLabel
                          value="closed"
-                         control={<StyledCheckbox name="videos" onChange={onHandleCheckChange} checked={checkState.closed} disabled={checkState.all} />}
+                         control={<StyledCheckbox name="closed" onChange={onHandleCheckChange} checked={checkState.closed} disabled={checkState.all} />}
                          label="Closed"
                          labelPlacement="start"
                          classes={{ root: styles.frmControlLabelStyleRoot, label: styles.frmControlLabelStyleLabel }}
@@ -536,14 +542,6 @@ const EnhancedTableToolbar = (props) => {
                     </Grid>
                 </Popover>
             </Grid>
-            <Grid
-            item
-            lg={1}
-            className={styles.gridItemStyles}>
-              <IconButton size="small">
-                <CalendarIcon style={{  width: 15,height: 15, fill:'none', }} />
-              </IconButton>
-            </Grid>
           </Grid>
         </Grid>
       </Grid>
@@ -554,6 +552,7 @@ const EnhancedTableToolbar = (props) => {
 EnhancedTableToolbar.propTypes = {
   onOpenMenu: PropTypes.bool.isRequired,
   onHandleMenuClose: PropTypes.func.isRequired,
+  onHandleSearchChange: PropTypes.func.isRequired,
   anchorEl: PropTypes.bool,
   checkid: PropTypes.string,
   onMenuClick: PropTypes.func.isRequired,
@@ -596,7 +595,7 @@ const useStyles = makeStyles(theme => ({
    }
 }));
 
-const Orders = props => {
+const Orders = () => {
 
     const classes = useStyles();
 
@@ -608,6 +607,7 @@ const Orders = props => {
     const [rowsPerPage, setRowsPerPage] = useState(5);
     const [loading, setLoading] = useState(false);
     const [orderLogs, setOrderLogs] = useState([]);
+    const [orderList, setOrderList] = useState([]);
 
     const [checkState, setCheckState] = useState({
      all: false,
@@ -631,12 +631,13 @@ const Orders = props => {
           setLoading(true);
 
 
-          AXIOS.get(`resorders/get-by-resident?index=${page}&range=5`)
+          AXIOS.get(`resorders/get-by-resident?index=${page}&range=100`)
             .then(response => {
               setLoading(false);
               const res = response.data.response;
-              console.log("RES ORDER:" + JSON.stringify(res));
+              //console.log("RES ORDER:" + JSON.stringify(res));
               setOrderLogs(res);
+              setOrderList(res);
             })
             .catch(function (error) {
               setLoading(false);
@@ -652,6 +653,17 @@ const Orders = props => {
      setOrder(isAsc ? 'desc' : 'asc');
      setOrderBy(property);
    };
+
+   const handleSearchChange = event => {
+      let newList = [];
+      let query = event.target.value;
+      console.log(orderList);
+      newList = query ? orderList.filter(order => order.name.includes(query) || 
+      moment(order.dueBy).format('DD/MM/YYYY').includes(query) ||
+      order.status.includes(query)) : orderList;
+      //console.log(newList);
+      setOrderLogs(newList);
+   }
 
    const handleChangePage = (event, newPage) => {
      setPage(newPage);
@@ -706,7 +718,8 @@ const Orders = props => {
               onMenuClick={handleMenuClick}
               checkState={checkState}
               onHandleCheckChange={handleCheckChange}
-              onHandleFilter={handleFilter}/>
+              onHandleFilter={handleFilter}
+              onHandleSearchChange={handleSearchChange} />
               <Paper style={{ width: '100%', mb: 2 }}>
                 <TableContainer>
                   {loading && <CircularProgress size={25} className={classes.buttonProgress} /> }
@@ -770,11 +783,15 @@ const Orders = props => {
                                   <EditIcon style={{  width: 12,height: 12, fill:'none', }} />
                                 </IconButton>
                               </StyledTableCell>
-                              <StyledTableCell align="center">
-                                <IconButton size="small">
-                                  <DeleteIcon style={{  width: 18,height: 18, fill:'none', }} />
-                                </IconButton>
-                              </StyledTableCell>
+                              {/*
+                                 <StyledTableCell align="center">
+                                  <IconButton size="small">
+                                    <DeleteIcon style={{  width: 18,height: 18, fill:'none', }} />
+                                  </IconButton>
+                                </StyledTableCell>
+                            
+                              */}
+                             
                             </TableRow>
                           );
                         })}

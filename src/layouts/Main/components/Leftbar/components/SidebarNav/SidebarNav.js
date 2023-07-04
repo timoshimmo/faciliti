@@ -111,7 +111,7 @@ const CustomRouterLink = forwardRef((props, ref) => (
 
 
 const SidebarNav = props => {
-  const { pages, onDialogOpen } = props;
+  const { pages } = props;
 
   const classes = useStyles();
   let history = useHistory();

@@ -29,8 +29,9 @@ import {
 } from '@material-ui/core';
 import SearchIcon from '@material-ui/icons/Search';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import ExpandLessIcon from '@material-ui/icons/ExpandLess';
+//import ExpandLessIcon from '@material-ui/icons/ExpandLess';
 
+/*
 function createData(datecreated, title, description, datedue, supervisor, status) {
   return {
     datecreated,
@@ -41,7 +42,7 @@ function createData(datecreated, title, description, datedue, supervisor, status
     status
   };
 }
-
+*/
 /*
 const rows = [
   createData('12/09/2021', 'Tree & Light works', 'Vendor was on site on time at 3pm and fixed all issues', '12/09/2021', 'Segun Odegbami', 0),
@@ -75,8 +76,6 @@ const StyledTableCell = withStyles((theme) => ({
   body: {
     fontSize: 12,
     color: '#696F79',
-    paddingTop: 0,
-    paddingBottom: 0,
     borderBottom: '1px solid #D6D6D6',
     paddingTop: 5,
     paddingBottom: 5
@@ -122,6 +121,7 @@ function CalendarIcon(props) {
   );
 }
 
+/*
 function EditIcon(props) {
   return (
     <SvgIcon {...props} width="20" height="21" viewBox="0 0 20 21">
@@ -138,7 +138,7 @@ function DeleteIcon(props) {
     </SvgIcon>
   );
 }
-
+*/
 const headCells = [
   {
     id: 'created',
@@ -173,7 +173,7 @@ const headCells = [
 ];
 
 function EnhancedTableHead(props) {
-  const { order, orderBy, rowCount, onRequestSort } = props;
+  const { order, orderBy, onRequestSort } = props;
   const createSortHandler = (property) => (event) => {
     onRequestSort(event, property);
   };

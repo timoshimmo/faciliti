@@ -5,12 +5,10 @@ import {
   Typography,
   Card,
   CardContent,
-  Link,
   CardActions,
   Button,
   SvgIcon
 } from '@material-ui/core';
-import { Link as RouterLink, withRouter } from 'react-router-dom';
 import CurrencyFormat from 'react-currency-format';
 import moment from 'moment';
 import { useModalAction } from '../../../../modal/modal-context.tsx';
@@ -172,70 +170,12 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-/*
-{
-  contract.length > 0 ?
-  contract.chargeData.map((values) => {
-    const {amount, amountOutstanding, paymentStatus, endDate} = values;
-
-    console.log("OUTSTANDING: ", values);
-    return (
-      <>
-        <Typography
-          variant="h4"
-          gutterBottom
-          className={classes.nextPaymentPriceStyle}>
-            <CurrencyFormat value={amountOutstanding} displayType={'text'} thousandSeparator={true} prefix={'₦'} />
-        </Typography>
-        <Typography
-          variant="body2"
-          gutterBottom
-          className={classes.nextPaymentDateStyle}>
-          {moment(endDate).format('MMMM DD, YYYY')}
-        </Typography>
-      </>
-    );
-  })
-  :
-  (
-    <>
-      <Typography
-      variant="h4"
-      gutterBottom
-      className={classes.nextPaymentPriceStyle}>
-        <CurrencyFormat value={0} displayType={'text'} thousandSeparator={true} prefix={'₦'} />
-    </Typography>
-    <Typography
-      variant="body2"
-      gutterBottom
-      className={classes.nextPaymentDateStyle}>
-
-    </Typography>
-  </>
-)
-}
-
-{
-  contract.chargeData.map((values) => {
-    const {amount, amountOutstanding, paymentStatus, endDate} = values;
-
-    return (
-      <>
-
-      </>
-    );
-  })
-
-}
-*/
-
 
 const Billing = props => {
 
   const classes = useStyles();
 
   const { contract } = props;
-
 
   const [subscription, setSubscription] = useState(0);
   const [nextCharge, setNextCharge] = useState(0);
@@ -246,7 +186,7 @@ const Billing = props => {
 
   useEffect(() => {
     if(Object.keys(contract).length > 0) {
-      console.log("BILLING: ", contract.chargeData[0]);
+      //console.log("BILLING: ", contract.chargeData[0]);
       setSubscription(contract.charge);
       setNextCharge(contract.chargeData[0].amountOutstanding);
       setNextDue(contract.chargeData[0].endDate);
@@ -290,7 +230,7 @@ const Billing = props => {
                     variant="body2"
                     gutterBottom
                     className={classes.subscriptionPackageStyle}>
-                    Spacio Elite
+                    Basic Plan
                   </Typography>
                 </Grid>
                 <Grid
@@ -321,6 +261,8 @@ const Billing = props => {
                 <Grid
                 item
                 lg={6}>
+                  {/*
+
                   <Typography
                     variant="body2"
                     gutterBottom
@@ -337,6 +279,10 @@ const Billing = props => {
                       Learn more
                     </Link>
                   </Typography>
+                  
+                
+  */}
+                  
                 </Grid>
               </Grid>
             </CardActions>
@@ -402,7 +348,9 @@ const Billing = props => {
                 <Grid
                 item
                 lg={6}>
-                  <Typography
+
+                  {/*
+                   <Typography
                     variant="body2"
                     gutterBottom
                     align="right"
@@ -417,6 +365,9 @@ const Billing = props => {
                       Learn more
                     </Link>
                   </Typography>
+                
+*/}
+                 
                 </Grid>
               </Grid>
             </CardActions>

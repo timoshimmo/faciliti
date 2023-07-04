@@ -131,14 +131,15 @@ const headCells = [
     numeric: true,
     label: 'STATUS',
   },
-  {
+  
+];
+
+/*
+{
     id: 'delete',
     numeric: true,
     label: '',
   },
-];
-
-/*
 {
   id: 'id',
   numeric: false,
@@ -370,7 +371,7 @@ const EnhancedTableToolbar = (props) => {
 
   }));
 
-  const { onOpenMenu, onHandleMenuClose, anchorEl, checkid, onMenuClick, checkState, onHandleCheckChange, onHandleFilter, onHandleDialogOpen } = props;
+  const { onOpenMenu, onHandleMenuClose, anchorEl, checkid, onMenuClick, checkState, onHandleCheckChange, onHandleFilter, onHandleDialogOpen, onHandleSearch } = props;
   const styles = toolbarStyles();
 
   function StyledCheckbox(props) {
@@ -411,6 +412,7 @@ const EnhancedTableToolbar = (props) => {
         item
         lg={8}>
         <Grid container spacing={2} justifyContent="flex-end" alignItems='center'>
+          {/*
           <Grid
           item>
             <Button
@@ -418,6 +420,7 @@ const EnhancedTableToolbar = (props) => {
               Export CSV
             </Button>
         </Grid>
+          */}
           <Grid
           item>
               <FormControl style={{
@@ -443,6 +446,7 @@ const EnhancedTableToolbar = (props) => {
                   name="searchOrder"
                   type="text"
                   placeholder="Search"
+                  onChange={onHandleSearch}
                   InputProps={{
                     endAdornment: <InputAdornment position="start">
                     <SearchIcon style={{ fontSize: 14, color: '#8692A6' }} />
@@ -453,6 +457,7 @@ const EnhancedTableToolbar = (props) => {
                 />
               </FormControl>
             </Grid>
+            {/*
             <Grid
             item>
             <IconButton
@@ -534,6 +539,7 @@ const EnhancedTableToolbar = (props) => {
                     </Grid>
                 </Popover>
             </Grid>
+                  */}
             <Grid
             item>
             <Button
@@ -624,10 +630,9 @@ const Logs = props => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
-  const [selectedRow, setSelectedRow] = useState([]);
   const [meetings, setMeetings] = useState([]);
+  const [meetingList, setMeetingList] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [dataSize, setDataSize] = useState(0);
 
   const [checkState, setCheckState] = useState({
    all: false,
@@ -674,6 +679,7 @@ const Logs = props => {
             const res = response.data.response;
             //console.log("ALL MEETINGS:" + JSON.stringify(res));
             setMeetings(res);
+            setMeetingList(res);
           })
           .catch(function (error) {
             setLoading(false);
@@ -727,6 +733,17 @@ const handleFilter = () => {
 
 }
 
+const handleSearchChange = event => {
+  let newList = [];
+  let query = event.target.value;
+  //.log(serviceList);
+  newList = query ? meetingList.filter(meeting => meeting.name.toLowerCase().includes(query.toLowerCase()) || 
+  moment(meeting.dueBy).format('DD/MM/YYYY hh:mm:ss A').includes(query) ||
+  meeting.status.toLowerCase().includes(query.toLowerCase())) : meetingList;
+  //console.log(newList);
+  setMeetings(newList);
+}
+
 /*
 <StyledTableCell>
      {row.key.uuid}
@@ -748,7 +765,8 @@ const handleFilter = () => {
           checkState={checkState}
           onHandleCheckChange={handleCheckChange}
           onHandleFilter={handleFilter}
-          onHandleDialogOpen={handleCreateNew}/>
+          onHandleDialogOpen={handleCreateNew}
+          onHandleSearch={handleSearchChange} />
         <div>
           {loading && <CircularProgress size={25} className={classes.buttonProgress} /> }
           <TableContainer>
@@ -794,23 +812,25 @@ const handleFilter = () => {
                         <StyledTableCell align="center">
                           {row.status === "Scheduled" ?
                           <Chip
-                            label="Scheduled"
+                            label={row.status}
                             variant="outlined"
-                            classes={{ root: classes.chipStyles, label: classes.chipLabelStyle }}
+                            classes={{ root: classes.successfulStyles, label: classes.successfulLabelStyle }}
                           />
                           :
                           <Chip
-                            label="Pending"
+                            label={row.status}
                             variant="outlined"
-                            classes={{ root: classes.chipStyles, label: classes.chipLabelStyle }}
+                            classes={{ root: classes.failedStyles, label: classes.failedLabelStyle }}
                           />
                         }
                         </StyledTableCell>
-                        <StyledTableCell align="center">
-                          <IconButton size="small">
-                            <DeleteIcon style={{  width: 16,height: 17, fill:'none', }} />
-                          </IconButton>
-                        </StyledTableCell>
+                        {/*
+                          <StyledTableCell align="center">
+                            <IconButton size="small">
+                              <DeleteIcon style={{  width: 16,height: 17, fill:'none', }} />
+                            </IconButton>
+                          </StyledTableCell>
+                      */}
                       </StyledTableRow>
                     );
                   })}

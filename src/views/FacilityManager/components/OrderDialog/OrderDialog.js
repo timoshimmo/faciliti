@@ -255,12 +255,12 @@ const OrderDialog = props => {
       { key: 5, label: 'Welding' },
       ]);
 
-    const [peopleList, setPeopleList] = useState([
+    const peopleList = [
       { key: 0, name: 'Mr Gbenga Lasisi', email: "gbengalasisi@email.com", avatar: "/images/ga.png", role: "Facility Manager" },
       { key: 1, name: 'Stella Ejiofor', email: "stellaejiofor@email.com", avatar: "/images/ba.png", role: "Exco" },
       { key: 2, name: 'Nnamdi Oji', email: "nnamdioji@email.com", avatar: "/images/ga.png", role: "Exco" },
       { key: 3, name: 'Rhummie West', email: "rhummie_west@email.com", avatar: "/images/ba.png", role: "Exco" },
-      ]);
+      ];
 
   const handleChange = event => {
     event.persist();

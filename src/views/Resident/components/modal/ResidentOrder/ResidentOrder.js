@@ -1,15 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import {
   Typography,
   Grid,
   Button,
   TextField,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
   IconButton,
   Slide,
   FormControl,
@@ -28,9 +23,11 @@ import CloseIcon from '@material-ui/icons/Close';
 import { useModalAction } from '../../../../modal/modal-context.tsx';
 import moment from 'moment';
 
+/*
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
+*/
 
 function CalendarIcon(props) {
   return (
@@ -226,17 +223,6 @@ btnAddPeopleStyle: {
   }
 },
 
-dialogtitleStyle: {
-  margin: 0,
-  paddingLeft: theme.spacing(2),
-  paddingRight: theme.spacing(2),
-  paddingTop: theme.spacing(3),
-  paddingBottom: theme.spacing(3),
-  display: 'flex',
-  flexDirection: 'row',
-  alignItems: 'center',
-  backgroundColor: '#F3F8FF'
-},
 contentBodyStyle: {
   paddingLeft: theme.spacing(3),
   paddingRight: theme.spacing(3),
@@ -248,7 +234,7 @@ const ResidentOrder = (props) => {
 
   const classes = useStyles();
 
-  const { onOpen, onClose, row } = props;
+  const { row } = props;
 
 
   const [openDialog, setOpenDialog] = useState(false);
@@ -260,11 +246,11 @@ const ResidentOrder = (props) => {
     errors: {}
   });
 
- const { openModal, closeModal } = useModalAction();
+ const { closeModal } = useModalAction();
 
   const [categoryData, setCategoryData] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState([]);
-  const [peopleList, setPeopleList] = useState([]);
+//  const [peopleList, setPeopleList] = useState([]);
   const [avatarList, setAvatarList] = useState([]);
   const [contactList, setContactList] = useState([]);
   const [loading, setLoading] = useState(false);

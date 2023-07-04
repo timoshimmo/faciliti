@@ -113,6 +113,18 @@ const Leftbar = props => {
     href: '/home',
     icon: <HomeIcon fontSize="small" style={{ fill:'none', stroke:'#010e1c', strokeLinecap:'round', strokeLinejoin:'round', strokeWidth:2 }} />
   },
+
+  {
+      title: 'Message',
+      href: '/notifications',
+      icon: <MessageIcon fontSize="small" style={{ width: 15, height: 15, strokeWidth:1 }} />
+    },
+
+    {
+      title: 'Maintenance',
+      href: '/maintenance',
+      icon: <BookmarksIcon fontSize="small" style={{ width: 15, height: 15, fill:'none', stroke:'#EFF1F3', strokeLinecap:'round', strokeLinejoin:'round', strokeWidth:2 }} />
+    },
   */
 
   const pages = [
@@ -127,11 +139,6 @@ const Leftbar = props => {
       icon: <NotificationsIcon fontSize="small" style={{ width: 15, height: 15, fill:'none', stroke:'#EFF1F3', strokeLinecap:'round', strokeLinejoin:'round', strokeWidth:2 }} />
     },
     {
-      title: 'Message',
-      href: '/notifications',
-      icon: <MessageIcon fontSize="small" style={{ width: 15, height: 15, strokeWidth:1 }} />
-    },
-    {
       title: 'Orders',
       href: '/orders',
       icon: <BookmarksIcon fontSize="small" style={{ width: 15, height: 15, fill:'none', stroke:'#EFF1F3', strokeLinecap:'round', strokeLinejoin:'round', strokeWidth:2 }} />
@@ -141,11 +148,7 @@ const Leftbar = props => {
       href: '/visitors',
       icon: <ProfileIcon  fontSize="small" style={{ width: 15, height: 15, fill:'none', stroke:'#EFF1F3', strokeLinecap:'round', strokeLinejoin:'round', strokeWidth:2 }} />
     },
-    {
-      title: 'Maintenance',
-      href: '/maintenance',
-      icon: <BookmarksIcon fontSize="small" style={{ width: 15, height: 15, fill:'none', stroke:'#EFF1F3', strokeLinecap:'round', strokeLinejoin:'round', strokeWidth:2 }} />
-    },
+    
   ];
 
   /*

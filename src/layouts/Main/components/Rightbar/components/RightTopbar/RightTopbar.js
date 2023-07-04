@@ -58,6 +58,7 @@ const useStyles = makeStyles(theme => ({
     borderRadius: 4,
     paddingLeft: 10,
     paddingRight: 10,
+    width: '100%'
   }
   }));
 
@@ -103,13 +104,17 @@ const useStyles = makeStyles(theme => ({
             lg={2}
             className={classes.leftCol}
           >
-            <IconButton
+            {/*
+            
+          <IconButton
               disableRipple={true}
               disableFocusRipple={true}
               color="primary"
               className={classes.topIconButton}>
                 <NotificationIcon fontSize="small" style={{ width: 17, height: 17, fill: 'none' }} />
             </IconButton>
+    */}
+            
           </Grid>
 
             <Grid

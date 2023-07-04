@@ -18,7 +18,6 @@ import {
   SvgIcon,
 } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
-import AvatarGroup from '@material-ui/lab/AvatarGroup';
 import MuiAlert from '@material-ui/lab/Alert';
 import Collapse from '@material-ui/core/Collapse';
 import CloseIcon from '@material-ui/icons/Close';
@@ -35,6 +34,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
+/*
 function CalendarIcon(props) {
   return (
     <SvgIcon {...props} width="20" height="20" viewBox="0 0 20 20">
@@ -55,6 +55,7 @@ function AttachmentIcon(props) {
     </SvgIcon>
   );
 }
+*/
 
 const schema = {
 
@@ -327,18 +328,19 @@ const NewVisitorDialog = props => {
       }
   }
 
-  const [openDialog, setOpenDialog] = useState(false);
+ /* const [openDialog, setOpenDialog] = useState(false);
   const [openPeopleDialog, setOpenPeopleDialog] = useState(false);
-  const [selectedDate, setSelectedDate] = useState('');
+  const [selectedDate, setSelectedDate] = useState(''); */
   const [openError, setOpenError] = useState(false);
   const [serverError, setServerError] = useState(null);
   const [loading, setLoading] = useState(false);
   const [updateLoading, setUpdateLoading] = useState(false);
-  const [categoryData, setCategoryData] = useState([]);
+ // const [categoryData, setCategoryData] = useState([]);
 
-  const [avatarList, setAvatarList] = useState([]);
+  //const [avatarList, setAvatarList] = useState([]);
   const [phoneNo, setPhoneNo] = useState('');
 
+  /*
   const [dummyList, setDummyList] = useState([
       { key: 0,
         xri: "xri://@openmdx*org.opencrx.kernel.account1/provider/CRX/segment/INJREAM26606/account/R766BOBU81L9OS69941RBA7DF",
@@ -347,8 +349,8 @@ const NewVisitorDialog = props => {
         accountCategories: [25]
       }
     ]);
-
-  const [contactList, setContactList] = useState([]);
+*/
+  //const [contactList, setContactList] = useState([]);
   const [formState, setFormState] = useState({
     isValid: false,
     values: {},
@@ -414,17 +416,21 @@ const NewVisitorDialog = props => {
     onClose()
   }
 
+  /*
+
    const handleDateChange = (date) => {
      setSelectedDate(date);
    };
+
+   */
 
   const handleSave = () => {
 
     if (!loading) {
       setLoading(true);
 
-      console.log("New Visitor: " + JSON.stringify(formState.values));
-      console.log("Phone: " + phoneNo.phone);
+     // console.log("New Visitor: " + JSON.stringify(formState.values));
+     // console.log("Phone: " + phoneNo.phone);
       const obj = {
         name: formState.values.visitorName,
         phoneNumber: phoneNo.phone,
@@ -477,7 +483,7 @@ const NewVisitorDialog = props => {
     }
   }
 
-
+/*
   const handleDialogOpen = () => {
     setOpenDialog(true);
   };
@@ -493,6 +499,8 @@ const NewVisitorDialog = props => {
   const handlePeopleDialogClose = () => {
     setOpenPeopleDialog(false);
   };
+
+  */
 
 /*  const taggedPeopleItems = () => {
       return avatarList.map((avatar, i) => {

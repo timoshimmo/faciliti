@@ -197,7 +197,7 @@ const Leftbar = props => {
     },
     {
       title: 'Payment',
-      href: '/fm-payments',
+      href: '/fm-contracts',
       icon: <PaymentIcon fontSize="small" style={{ width: 18, height: 18, fill:'none', stroke:'#EFF1F3', strokeLinecap:'round', strokeLinejoin:'round', strokeWidth:2 }} />
     },
     {

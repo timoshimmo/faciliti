@@ -1,16 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/styles';
 import {
   Grid,
-  Typography,
-  Card,
-  CardContent,
-  CardActions,
+  Typography
 } from '@material-ui/core';
 import { Billing, PaymentHistory } from './components';
-import AXIOS from '../../../../../util/webservices';
+//import AXIOS from '../../../../../util/webservices';
 import {
-  useModalAction,
   useModalState,
 } from "../../../../modal/modal-context";
 
@@ -39,21 +35,23 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const Payment = props => {
+const Payment = () => {
 
     const classes = useStyles();
 
-    const { closeModal } = useModalAction();
+   // const { closeModal } = useModalAction();
     const { data } = useModalState();
 
-    const [loading, setLoading] = useState(false);
+
+   // const [loading, setLoading] = useState(false);
   //  const [charges, setCharges] = useState([]);
 
-
-    useEffect(() => {
-      console.log(data.serviceCharges);
+  //console.log("MODAL PAYMENT CONTRACT: ", data.contract);
+ /*   useEffect(() => {
+      console.log("MODAL PAYMENT CONTRACT: ", data.contract);
+      //console.log(data.contractId);
     //  handleGetCharges();
-   }, []);
+   }, []); */
 
   /*  const handleGetCharges = () => {
       AXIOS.get(`contracts/${data.contractId}/charges?index=0&range=100`)
@@ -91,7 +89,7 @@ const Payment = props => {
           <Grid
           item
           lg={12}>
-            <Billing charges={data.serviceCharges}/>
+            <Billing contract={data.contract}/>
           </Grid>
           <Grid
             item
@@ -107,7 +105,7 @@ const Payment = props => {
             <Grid
               item
               lg={12}>
-                <PaymentHistory contractId={data.contractId}/>
+                <PaymentHistory contract={data.contract} />
               </Grid>
         </Grid>
       </div>

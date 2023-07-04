@@ -244,7 +244,7 @@ const SignIn = props => {
   const [openError, setOpenError] = useState(false);
   const [serverError, setServerError] = useState(null);
   const [loading, setLoading] = useState(false);
-  const timer = React.useRef();
+//  const timer = React.useRef();
 
   const [formState, setFormState] = useState({
      isValid: false,

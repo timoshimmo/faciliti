@@ -5,7 +5,7 @@ import {
   Typography,
   List
 } from '@material-ui/core';
-import { RightTopbar, LiveFeedComponent } from './components';
+import { LiveFeedComponent } from './components';
 
 function createLiveFeed(title, dateTime) {
   return { title, dateTime};

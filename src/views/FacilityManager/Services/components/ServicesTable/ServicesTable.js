@@ -14,16 +14,11 @@ import {
   TableRow,
   TablePagination,
   Paper,
-  Chip,
   SvgIcon,
-  IconButton,
   Toolbar,
   TextField,
   FormControl,
-  FormGroup,
-  FormControlLabel,
   InputAdornment,
-  Popover,
   Button,
   Checkbox,
   Box
@@ -35,58 +30,6 @@ import { useModalAction } from '../../../../modal/modal-context.tsx';
 import CurrencyFormat from 'react-currency-format';
 import AXIOS from '../../../../../util/webservices';
 
-const rows = [
-    {
-       "index": 0,
-       "date": "09/12/2022",
-       "amount": 15000,
-       "username": "Frank Olise",
-       "userid": "Resident",
-       "description": "Monthly Subscription",
-       "status": 1,
-       "payMethod": "Bank Transfer"
-   },
-   {
-     "index": 1,
-     "date": "09/13/2022",
-     "amount": 28500,
-     "username": "Hauwa Beki",
-     "userid": "Resident",
-     "description": "Single Payment",
-     "status": 1,
-     "payMethod": "Bank Transfer"
-  },
-  {
-    "index": 2,
-    "date": "09/13/2022",
-    "amount": 30000,
-    "username": "Tunde Badmus",
-    "userid": "Resident-Exco",
-    "description": "Monthly Subscription",
-    "status": 0,
-    "payMethod": "Bank Transfer"
-  },
-  {
-    "index": 3,
-    "date": "09/13/2022",
-    "amount": 18000,
-    "username": "Festus Lar",
-    "userid": "Resident",
-    "description": "Monthly Subscription",
-    "status": 1,
-    "payMethod": "Cash"
-  },
-  {
-    "index": 4,
-    "date": "09/14/2022",
-    "amount": 14500,
-    "username": "Bella Osu",
-    "userid": "Resident-Exco",
-    "description": "Monthly Subscription",
-    "status": 1,
-    "payMethod": "Bank Transfer"
-  }
-];
 
 const StyledTableCell = withStyles((theme) => ({
   head: {
@@ -139,6 +82,7 @@ function stableSort(array, comparator) {
   return stabilizedThis.map((el) => el[0]);
 }
 
+/*
 function FilterIcon(props) {
   return (
     <SvgIcon {...props} width="22" height="21" viewBox="0 0 22 21">
@@ -155,6 +99,8 @@ function ExportIcon(props) {
   );
 }
 
+
+
 function RightArrowIcon(props) {
   return (
     <SvgIcon {...props} width="22" height="21" viewBox="0 0 25 25">
@@ -163,6 +109,8 @@ function RightArrowIcon(props) {
     </SvgIcon>
   );
 }
+
+*/
 
 const headCells = [
   {
@@ -468,10 +416,10 @@ const EnhancedTableToolbar = (props) => {
 
   }));
 
-    const { onOpenMenu, onHandleMenuClose, anchorEl, checkid, onMenuClick, checkState, onHandleCheckChange, onHandleFilter } = props;
+    const { onHandleSearch } = props;
     const styles = toolbarStyles();
 
-    function StyledCheckbox(props) {
+    /*function StyledCheckbox(props) {
 
       return (
         <Checkbox
@@ -485,6 +433,8 @@ const EnhancedTableToolbar = (props) => {
         />
       );
     }
+
+    */
 
     return (
       <Toolbar className={styles.toolbar}>
@@ -535,6 +485,7 @@ const EnhancedTableToolbar = (props) => {
                     name="searchOrder"
                     type="text"
                     placeholder="Search"
+                    onChange={onHandleSearch}
                     InputProps={{
                       endAdornment: <InputAdornment position="start">
                       <SearchIcon style={{ fontSize: 16, color: '#1B75BC' }} />
@@ -545,6 +496,7 @@ const EnhancedTableToolbar = (props) => {
                   />
                 </FormControl>
               </Grid>
+              {/*
               <Grid
               item
               lg={1.5}>
@@ -643,6 +595,8 @@ const EnhancedTableToolbar = (props) => {
               </Button>
 
               </Grid>
+
+                */}
             </Grid>
           </Grid>
         </Grid>
@@ -651,12 +605,7 @@ const EnhancedTableToolbar = (props) => {
   };
 
   EnhancedTableToolbar.propTypes = {
-    onOpenMenu: PropTypes.bool.isRequired,
-    onHandleMenuClose: PropTypes.func.isRequired,
-    anchorEl: PropTypes.bool.isRequired,
-    checkid: PropTypes.string.isRequired,
-    onMenuClick: PropTypes.func.isRequired,
-    onHandleFilter: PropTypes.func.isRequired
+    onHandleSearch: PropTypes.func.isRequired,
   };
 
   const useStyles = makeStyles(theme => ({
@@ -713,11 +662,11 @@ const EnhancedTableToolbar = (props) => {
     },
   }));
 
-  const ServicesTable = props => {
+  const ServicesTable = () => {
 
     const classes = useStyles();
 
-    const [anchorEl, setAnchorEl] = useState(null);
+   // const [anchorEl, setAnchorEl] = useState(null);
     const [order, setOrder] = useState('asc');
     const [orderBy, setOrderBy] = useState('date');
     const [page, setPage] = useState(0);
@@ -725,17 +674,20 @@ const EnhancedTableToolbar = (props) => {
     const [loading, setLoading] = useState(false);
 
     const [services, setServices] = useState([]);
-
+    const [serviceList, setServiceList] = useState([]);
+/*
     const [checkState, setCheckState] = useState({
      all: false,
      pending: false,
      closed: false,
    });
 
+   */
+
    const { openModal } = useModalAction();
 
-   const openPostMenu = Boolean(anchorEl);
-   const checkid = openPostMenu ? 'simple-popover' : undefined;
+   // openPostMenu = Boolean(anchorEl);
+  // const checkid = openPostMenu ? 'simple-popover' : undefined;
 
    useEffect(() => {
      handleGetAll();
@@ -775,6 +727,7 @@ const EnhancedTableToolbar = (props) => {
                   //  console.log("MY Charges:" + JSON.stringify(chargeData));
                     //setCharges(res.response);
                     setServices(services => [...services, chargeData]);
+                    setServiceList(serviceList => [...serviceList, chargeData])
                     setLoading(false);
                     //setServices(res.response);
                 })
@@ -794,8 +747,9 @@ const EnhancedTableToolbar = (props) => {
         })
     }
 
-    const handleOpenPayment = (contractId, serviceCharges) => {
-      return openModal('PAYMENT_FM', {contractId, serviceCharges});
+    const handleOpenPayment = (contract) => {
+      //console.log("OPEN PAYMENT", contract);
+      return openModal('PAYMENT_FM', {contract});
     }
 
    const handleRequestSort = (event, property) => {
@@ -813,6 +767,17 @@ const EnhancedTableToolbar = (props) => {
     setPage(0);
   };
 
+  const handleSearchChange = event => {
+    let newList = [];
+    let query = event.target.value;
+    //.log(serviceList);
+    newList = query ? serviceList.filter(service => service.serviceType.includes(query) || 
+    service.serviceId.includes(query)) : serviceList;
+    //console.log(newList);
+    setServices(newList);
+ }
+
+ /*
   const handleCheckChange =(event) => {
     setCheckState({...checkState, [event.target.name]: event.target.checked});
   }
@@ -834,7 +799,7 @@ const EnhancedTableToolbar = (props) => {
    const editStatus = true;
    return openModal('SERVICE_CONTRACT', { editStatus, contractDetails });
  }
-
+*/
 
  const emptyRows =
   page > 0 ? Math.max(0, (1 + page) * rowsPerPage - services.length) : 0;
@@ -844,14 +809,7 @@ const EnhancedTableToolbar = (props) => {
       <Paper style={{ width: '100%' }}>
         <div className={classes.paperBody}>
           <EnhancedTableToolbar
-            onOpenMenu={openPostMenu}
-            onHandleMenuClose={handleMenuClose}
-            anchorEl={anchorEl}
-            checkid={checkid}
-            onMenuClick={handleMenuClick}
-            checkState={checkState}
-            onHandleCheckChange={handleCheckChange}
-            onHandleFilter={handleFilter}/>
+            onHandleSearch={handleSearchChange} />
           <div>
             {loading && <CircularProgress size={25} className={classes.buttonProgress} /> }
             <TableContainer>
@@ -861,11 +819,14 @@ const EnhancedTableToolbar = (props) => {
                   orderBy={orderBy}
                   onRequestSort={handleRequestSort}/>
                 <TableBody>
+                  {/* Add to StyledTabRow for click action
+                      onClick={()=>handleOpenServiceContract(row)}
+                  */}
                   {stableSort(services, getComparator(order, orderBy))
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((row, index) => {
                       return (
-                        <StyledTableRow hover role="button" key={row.index} onClick={()=>handleOpenServiceContract(row)}>
+                        <StyledTableRow hover role="button" key={row.index}>
                           <StyledTableCell component="th" scope="row">
                               {moment(row.createdAt).format('DD/MM/YYYY')}
                           </StyledTableCell>
@@ -909,7 +870,7 @@ const EnhancedTableToolbar = (props) => {
                             <Button
                               variant="outlined"
                               className={classes.plainButtonStyle}
-                              onClick={()=>handleOpenPayment(row.key.uuid, row.chargeData)}
+                              onClick={()=>handleOpenPayment(row)}
                               >
                               Pay Offline
                             </Button>

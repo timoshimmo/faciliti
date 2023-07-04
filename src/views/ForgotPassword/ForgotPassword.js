@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link as RouterLink, withRouter, useHistory } from 'react-router-dom';
+import { Link as RouterLink, useHistory } from 'react-router-dom';
 import { makeStyles } from '@material-ui/styles';
 import {
   Grid,
@@ -7,12 +7,10 @@ import {
   Link,
   Typography,
   Divider,
-  InputAdornment,
   FormControl,
   InputLabel,
   FormHelperText,
   TextField,
-  Checkbox,
   Paper,
   IconButton
 } from '@material-ui/core';
@@ -285,10 +283,10 @@ const ForgotPassword = props => {
 
       //console.log("FORFOT EMAIL: " + mEmail);
 
-      axios.post(`http://132.145.58.252:8081/spaciofm/api/user-profiles/send-reset-link/${mEmail}`)
+      axios.post(`http://132.145.58.252:8081/spaciofm/api/user-profiles/send-reset-link/${mEmail}`, {})
       .then(response => {
         const res = JSON.stringify(response.data);
-        console.log("FORGOT: " + res);
+        console.log(res);
         setLoading(false);
         history.push('/forgot/sent');
 

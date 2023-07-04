@@ -168,7 +168,7 @@ const headCells = [
   },
   {
     id: 'personCount',
-    numeric: false,
+    numeric: true,
     label: 'PERSON COUNT',
   },
   {
@@ -411,7 +411,7 @@ const EnhancedTableToolbar = (props) => {
 
   }));
 
-  const { onOpenMenu, onHandleMenuClose, anchorEl, checkid, onMenuClick, checkState, onHandleCheckChange, onHandleFilter } = props;
+  const { onOpenMenu, onHandleMenuClose, anchorEl, checkid, onMenuClick, checkState, onHandleCheckChange, onHandleFilter, onHandleSearch } = props;
   const styles = toolbarStyles();
 
   function StyledCheckbox(props) {
@@ -452,6 +452,7 @@ const EnhancedTableToolbar = (props) => {
         item
         lg={7}>
         <Grid container spacing={2} justifyContent="flex-end" alignItems='center'>
+          {/*}
           <Grid
           item>
             <Button
@@ -459,8 +460,10 @@ const EnhancedTableToolbar = (props) => {
               Export CSV
             </Button>
         </Grid>
+          */}
           <Grid
-          item>
+          item
+          lg={6}>
               <FormControl style={{
                 fontSize: 10,
                 width: '100%'
@@ -484,6 +487,7 @@ const EnhancedTableToolbar = (props) => {
                   name="searchOrder"
                   type="text"
                   placeholder="Search"
+                  onChange={onHandleSearch}
                   InputProps={{
                     endAdornment: <InputAdornment position="start">
                     <SearchIcon style={{ fontSize: 14, color: '#8692A6' }} />
@@ -494,6 +498,7 @@ const EnhancedTableToolbar = (props) => {
                 />
               </FormControl>
             </Grid>
+            {/*
             <Grid
             item>
             <IconButton
@@ -575,6 +580,7 @@ const EnhancedTableToolbar = (props) => {
                     </Grid>
                 </Popover>
             </Grid>
+                  */}
           </Grid>
         </Grid>
       </Grid>
@@ -589,6 +595,7 @@ EnhancedTableToolbar.propTypes = {
   checkid: PropTypes.string,
   onMenuClick: PropTypes.func.isRequired,
   onHandleFilter: PropTypes.func.isRequired,
+  onHandleSearch: PropTypes.func.isRequired
 };
 
 const useStyles = makeStyles(theme => ({
@@ -640,6 +647,7 @@ const Logs = props => {
   const { handleDialogOpen, setMeetingDetails, meetingDetails } = props;
 
   const [visitsLog, setVisitsLog] = useState([]);
+  const [visitsLoglist, setVisitsLogList] = useState([]);
   const [order, setOrder] = useState('asc');
   const [orderBy, setOrderBy] = useState('dueBy');
   const [page, setPage] = useState(0);
@@ -669,6 +677,7 @@ const Logs = props => {
        //console.log("ALL VISITS:" + JSON.stringify(res));
         setLoading(false);
         setVisitsLog(res.response);
+        setVisitsLogList(res.response);
       })
       .catch(function (error) {
         setLoading(false);
@@ -703,6 +712,19 @@ const Logs = props => {
    setCheckState({...checkState, [event.target.name]: event.target.checked});
  }
 
+ 
+ const handleSearchChange = event => {
+  let newList = [];
+  let query = event.target.value;
+  //.log(serviceList);
+  newList = query ? visitsLoglist.filter(visits => visits.name.toLowerCase().includes(query.toLowerCase()) || 
+  visits.phoneNumber.includes(query) ||
+  visits.status.toLowerCase().includes(query.toLowerCase())) : visitsLoglist;
+  //console.log(newList);
+  setVisitsLog(newList);
+}
+
+
  const handleMenuClick = (event) => {
   setAnchorEl(event.currentTarget);
 };
@@ -735,7 +757,8 @@ const handleFilter = () => {
           onMenuClick={handleMenuClick}
           checkState={checkState}
           onHandleCheckChange={handleCheckChange}
-          onHandleFilter={handleFilter}/>
+          onHandleFilter={handleFilter}
+          onHandleSearch={handleSearchChange} />
         <div>
           {loading && <CircularProgress size={25} className={classes.buttonProgress} /> }
           <TableContainer>
@@ -784,15 +807,15 @@ const handleFilter = () => {
                         <StyledTableCell align="center">
                           {row.status === "Scheduled" ?
                           <Chip
-                            label="Scheduled"
+                            label={row.status}
                             variant="outlined"
-                            classes={{ root: classes.chipStyles, label: classes.chipLabelStyle }}
+                            classes={{ root: classes.successfulStyles, label: classes.successfulLabelStyle }}
                           />
                           :
                           <Chip
-                            label="Pending"
+                            label={row.status}
                             variant="outlined"
-                            classes={{ root: classes.chipStyles, label: classes.chipLabelStyle }}
+                            classes={{ root: classes.failedStyles, label: classes.failedLabelStyle }}
                           />
                         }
                         </StyledTableCell>

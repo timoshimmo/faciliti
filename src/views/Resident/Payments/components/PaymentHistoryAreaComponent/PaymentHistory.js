@@ -183,8 +183,11 @@ const PaymentHistory = props => {
 
   const classes = useStyles();
 
+  const { contract } = props;
+
   const [loading, setLoading] = useState(false);
   const [payments, setPayments] = useState([]);
+  const [services, setServices] = useState([]);
 
   const [order, setOrder] = useState('asc');
   const [orderBy, setOrderBy] = useState('date');
@@ -198,20 +201,43 @@ const PaymentHistory = props => {
  //`contracts/${contractId}/charges/${chargeId}/payments?index=0&range=100`
 
   const handleGetPayments = () => {
-    AXIOS.get(`contracts/9EQU4GSOQHOTO0R8O8C0ULROJ/charges/RSCCJ0YIRYBJG0R8O8C0ULROJ/payments?index=0&range=100`)
-      .then(response => {
-          const res = response.data;
-        //  console.log("ALL PAYMENTS:" + JSON.stringify(res));
-          setPayments(res.response);
-          setLoading(false);
-          //setServices(res.response);
-      })
-      .catch(function (error) {
-          setLoading(false);
-          console.log(error.response);
-          console.log(error.message);
-      })
+
+    if(!loading) {
+
+      setLoading(true);
+
+      let contractId = '';
+      let chargeId = '';
+
+      //console.log("CONTRACT DATA: ", typeof contract);
+
+      if(contract !== undefined || typeof contract !== 'undefined') {
+
+          if(Object.keys(contract).length > 0) {
+            contractId = contract.key.uuid;
+            chargeId = contract.chargeData[0].key.uuid;
+          }
+
+          //AXIOS.get(`contracts/9EQU4GSOQHOTO0R8O8C0ULROJ/charges/RSCCJ0YIRYBJG0R8O8C0ULROJ/payments?index=0&range=100`)
+
+          AXIOS.get(`contracts/${contractId}/charges/${chargeId}/payments?index=0&range=100`)
+          .then(response => {
+              const res = response.data;
+              //console.log("ALL PAYMENTS:" + JSON.stringify(res));
+              setPayments(res.response);
+              setLoading(false);
+              //setServices(res.response);
+          })
+          .catch(function (error) {
+              setLoading(false);
+              console.log(error);
+              //console.log(error.message);
+          })
+      }
+    }
   }
+
+  
 
   const handleRequestSort = (event, property) => {
    const isAsc = orderBy === property && order === 'asc';

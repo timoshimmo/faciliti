@@ -6,7 +6,7 @@ import {
 
 const CategoryListComponent = props => {
 
-  const { setCategoryList, categoryData, setCategoryData, setSelectedCategory, selectedCategory } = props;
+  const { setCategoryList, setCategoryData, setSelectedCategory } = props;
 
   const handleAddCategory = (categoryVal) => () => {
       setCategoryData(categoryData => [...categoryData, categoryVal]);

@@ -7,10 +7,12 @@ export { default as SignIn } from './SignIn';
 export { default as ForgotPassword } from './ForgotPassword';
 export { default as ResetPassword } from './ResetPassword';
 export { default as SelectUser } from './SelectUser';
-export { default as FMOverview } from './FacilityManager/Overview';
 export { default as Overview } from './Resident/Overview';
 export { default as Payment } from './Resident/Payments';
+export { default as UserProfile } from './Resident/Profile';
+export { default as FMOverview } from './FacilityManager/Overview';
 export { default as FMPayment } from './FacilityManager/Payment';
+export { default as FMPaymentHistory } from './FacilityManager/Payment/PaymentHistory';
 export { default as FMServices } from './FacilityManager/Services';
 export { default as Orders } from './Resident/Orders';
 export { default as Visitors } from './Resident/Visitors';
@@ -20,3 +22,4 @@ export { default as FMBusiness } from './FacilityManager/Company';
 export { default as FMPersonal } from './FacilityManager/Register';
 export { default as Meetings } from './FacilityManager/Meetings';
 export { default as Profile } from './FacilityManager/Profile';
+

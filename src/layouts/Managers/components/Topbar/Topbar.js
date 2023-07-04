@@ -103,7 +103,7 @@ formComponent: {
   }
 
 
-  const Topbar = props => {
+  const Topbar = () => {
 
     const classes = useStyles();
     let history = useHistory();
@@ -193,13 +193,17 @@ formComponent: {
               lg={6}
               className={classes.rightCol}
             >
-              <IconButton
+              {/*
+              
+            <IconButton
                 disableRipple={true}
                 disableFocusRipple={true}
                 color="primary"
                 className={classes.topIconButton}>
                   <NotificationIcon fontSize="small" style={{ width: 17, height: 17, fill: 'none' }} />
               </IconButton>
+    */}
+              
               <Button
                 className={classes.typoUsername}
                 onClick={handleProfile}
